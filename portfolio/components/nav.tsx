@@ -1,9 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 const links = [
-  { href: "#about", label: "About" },
+  { href: "/", label: "Home" },
   { href: "/technical-breakdowns", label: "Breakdowns" },
   { href: "#environment", label: "3D Environment" },
   { href: "#contact", label: "Contact" },
@@ -11,8 +12,10 @@ const links = [
 ];
 
 export default function Nav() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrollPct, setScrollPct] = useState(0);
+  const visibleLinks = links.filter((l) => !(l.href === "/" && pathname === "/"));
 
   useEffect(() => {
     const onScroll = () => {
@@ -61,7 +64,7 @@ export default function Nav() {
           className="hidden md:flex"
           style={{ listStyle: "none", gap: "2.5rem" }}
         >
-          {links.map((l) => (
+          {visibleLinks.map((l) => (
             <li key={l.href}>
               <a
                 href={l.href}
@@ -181,7 +184,7 @@ export default function Nav() {
             backdropFilter: "blur(12px)",
           }}
         >
-          {links.map((l) => (
+          {visibleLinks.map((l) => (
             <a
               key={l.href}
               href={l.href}
