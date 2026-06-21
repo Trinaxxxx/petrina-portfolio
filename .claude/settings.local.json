@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Start-Process \"C:\\\\Users\\\\pkinz\\\\OneDrive\\\\Documents\\\\Claude Portfolio\\\\index.html\")",
+      "mcp__visualize__show_widget",
+      "Bash(python -c ' *)",
+      "Bash(pip install *)",
+      "Bash(python)",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\pkinz\\\\OneDrive\\\\Documents\\\\Claude Portfolio\\\\portfolio\\\\public\\\\projects\" | Where-Object { $_.Name -match ' ' -or $_.Name -match '\\\\.mov$' -or $_.Name -match '\\\\.PNG$' -or $_.Name -match '\\\\.mp4$' -and $_.Name -notmatch '^showreel' } | Select-Object Name)"
+    ]
+  }
+}
