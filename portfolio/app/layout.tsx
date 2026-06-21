@@ -9,6 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://petrina-portfolio.vercel.app"),
   title: "Petrina Kinzel — Technical Environment Artist",
   description:
     "Real-time environment artist specialising in Blender automation, CAD/Revit integration, and Unreal Engine deployment.",
@@ -34,6 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} dark`}>
       <head>
+        <link rel="canonical" href="https://petrina-portfolio.vercel.app/" />
         <link rel="preconnect" href="https://www.youtube.com" />
         <link rel="preconnect" href="https://www.linkedin.com" />
         <link rel="dns-prefetch" href="https://www.youtube.com" />

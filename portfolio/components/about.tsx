@@ -50,7 +50,7 @@ export default function About() {
   return (
     <section
       id="about"
-      style={{ padding: "4rem 3rem 0", maxWidth: "1200px", margin: "0 auto", overflowX: "clip" }}
+      style={{ padding: "clamp(2rem, 6vw, 4rem) clamp(1.25rem, 5vw, 3rem) 0", maxWidth: "1200px", margin: "0 auto", overflowX: "clip" }}
     >
       {/* Section label */}
       <div

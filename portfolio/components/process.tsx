@@ -46,7 +46,7 @@ export default function Process() {
   return (
     <section
       id="process"
-      style={{ position: "relative", padding: "6rem 3rem", maxWidth: "1200px", margin: "0 auto" }}
+      style={{ position: "relative", padding: "clamp(3rem, 8vw, 6rem) clamp(1.25rem, 5vw, 3rem)", maxWidth: "1200px", margin: "0 auto" }}
     >
       <div>
         <div

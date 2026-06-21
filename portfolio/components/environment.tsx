@@ -8,7 +8,7 @@ export default function Environment() {
         style={{
           maxWidth: "1200px",
           margin: "0 auto",
-          padding: "6rem 3rem 3rem",
+          padding: "clamp(3rem, 8vw, 6rem) clamp(1.25rem, 5vw, 3rem) 3rem",
         }}
       >
         <div
@@ -54,7 +54,7 @@ export default function Environment() {
         style={{
           position: "relative",
           width: "100%",
-          height: "500px",
+          minHeight: "clamp(300px, 50vh, 500px)",
           background:
             "linear-gradient(135deg, var(--pk-bg3) 0%, var(--pk-bg) 100%)",
           borderTop: "0.5px solid var(--pk-border)",
@@ -149,7 +149,7 @@ export default function Environment() {
         style={{
           maxWidth: "1200px",
           margin: "0 auto",
-          padding: "2rem 3rem 6rem",
+          padding: "2rem clamp(1.25rem, 5vw, 3rem) clamp(3rem, 8vw, 6rem)",
         }}
       >
         <p

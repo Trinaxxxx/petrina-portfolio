@@ -91,3 +91,9 @@
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--pk-bg); }
 ::-webkit-scrollbar-thumb { background: var(--pk-border-accent); border-radius: 2px; }
+
+:focus-visible {
+  outline: 2px solid var(--pk-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
