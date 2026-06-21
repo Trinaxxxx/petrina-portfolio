@@ -104,21 +104,17 @@ function MobileCard({ b, cardRef }: { b: Breakdown; cardRef: (el: HTMLDivElement
     <div
       ref={cardRef}
       style={{
-        flex: "0 0 88vw",
+        flex: "0 0 100vw",
         scrollSnapAlign: "start",
         scrollSnapStop: "always",
-        height: "calc(100svh - 116px)",
-        overflowY: "auto",
         borderRight: "0.5px solid var(--pk-border)",
         background: "var(--pk-bg)",
-        display: "flex",
-        flexDirection: "column",
       }}
     >
-      {/* Hero image — full bleed top */}
-      <div style={{ position: "relative", width: "100%", height: "200px", flexShrink: 0, background: "var(--pk-bg3)", overflow: "hidden" }}>
+      {/* Hero image — full bleed */}
+      <div style={{ position: "relative", width: "100%", height: "220px", background: "var(--pk-bg3)", overflow: "hidden" }}>
         {heroItem?.src && !isGif && (
-          <Image src={heroItem.src} alt={heroItem.alt} fill sizes="90vw" style={{ objectFit: "cover" }} />
+          <Image src={heroItem.src} alt={heroItem.alt} fill sizes="100vw" style={{ objectFit: "cover" }} />
         )}
         {heroItem?.src && isGif && (
           // eslint-disable-next-line @next/next/no-img-element
@@ -126,30 +122,36 @@ function MobileCard({ b, cardRef }: { b: Breakdown; cardRef: (el: HTMLDivElement
         )}
       </div>
 
-      {/* Content — scrollable within the fixed card height */}
-      <div style={{ padding: "1.25rem 1.25rem 1.5rem", overflowY: "auto", flex: 1 }}>
+      <div style={{ padding: "1.25rem 1.5rem 2rem" }}>
         <div style={{ fontFamily: "var(--pk-mono)", fontSize: "10px", color: "var(--pk-accent)", letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: "0.4rem" }}>
           Technical Breakdown
         </div>
-        <h2 style={{ fontSize: "clamp(1.1rem, 4.5vw, 1.4rem)", fontWeight: 400, letterSpacing: "-0.01em", marginBottom: "0.3rem", color: "var(--pk-text)", lineHeight: 1.25 }}>
+        <h2 style={{ fontSize: "clamp(1.2rem, 5vw, 1.5rem)", fontWeight: 400, letterSpacing: "-0.01em", marginBottom: "0.3rem", color: "var(--pk-text)", lineHeight: 1.25 }}>
           {b.title}
         </h2>
-        <p style={{ fontSize: "12px", color: "var(--pk-muted)", marginBottom: "1.1rem", lineHeight: 1.5 }}>
+        <p style={{ fontSize: "13px", color: "var(--pk-muted)", marginBottom: "1.1rem", lineHeight: 1.5 }}>
           {b.subtitle}
         </p>
 
-        {/* Key stats — large type, scannable at a glance */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem 1rem", padding: "1rem 0", borderTop: "0.5px solid var(--pk-border)", borderBottom: "0.5px solid var(--pk-border)", marginBottom: "1rem" }}>
+        {/* Key stats — large type */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem 1rem", padding: "1rem 0", borderTop: "0.5px solid var(--pk-border)", borderBottom: "0.5px solid var(--pk-border)", marginBottom: "1.25rem" }}>
           {b.stats.map((s) => (
             <div key={s.label}>
-              <div style={{ fontFamily: "var(--pk-mono)", fontSize: "1.25rem", color: "var(--pk-accent)", fontWeight: 300, lineHeight: 1, marginBottom: "0.2rem" }}>{s.value}</div>
+              <div style={{ fontFamily: "var(--pk-mono)", fontSize: "1.2rem", color: "var(--pk-accent)", fontWeight: 300, lineHeight: 1, marginBottom: "0.2rem" }}>{s.value}</div>
               <div style={{ fontFamily: "var(--pk-mono)", fontSize: "10px", color: "var(--pk-muted)", letterSpacing: "0.04em" }}>{s.label}</div>
             </div>
           ))}
         </div>
 
-        {/* First paragraph only — hook, not wall of text */}
-        <p style={{ fontSize: "13px", color: "var(--pk-muted)", lineHeight: 1.8, marginBottom: "1rem" }}>{b.summary[0]}</p>
+        {/* Summary */}
+        {b.summary.map((para, i) => (
+          <p key={i} style={{ fontSize: "13px", color: "var(--pk-muted)", lineHeight: 1.8, marginBottom: "0.75rem" }}>{para}</p>
+        ))}
+
+        {/* Image grid — full set */}
+        <div style={{ marginTop: "1.25rem", marginBottom: "1.25rem" }}>
+          <MediaGrid media={b.media} />
+        </div>
 
         <CTALinks b={b} />
         <div style={{ marginTop: "1rem" }}><TagList tags={b.tags} /></div>
@@ -243,6 +245,14 @@ export default function TechnicalBreakdowns() {
         .tb-tablet  { display: none; }
         .tb-desktop { display: none; }
         .tb-scroll::-webkit-scrollbar { display: none; }
+        @keyframes swipe-nudge {
+          0%   { transform: translateX(0); opacity: 1; }
+          30%  { transform: translateX(6px); opacity: 1; }
+          60%  { transform: translateX(0); opacity: 1; }
+          80%  { transform: translateX(4px); opacity: 0.6; }
+          100% { transform: translateX(0); opacity: 0.3; }
+        }
+        .tb-swipe-hint { animation: swipe-nudge 1.4s ease-in-out 0.8s 2 forwards; }
         .tb-left-btn {
           display: block; width: 100%; text-align: left;
           background: none; border: none; cursor: pointer;
@@ -279,8 +289,8 @@ export default function TechnicalBreakdowns() {
 
       {/* ── Mobile layout ── */}
       <div className="tb-mobile" style={{ borderTop: "0.5px solid var(--pk-border)" }}>
-        {/* Dots sit above the strip — always visible on arrival */}
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "0.5rem", padding: "0.75rem 0", borderBottom: "0.5px solid var(--pk-border)", background: "var(--pk-bg)", position: "sticky", top: "60px", zIndex: 10 }}>
+        {/* Dots + swipe hint — sticky, always visible on arrival */}
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "0.75rem", padding: "0.7rem 0", borderBottom: "0.5px solid var(--pk-border)", background: "var(--pk-bg)", position: "sticky", top: "60px", zIndex: 10 }}>
           {breakdowns.map((b, i) => (
             <button
               key={b.slug}
@@ -289,10 +299,18 @@ export default function TechnicalBreakdowns() {
               style={{ width: i === activeIndex ? "20px" : "6px", height: "6px", borderRadius: "3px", background: i === activeIndex ? "var(--pk-accent)" : "var(--pk-border-accent)", border: "none", cursor: "pointer", padding: 0, transition: "width 0.2s, background 0.2s" }}
             />
           ))}
+          {/* Animated nudge arrow — plays twice on load then fades out */}
+          <span
+            className="tb-swipe-hint"
+            aria-hidden="true"
+            style={{ fontFamily: "var(--pk-mono)", fontSize: "11px", color: "var(--pk-muted)", letterSpacing: "0.04em", userSelect: "none" }}
+          >
+            swipe ›
+          </span>
         </div>
 
-        {/* Scroll strip — 88vw cards so next card peeks in from the right */}
-        <div className="tb-scroll" style={{ display: "flex", overflowX: "auto", scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" as never, scrollbarWidth: "none", gap: "8px", paddingRight: "8px" }}>
+        {/* Scroll strip */}
+        <div className="tb-scroll" style={{ display: "flex", overflowX: "auto", scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" as never, scrollbarWidth: "none" }}>
           {breakdowns.map((b, i) => (
             <MobileCard
               key={b.slug}
