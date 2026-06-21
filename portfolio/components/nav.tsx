@@ -4,9 +4,8 @@ import Link from "next/link";
 
 const links = [
   { href: "#about", label: "About" },
-  { href: "#work", label: "Work" },
+  { href: "/technical-breakdowns", label: "Breakdowns" },
   { href: "#environment", label: "3D Environment" },
-  { href: "#process", label: "Process" },
   { href: "#contact", label: "Contact" },
   { href: "https://github.com/Trinaxxxx", label: "GitHub ↗", external: true },
 ];
