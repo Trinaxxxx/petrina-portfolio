@@ -46,7 +46,7 @@ export default function Hero() {
         style={{
           position: "relative",
           zIndex: 3,
-          padding: "0 3rem",
+          padding: "0 clamp(1.25rem, 5vw, 3rem)",
           maxWidth: "900px",
           width: "100%",
         }}

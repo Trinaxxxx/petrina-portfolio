@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 
@@ -91,16 +91,16 @@ const projects: Project[] = [
     ],
     media: [
       { src: "/projects/pipeline-ui.png", alt: "PipelineX Blender plugin — full UI panel" },
-      { src: "", alt: "Tool demo — Collection Organizer walkthrough", type: "placeholder" as "image" },
-      { src: "", alt: "Script walkthrough — Revit Asset Replacer", type: "placeholder" as "image" },
-      { src: "", alt: "Before / After — scene cleanup automation", type: "placeholder" as "image" },
+      { src: "", alt: "Tool demo — Collection Organizer walkthrough", type: "placeholder" as const },
+      { src: "", alt: "Script walkthrough — Revit Asset Replacer", type: "placeholder" as const },
+      { src: "", alt: "Before / After — scene cleanup automation", type: "placeholder" as const },
     ],
     link: { label: "View on GitHub ↗", href: "https://github.com/Trinaxxxx" },
   },
 ];
 
 function MediaCard({ item }: { item: MediaItem }) {
-  const [failed, setFailed] = React.useState(false);
+  const [failed, setFailed] = useState(false);
   const isGif = item.type === "gif" || item.src.endsWith(".gif");
   const isPlaceholder = item.type === "placeholder" || !item.src;
 
@@ -162,7 +162,7 @@ export default function Projects() {
   return (
     <section
       id="work"
-      style={{ padding: "6rem 3rem", maxWidth: "1200px", margin: "0 auto" }}
+      style={{ padding: "clamp(3rem, 8vw, 6rem) clamp(1.25rem, 5vw, 3rem)", maxWidth: "1200px", margin: "0 auto" }}
     >
       <div
         style={{
