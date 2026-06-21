@@ -83,7 +83,7 @@ function CTALinks({ b }: { b: Breakdown }) {
     <div style={{ display: "flex", gap: "1rem", marginTop: "1.25rem", flexWrap: "wrap" }}>
       {b.caseStudyHref && (
         <a href={b.caseStudyHref} style={{ fontFamily: "var(--pk-mono)", fontSize: "12px", color: "var(--pk-accent)", textDecoration: "none", letterSpacing: "0.06em" }}>
-          Read Case Study →
+          Read the breakdown →
         </a>
       )}
       {b.externalLink && (
@@ -102,6 +102,7 @@ function MobileCard({ b, cardRef }: { b: Breakdown; cardRef: (el: HTMLDivElement
 
   return (
     <div
+      id={b.slug}
       ref={cardRef}
       style={{
         flex: "0 0 100vw",
@@ -213,6 +214,14 @@ export default function TechnicalBreakdowns() {
   const rightPanelRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const selected = breakdowns.find((b) => b.slug === selectedSlug)!;
+
+  // On mount, read URL hash and pre-select the matching breakdown
+  useEffect(() => {
+    const slug = window.location.hash.slice(1);
+    if (slug && breakdowns.find((b) => b.slug === slug)) {
+      setSelectedSlug(slug);
+    }
+  }, []);
 
   // Reset right panel scroll on project switch
   useEffect(() => {
