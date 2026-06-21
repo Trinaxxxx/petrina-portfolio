@@ -37,6 +37,7 @@ const projects: Project[] = [
       { src: "/projects/laundromat-kit.png",       alt: "Modular building kit — all props with LOD strategy" },
       { src: "/projects/laundromat-breakdown.png", alt: "Scene asset breakdown with optimisation strategy" },
     ],
+    caseStudy: "/technical-breakdowns#laundromat",
   },
   {
     num: "02",
@@ -56,7 +57,7 @@ const projects: Project[] = [
       { src: "/projects/alphamass-bts.png",         alt: "Production BTS — Blender optimisation workflow" },
       { src: "/projects/alphamass-comparison.gif",  alt: "Revit vs Alpha Planes — VR before/after comparison", type: "gif" },
     ],
-    caseStudy: "/case-study/alpha-planes",
+    caseStudy: "/technical-breakdowns#alpha-planes",
   },
   {
     num: "03",
@@ -76,6 +77,7 @@ const projects: Project[] = [
       { src: "/projects/tmx-p2-1.png", alt: "TMX VR Environment — Project 2, shot 1" },
       { src: "/projects/tmx-p2-3.png", alt: "TMX VR Environment — Project 2, shot 3" },
     ],
+    caseStudy: "/technical-breakdowns#tmx",
   },
   {
     num: "04",
@@ -95,6 +97,7 @@ const projects: Project[] = [
       { src: "", alt: "Script walkthrough — Revit Asset Replacer", type: "placeholder" as const },
       { src: "", alt: "Before / After — scene cleanup automation", type: "placeholder" as const },
     ],
+    caseStudy: "/technical-breakdowns#blender-automation",
     link: { label: "View on GitHub ↗", href: "https://github.com/Trinaxxxx" },
   },
 ];
@@ -372,7 +375,7 @@ export default function Projects() {
                     onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.7")}
                     onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
                   >
-                    Read Case Study →
+                    Read the breakdown →
                   </a>
                 )}
                 {p.link && (
