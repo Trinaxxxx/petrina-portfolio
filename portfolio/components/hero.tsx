@@ -36,7 +36,7 @@ export default function Hero() {
           position: "absolute",
           inset: 0,
           background:
-            "linear-gradient(to bottom, rgba(11,13,9,0.55) 0%, rgba(11,13,9,0.35) 50%, rgba(11,13,9,0.7) 100%)",
+            "linear-gradient(to bottom, rgba(11,11,13,0.55) 0%, rgba(11,11,13,0.65) 50%, rgba(11,11,13,0.8) 100%)",
           zIndex: 1,
         }}
       />
@@ -93,7 +93,7 @@ export default function Hero() {
         <p
           style={{
             fontSize: "clamp(14px, 1.5vw, 17px)",
-            color: "var(--pk-muted)",
+            color: "var(--pk-text)",
             lineHeight: 1.8,
             maxWidth: "520px",
             marginBottom: "2.5rem",
