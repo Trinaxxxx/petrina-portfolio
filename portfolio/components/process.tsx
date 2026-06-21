@@ -3,8 +3,6 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Silk from "@/components/Silk";
-
 gsap.registerPlugin(ScrollTrigger);
 
 const steps = [
@@ -50,21 +48,7 @@ export default function Process() {
       id="process"
       style={{ position: "relative", padding: "6rem 3rem", maxWidth: "1200px", margin: "0 auto" }}
     >
-      {/* Silk background */}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          opacity: 0.08,
-          zIndex: 0,
-          pointerEvents: "none",
-          overflow: "hidden",
-        }}
-      >
-        <Silk speed={7.8} scale={0.8} color="#232d1c" noiseIntensity={0.8} rotation={3.71} />
-      </div>
-
-      <div style={{ position: "relative", zIndex: 1 }}>
+      <div>
         <div
           style={{
             fontFamily: "var(--pk-mono)",
@@ -73,13 +57,9 @@ export default function Process() {
             letterSpacing: "0.14em",
             textTransform: "uppercase",
             marginBottom: "0.75rem",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.75rem",
           }}
         >
-          04 / Process
-          <span style={{ display: "block", height: "0.5px", width: "48px", background: "var(--pk-accent)" }} />
+          Process
         </div>
         <h2
           style={{

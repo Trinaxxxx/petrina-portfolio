@@ -61,13 +61,9 @@ export default function About() {
           letterSpacing: "0.14em",
           textTransform: "uppercase",
           marginBottom: "0.75rem",
-          display: "flex",
-          alignItems: "center",
-          gap: "0.75rem",
         }}
       >
-        01 / About
-        <span style={{ display: "block", height: "0.5px", width: "48px", background: "var(--pk-accent)" }} />
+        About
       </div>
 
       {/* Bio — condensed */}

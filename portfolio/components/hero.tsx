@@ -78,14 +78,14 @@ export default function Hero() {
         <h1
           style={{
             fontSize: "clamp(3rem, 7vw, 6rem)",
-            fontWeight: 300,
+            fontWeight: 400,
             letterSpacing: "-0.025em",
             lineHeight: 1.05,
             marginBottom: "1.5rem",
           }}
         >
           Petrina{" "}
-          <span style={{ color: "var(--pk-accent)", fontWeight: 400 }}>
+          <span style={{ color: "var(--pk-accent)", fontWeight: 600 }}>
             Kinzel
           </span>
         </h1>
@@ -149,36 +149,6 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Scroll hint */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: "2rem",
-          left: "50%",
-          transform: "translateX(-50%)",
-          zIndex: 3,
-          fontFamily: "var(--pk-mono)",
-          fontSize: "10px",
-          color: "var(--pk-muted)",
-          letterSpacing: "0.1em",
-          opacity: 0.5,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "0.4rem",
-        }}
-      >
-        <span
-          style={{
-            display: "block",
-            width: "0.5px",
-            height: "32px",
-            background: "var(--pk-muted)",
-            opacity: 0.4,
-          }}
-        />
-        scroll
-      </div>
     </section>
   );
 }
