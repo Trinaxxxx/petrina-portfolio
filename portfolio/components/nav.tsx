@@ -66,29 +66,31 @@ export default function Nav() {
         >
           {visibleLinks.map((l) => {
             const isActive = l.href === pathname;
+            const isExternal = "external" in l;
+            const linkStyle: React.CSSProperties = {
+              color: isActive ? "var(--pk-text)" : "var(--pk-muted)",
+              textDecoration: "none",
+              fontSize: "13px",
+              letterSpacing: "0.04em",
+              transition: "color 0.2s",
+            };
+            const hoverHandlers = {
+              onMouseEnter: (e: React.MouseEvent<HTMLAnchorElement>) =>
+                (e.currentTarget.style.color = "var(--pk-text)"),
+              onMouseLeave: (e: React.MouseEvent<HTMLAnchorElement>) =>
+                (e.currentTarget.style.color = isActive ? "var(--pk-text)" : "var(--pk-muted)"),
+            };
             return (
               <li key={l.href}>
-                <a
-                  href={l.href}
-                  target={"external" in l ? "_blank" : undefined}
-                  rel={"external" in l ? "noopener noreferrer" : undefined}
-                  aria-current={isActive ? "page" : undefined}
-                  style={{
-                    color: isActive ? "var(--pk-text)" : "var(--pk-muted)",
-                    textDecoration: "none",
-                    fontSize: "13px",
-                    letterSpacing: "0.04em",
-                    transition: "color 0.2s",
-                  }}
-                  onMouseEnter={(e) =>
-                    (e.currentTarget.style.color = "var(--pk-text)")
-                  }
-                  onMouseLeave={(e) =>
-                    (e.currentTarget.style.color = isActive ? "var(--pk-text)" : "var(--pk-muted)")
-                  }
-                >
-                  {l.label}
-                </a>
+                {isExternal ? (
+                  <a href={l.href} target="_blank" rel="noopener noreferrer" style={linkStyle} {...hoverHandlers}>
+                    {l.label}
+                  </a>
+                ) : (
+                  <Link href={l.href} aria-current={isActive ? "page" : undefined} style={linkStyle} {...hoverHandlers}>
+                    {l.label}
+                  </Link>
+                )}
               </li>
             );
           })}
@@ -181,27 +183,40 @@ export default function Nav() {
             backdropFilter: "blur(12px)",
           }}
         >
-          {visibleLinks.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              target={"external" in l ? "_blank" : undefined}
-              rel={"external" in l ? "noopener noreferrer" : undefined}
-              onClick={() => setOpen(false)}
-              style={{
-                display: "block",
-                color: "var(--pk-muted)",
-                textDecoration: "none",
-                fontFamily: "var(--pk-mono)",
-                fontSize: "13px",
-                letterSpacing: "0.06em",
-                padding: "0.9rem 0",
-                borderBottom: "0.5px solid var(--pk-border)",
-              }}
-            >
-              {l.label}
-            </a>
-          ))}
+          {visibleLinks.map((l) => {
+            const isExternal = "external" in l;
+            const mobileStyle: React.CSSProperties = {
+              display: "block",
+              color: "var(--pk-muted)",
+              textDecoration: "none",
+              fontFamily: "var(--pk-mono)",
+              fontSize: "13px",
+              letterSpacing: "0.06em",
+              padding: "0.9rem 0",
+              borderBottom: "0.5px solid var(--pk-border)",
+            };
+            return isExternal ? (
+              <a
+                key={l.href}
+                href={l.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setOpen(false)}
+                style={mobileStyle}
+              >
+                {l.label}
+              </a>
+            ) : (
+              <Link
+                key={l.href}
+                href={l.href}
+                onClick={() => setOpen(false)}
+                style={mobileStyle}
+              >
+                {l.label}
+              </Link>
+            );
+          })}
         </div>
       )}
     </>
