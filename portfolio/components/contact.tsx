@@ -104,7 +104,7 @@ export default function Contact() {
       <footer
         style={{
           borderTop: "0.5px solid var(--pk-border)",
-          padding: "2rem 3rem",
+          padding: "2rem clamp(1.25rem, 5vw, 3rem)",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",

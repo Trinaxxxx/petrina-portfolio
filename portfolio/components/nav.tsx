@@ -6,8 +6,8 @@ import Link from "next/link";
 const links = [
   { href: "/", label: "Home" },
   { href: "/technical-breakdowns", label: "Breakdowns" },
-  { href: "#environment", label: "3D Environment" },
-  { href: "#contact", label: "Contact" },
+  { href: "/#environment", label: "3D Environment" },
+  { href: "/#contact", label: "Contact" },
   { href: "https://github.com/Trinaxxxx", label: "GitHub ↗", external: true },
 ];
 
@@ -42,12 +42,12 @@ export default function Nav() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: "0 3rem",
+          padding: "0 clamp(1.25rem, 4vw, 3rem)",
           height: "60px",
         }}
       >
         <Link
-          href="#hero"
+          href="/"
           style={{
             fontFamily: "var(--pk-mono)",
             fontSize: "14px",
@@ -64,36 +64,41 @@ export default function Nav() {
           className="hidden md:flex"
           style={{ listStyle: "none", gap: "2.5rem" }}
         >
-          {visibleLinks.map((l) => (
-            <li key={l.href}>
-              <a
-                href={l.href}
-                target={"external" in l ? "_blank" : undefined}
-                rel={"external" in l ? "noopener noreferrer" : undefined}
-                style={{
-                  color: "var(--pk-muted)",
-                  textDecoration: "none",
-                  fontSize: "13px",
-                  letterSpacing: "0.04em",
-                  transition: "color 0.2s",
-                }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.color = "var(--pk-text)")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.color = "var(--pk-muted)")
-                }
-              >
-                {l.label}
-              </a>
-            </li>
-          ))}
+          {visibleLinks.map((l) => {
+            const isActive = l.href === pathname;
+            return (
+              <li key={l.href}>
+                <a
+                  href={l.href}
+                  target={"external" in l ? "_blank" : undefined}
+                  rel={"external" in l ? "noopener noreferrer" : undefined}
+                  aria-current={isActive ? "page" : undefined}
+                  style={{
+                    color: isActive ? "var(--pk-text)" : "var(--pk-muted)",
+                    textDecoration: "none",
+                    fontSize: "13px",
+                    letterSpacing: "0.04em",
+                    transition: "color 0.2s",
+                  }}
+                  onMouseEnter={(e) =>
+                    (e.currentTarget.style.color = "var(--pk-text)")
+                  }
+                  onMouseLeave={(e) =>
+                    (e.currentTarget.style.color = isActive ? "var(--pk-text)" : "var(--pk-muted)")
+                  }
+                >
+                  {l.label}
+                </a>
+              </li>
+            );
+          })}
         </ul>
 
         {/* Hamburger */}
         <button
           className="md:hidden"
-          aria-label="Open menu"
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
           onClick={() => setOpen(!open)}
           style={{
             background: "none",
@@ -105,22 +110,13 @@ export default function Nav() {
             padding: "6px",
           }}
         >
-          {[0, 1, 2].map((i) => (
-            <span
-              key={i}
-              style={{
-                display: "block",
-                width: "22px",
-                height: "1.5px",
-                background: "var(--pk-text)",
-                transition: "all 0.2s",
-              }}
-            />
-          ))}
+          <span style={{ display: "block", width: "22px", height: "1.5px", background: "var(--pk-text)", transition: "transform 0.2s, opacity 0.2s", transform: open ? "translateY(6.5px) rotate(45deg)" : "none" }} />
+          <span style={{ display: "block", width: "22px", height: "1.5px", background: "var(--pk-text)", transition: "opacity 0.2s", opacity: open ? 0 : 1 }} />
+          <span style={{ display: "block", width: "22px", height: "1.5px", background: "var(--pk-text)", transition: "transform 0.2s, opacity 0.2s", transform: open ? "translateY(-6.5px) rotate(-45deg)" : "none" }} />
         </button>
       </nav>
 
-      {/* Vertical scroll progress — fixed mid-right */}
+      {/* Vertical scroll progress — home page only (breakdowns page uses panel-level scroll) */}
       <div
         style={{
           position: "fixed",
@@ -129,6 +125,7 @@ export default function Nav() {
           transform: "translateY(-50%)",
           zIndex: 50,
           pointerEvents: "none",
+          display: pathname === "/" ? undefined : "none",
         }}
       >
         <div
