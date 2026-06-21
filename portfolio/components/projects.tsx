@@ -3,7 +3,6 @@
 import React from "react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
-import SpotlightCard from "@/components/SpotlightCard";
 
 type MediaItem = { src: string; alt: string; type?: "image" | "gif" | "placeholder" };
 
@@ -173,20 +172,9 @@ export default function Projects() {
           letterSpacing: "0.14em",
           textTransform: "uppercase",
           marginBottom: "0.75rem",
-          display: "flex",
-          alignItems: "center",
-          gap: "0.75rem",
-        }}
+      }}
       >
-        02 / Work
-        <span
-          style={{
-            display: "block",
-            height: "0.5px",
-            width: "48px",
-            background: "var(--pk-accent)",
-          }}
-        />
+        Work
       </div>
 
       <h2
@@ -219,23 +207,25 @@ export default function Projects() {
         }}
       >
         {projects.map((p, idx) => (
-          <SpotlightCard
+          <div
             key={p.num}
-            spotlightColor="rgba(138, 170, 116, 0.07)"
             style={{
               background: "var(--pk-bg)",
               display: "grid",
               gridTemplateColumns: "1fr 1fr",
               minHeight: "400px",
-              transition: "background 0.2s",
+              transition: "background 0.2s, border-left 0.2s",
               direction: idx % 2 === 1 ? "rtl" : "ltr",
+              borderLeft: "2px solid transparent",
             }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.background = "var(--pk-bg2)")
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.background = "var(--pk-bg)")
-            }
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "var(--pk-bg2)";
+              e.currentTarget.style.borderLeft = "2px solid var(--pk-accent)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "var(--pk-bg)";
+              e.currentTarget.style.borderLeft = "2px solid transparent";
+            }}
             className="project-card"
           >
             {/* Media grid */}
@@ -406,7 +396,7 @@ export default function Projects() {
                 )}
               </div>
             </div>
-          </SpotlightCard>
+          </div>
         ))}
       </div>
 

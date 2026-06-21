@@ -122,8 +122,7 @@ export default function Achievements() {
           gap: "0.75rem",
         }}
       >
-        05 / Recognition
-        <span style={{ display: "block", height: "0.5px", width: "48px", background: "var(--pk-accent)" }} />
+        Recognition
       </div>
       <h2
         style={{

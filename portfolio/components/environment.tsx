@@ -24,15 +24,7 @@ export default function Environment() {
             gap: "0.75rem",
           }}
         >
-          03 / Interactive
-          <span
-            style={{
-              display: "block",
-              height: "0.5px",
-              width: "48px",
-              background: "var(--pk-accent)",
-            }}
-          />
+          Interactive
         </div>
         <h2
           style={{

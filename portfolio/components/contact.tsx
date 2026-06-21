@@ -1,7 +1,5 @@
 "use client";
 
-import Silk from "@/components/Silk";
-
 const links: { label: string; href: string; target?: string }[] = [
   { label: "Petrina.kinzel@gmail.com", href: "mailto:Petrina.kinzel@gmail.com" },
   { label: "LinkedIn ↗", href: "https://www.linkedin.com/in/petrinakinzel", target: "_blank" },
@@ -23,20 +21,7 @@ export default function Contact() {
           overflow: "hidden",
         }}
       >
-        {/* Silk animated background */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            opacity: 0.18,
-            zIndex: 0,
-            pointerEvents: "none",
-          }}
-        >
-          <Silk speed={7.8} scale={0.8} color="#232d1c" noiseIntensity={0.8} rotation={3.71} />
-        </div>
-
-        {/* Content layer sits above Silk */}
+        {/* Content */}
         <div style={{ position: "relative", zIndex: 1 }}>
           <div
             style={{
@@ -52,8 +37,7 @@ export default function Contact() {
               gap: "0.75rem",
             }}
           >
-            06 / Contact
-            <span style={{ display: "block", height: "0.5px", width: "48px", background: "var(--pk-accent)" }} />
+            Contact
           </div>
 
           <h2
@@ -64,7 +48,7 @@ export default function Contact() {
               marginBottom: "1rem",
             }}
           >
-            Let&apos;s build something.
+            Available for environment art and pipeline work.
           </h2>
           <p style={{ color: "var(--pk-muted)", fontSize: "15px", maxWidth: "400px", margin: "0 auto 2.5rem" }}>
             Open to senior environment artist and technical pipeline roles in games, VR, and architectural visualisation.
