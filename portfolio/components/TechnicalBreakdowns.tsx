@@ -97,26 +97,63 @@ function CTALinks({ b }: { b: Breakdown }) {
 
 /* ── Mobile card ─────────────────────────────────────────── */
 function MobileCard({ b, cardRef }: { b: Breakdown; cardRef: (el: HTMLDivElement | null) => void }) {
+  const heroItem = b.media.find((m) => m.src && m.type !== "placeholder") ?? b.media[0];
+  const isGif = heroItem?.src?.endsWith(".gif");
+
   return (
-    <div ref={cardRef} style={{ flex: "0 0 100vw", scrollSnapAlign: "start", scrollSnapStop: "always", minHeight: "calc(100dvh - 60px)", padding: "2rem 1.5rem", boxSizing: "border-box", overflowY: "auto", borderRight: "0.5px solid var(--pk-border)" }}>
-      <div style={{ fontFamily: "var(--pk-mono)", fontSize: "11px", color: "var(--pk-accent)", letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: "0.5rem" }}>
-        Technical Breakdown
+    <div
+      ref={cardRef}
+      style={{
+        flex: "0 0 88vw",
+        scrollSnapAlign: "start",
+        scrollSnapStop: "always",
+        height: "calc(100svh - 116px)",
+        overflowY: "auto",
+        borderRight: "0.5px solid var(--pk-border)",
+        background: "var(--pk-bg)",
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
+      {/* Hero image — full bleed top */}
+      <div style={{ position: "relative", width: "100%", height: "200px", flexShrink: 0, background: "var(--pk-bg3)", overflow: "hidden" }}>
+        {heroItem?.src && !isGif && (
+          <Image src={heroItem.src} alt={heroItem.alt} fill sizes="90vw" style={{ objectFit: "cover" }} />
+        )}
+        {heroItem?.src && isGif && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={heroItem.src} alt={heroItem.alt} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+        )}
       </div>
-      <h2 style={{ fontSize: "clamp(1.3rem, 5vw, 1.8rem)", fontWeight: 400, letterSpacing: "-0.01em", marginBottom: "0.5rem", color: "var(--pk-text)" }}>
-        {b.title}
-      </h2>
-      <p style={{ fontSize: "13px", color: "var(--pk-muted)", marginBottom: "1.25rem", lineHeight: 1.6 }}>
-        {b.subtitle}
-      </p>
-      <TagList tags={b.tags} />
-      <div style={{ marginBottom: "1.5rem" }}>
-        <MediaGrid media={b.media} />
+
+      {/* Content — scrollable within the fixed card height */}
+      <div style={{ padding: "1.25rem 1.25rem 1.5rem", overflowY: "auto", flex: 1 }}>
+        <div style={{ fontFamily: "var(--pk-mono)", fontSize: "10px", color: "var(--pk-accent)", letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: "0.4rem" }}>
+          Technical Breakdown
+        </div>
+        <h2 style={{ fontSize: "clamp(1.1rem, 4.5vw, 1.4rem)", fontWeight: 400, letterSpacing: "-0.01em", marginBottom: "0.3rem", color: "var(--pk-text)", lineHeight: 1.25 }}>
+          {b.title}
+        </h2>
+        <p style={{ fontSize: "12px", color: "var(--pk-muted)", marginBottom: "1.1rem", lineHeight: 1.5 }}>
+          {b.subtitle}
+        </p>
+
+        {/* Key stats — large type, scannable at a glance */}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem 1rem", padding: "1rem 0", borderTop: "0.5px solid var(--pk-border)", borderBottom: "0.5px solid var(--pk-border)", marginBottom: "1rem" }}>
+          {b.stats.map((s) => (
+            <div key={s.label}>
+              <div style={{ fontFamily: "var(--pk-mono)", fontSize: "1.25rem", color: "var(--pk-accent)", fontWeight: 300, lineHeight: 1, marginBottom: "0.2rem" }}>{s.value}</div>
+              <div style={{ fontFamily: "var(--pk-mono)", fontSize: "10px", color: "var(--pk-muted)", letterSpacing: "0.04em" }}>{s.label}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* First paragraph only — hook, not wall of text */}
+        <p style={{ fontSize: "13px", color: "var(--pk-muted)", lineHeight: 1.8, marginBottom: "1rem" }}>{b.summary[0]}</p>
+
+        <CTALinks b={b} />
+        <div style={{ marginTop: "1rem" }}><TagList tags={b.tags} /></div>
       </div>
-      {b.summary.map((para, i) => (
-        <p key={i} style={{ fontSize: "14px", color: "var(--pk-muted)", lineHeight: 1.85, marginBottom: "0.75rem" }}>{para}</p>
-      ))}
-      <StatRow stats={b.stats} />
-      <CTALinks b={b} />
     </div>
   );
 }
@@ -242,23 +279,25 @@ export default function TechnicalBreakdowns() {
 
       {/* ── Mobile layout ── */}
       <div className="tb-mobile" style={{ borderTop: "0.5px solid var(--pk-border)" }}>
-        <div className="tb-scroll" style={{ display: "flex", overflowX: "auto", scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" as never, scrollbarWidth: "none" }}>
-          {breakdowns.map((b, i) => (
-            <MobileCard
-              key={b.slug}
-              b={b}
-              cardRef={(el) => { cardRefs.current[i] = el; }}
-            />
-          ))}
-        </div>
-        {/* Dot pagination */}
-        <div style={{ display: "flex", justifyContent: "center", gap: "0.5rem", padding: "1.25rem 0", borderTop: "0.5px solid var(--pk-border)" }}>
+        {/* Dots sit above the strip — always visible on arrival */}
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "0.5rem", padding: "0.75rem 0", borderBottom: "0.5px solid var(--pk-border)", background: "var(--pk-bg)", position: "sticky", top: "60px", zIndex: 10 }}>
           {breakdowns.map((b, i) => (
             <button
               key={b.slug}
               onClick={() => scrollToCard(i)}
               aria-label={`Go to ${b.title}`}
               style={{ width: i === activeIndex ? "20px" : "6px", height: "6px", borderRadius: "3px", background: i === activeIndex ? "var(--pk-accent)" : "var(--pk-border-accent)", border: "none", cursor: "pointer", padding: 0, transition: "width 0.2s, background 0.2s" }}
+            />
+          ))}
+        </div>
+
+        {/* Scroll strip — 88vw cards so next card peeks in from the right */}
+        <div className="tb-scroll" style={{ display: "flex", overflowX: "auto", scrollSnapType: "x mandatory", WebkitOverflowScrolling: "touch" as never, scrollbarWidth: "none", gap: "8px", paddingRight: "8px" }}>
+          {breakdowns.map((b, i) => (
+            <MobileCard
+              key={b.slug}
+              b={b}
+              cardRef={(el) => { cardRefs.current[i] = el; }}
             />
           ))}
         </div>
