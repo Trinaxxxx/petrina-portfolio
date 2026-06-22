@@ -33,7 +33,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable} dark`}>
+    <html lang="en" className={`${inter.variable} dark`} data-scroll-behavior="smooth">
       <head>
         <link rel="canonical" href="https://petrina-portfolio.vercel.app/" />
         <link rel="preconnect" href="https://www.youtube.com" />
