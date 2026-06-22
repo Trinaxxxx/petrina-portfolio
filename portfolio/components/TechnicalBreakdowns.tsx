@@ -4,9 +4,11 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { breakdowns, type Breakdown, type MediaItem } from "@/lib/breakdowns";
+import Lightbox from "@/components/Lightbox";
 
 function MediaCard({ item }: { item: MediaItem }) {
   const [failed, setFailed] = useState(false);
+  const [lightbox, setLightbox] = useState(false);
   const isGif = item.type === "gif" || item.src.endsWith(".gif");
   const isPlaceholder = item.type === "placeholder" || !item.src || failed;
 
@@ -32,14 +34,17 @@ function MediaCard({ item }: { item: MediaItem }) {
   }
 
   return (
-    <div style={base}>
-      {isGif ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={item.src} alt={item.alt} onError={() => setFailed(true)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-      ) : (
-        <Image src={item.src} alt={item.alt} fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw" style={{ objectFit: "cover" }} onError={() => setFailed(true)} />
-      )}
-    </div>
+    <>
+      <div style={{ ...base, cursor: "zoom-in" }} onClick={() => setLightbox(true)} title="Click to enlarge">
+        {isGif ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={item.src} alt={item.alt} onError={() => setFailed(true)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+        ) : (
+          <Image src={item.src} alt={item.alt} fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw" style={{ objectFit: "cover" }} onError={() => setFailed(true)} />
+        )}
+      </div>
+      {lightbox && <Lightbox item={item} onClose={() => setLightbox(false)} />}
+    </>
   );
 }
 
