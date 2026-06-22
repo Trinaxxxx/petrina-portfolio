@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
+import Lightbox from "@/components/Lightbox";
 
 type MediaItem = { src: string; alt: string; type?: "image" | "gif" | "placeholder" };
 
@@ -104,10 +105,11 @@ const projects: Project[] = [
 
 function MediaCard({ item }: { item: MediaItem }) {
   const [failed, setFailed] = useState(false);
+  const [lightbox, setLightbox] = useState(false);
   const isGif = item.type === "gif" || item.src.endsWith(".gif");
   const isPlaceholder = item.type === "placeholder" || !item.src;
 
-  const placeholderStyle: React.CSSProperties = {
+  const baseStyle: React.CSSProperties = {
     position: "relative",
     background: "var(--pk-bg)",
     border: "0.5px solid var(--pk-border)",
@@ -118,46 +120,32 @@ function MediaCard({ item }: { item: MediaItem }) {
     overflow: "hidden",
   };
 
-  const labelStyle: React.CSSProperties = {
-    fontFamily: "var(--pk-mono)",
-    fontSize: "9px",
-    color: "var(--pk-muted)",
-    opacity: 0.4,
-    letterSpacing: "0.05em",
-    textAlign: "center",
-    padding: "0.5rem",
-  };
-
   if (isPlaceholder || failed) {
     return (
-      <div style={placeholderStyle}>
-        <span style={labelStyle}>{item.alt}</span>
+      <div style={baseStyle}>
+        <span style={{ fontFamily: "var(--pk-mono)", fontSize: "9px", color: "var(--pk-muted)", opacity: 0.4, letterSpacing: "0.05em", textAlign: "center", padding: "0.5rem" }}>
+          {item.alt}
+        </span>
       </div>
     );
   }
 
   return (
-    <div style={placeholderStyle}>
-      {isGif ? (
-        // GIFs must use <img> so animation is preserved
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={item.src}
-          alt={item.alt}
-          onError={() => setFailed(true)}
-          style={{ width: "100%", height: "100%", objectFit: "cover" }}
-        />
-      ) : (
-        <Image
-          src={item.src}
-          alt={item.alt}
-          fill
-          sizes="(max-width: 900px) 50vw, 25vw"
-          style={{ objectFit: "cover" }}
-          onError={() => setFailed(true)}
-        />
-      )}
-    </div>
+    <>
+      <div
+        style={{ ...baseStyle, cursor: "zoom-in" }}
+        onClick={() => setLightbox(true)}
+        title="Click to enlarge"
+      >
+        {isGif ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={item.src} alt={item.alt} onError={() => setFailed(true)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+        ) : (
+          <Image src={item.src} alt={item.alt} fill sizes="(max-width: 900px) 50vw, 25vw" style={{ objectFit: "cover" }} onError={() => setFailed(true)} />
+        )}
+      </div>
+      {lightbox && <Lightbox item={item} onClose={() => setLightbox(false)} />}
+    </>
   );
 }
 
