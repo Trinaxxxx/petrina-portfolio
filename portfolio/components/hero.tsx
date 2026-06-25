@@ -16,9 +16,11 @@ export default function Hero() {
       {/* Layer 0 — Laundromat cinematic background */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/projects/laundromat-cinematic.png"
+        src="/projects/laundromat-cinematic.webp"
         alt=""
         aria-hidden="true"
+        fetchPriority="high"
+        decoding="async"
         style={{
           position: "absolute",
           inset: 0,

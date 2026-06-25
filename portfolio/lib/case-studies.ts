@@ -175,8 +175,8 @@ const caseStudies: CaseStudy[] = [
     results: {
       heading: "Results",
       body: "Quest 3 profiling showed a 205% increase in frame rate, reaching a locked 72 FPS. GPU overhead dropped from 99% to ~55%, creating a 44% performance buffer for higher-fidelity lighting and materials. The same performance-optimised assets used in the VR runtime render photorealistically in Enscape and Unreal Engine — proving that strict polygon budgets and visual quality are not in conflict.",
-      gif: "/projects/alphaplanes-comparison.gif",
-      gifAlt: "Revit vs Alpha Planes — before/after VR comparison",
+      gif: "",
+      gifAlt: "Revit vs Alpha Planes — before/after VR comparison (placeholder)",
       images: [
         { src: "/projects/alphaplanes-solution-1.png", alt: "Alpha Planes in production — warehouse scene render 1" },
         { src: "/projects/alphaplanes-solution-2.png", alt: "Alpha Planes in production — warehouse scene render 2" },
