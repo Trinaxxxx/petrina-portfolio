@@ -472,11 +472,9 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
             </div>
             <div className="cs-instance-grid">
               {study.problem.images.map((img) => (
-                <div
-                  key={img.src}
-                  style={{ position: "relative", aspectRatio: "16/9", background: "var(--pk-bg3)" }}
-                >
-                  <Image src={img.src} alt={img.alt} fill sizes="(max-width: 900px) 100vw, 50vw" style={{ objectFit: "cover" }} />
+                <div key={img.src} style={{ background: "var(--pk-bg3)", overflow: "hidden" }}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={img.src} alt={img.alt} loading="lazy" style={{ width: "100%", height: "auto", display: "block" }} />
                 </div>
               ))}
             </div>
@@ -525,24 +523,15 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
             </div>
           </FadeContent>
 
-          {/* LOD image — full width */}
+          {/* LOD image — full width, natural ratio */}
           <FadeContent duration={900} delay={100}>
-            <div
-              style={{
-                position: "relative",
-                width: "100%",
-                aspectRatio: "21/9",
-                background: "var(--pk-bg3)",
-                marginBottom: "1px",
-                overflow: "hidden",
-              }}
-            >
-              <Image
+            <div style={{ width: "100%", background: "var(--pk-bg3)", marginBottom: "1px", overflow: "hidden" }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src={study.technique.images[0].src}
                 alt={study.technique.images[0].alt}
-                fill
-                sizes="100vw"
-                style={{ objectFit: "cover", objectPosition: "center bottom" }}
+                loading="lazy"
+                style={{ width: "100%", height: "auto", display: "block" }}
               />
             </div>
           </FadeContent>
@@ -567,21 +556,19 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
             <FadeContent duration={900} delay={150}>
               <div
                 style={{
-                  position: "relative",
                   width: "100%",
                   maxWidth: "760px",
                   margin: "0 auto",
-                  aspectRatio: "4/3",
                   background: "var(--pk-bg3)",
                   overflow: "hidden",
                 }}
               >
-                <Image
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                   src={study.technique.images[1].src}
                   alt={study.technique.images[1].alt}
-                  fill
-                  sizes="(max-width: 900px) 100vw, 760px"
-                  style={{ objectFit: "cover" }}
+                  loading="lazy"
+                  style={{ width: "100%", height: "auto", display: "block" }}
                 />
               </div>
               <div
@@ -645,7 +632,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
                   alt={step.imageAlt}
                   fill
                   sizes="(max-width: 900px) 100vw, 33vw"
-                  style={{ objectFit: "cover" }}
+                  style={{ objectFit: "contain" }}
                 />
               </div>
               {/* Text */}
@@ -926,13 +913,35 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
               marginBottom: "0.75rem",
             }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={study.results.gif}
-              alt={study.results.gifAlt}
-              loading="lazy"
-              style={{ width: "100%", display: "block" }}
-            />
+            {study.results.gif ? (
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={study.results.gif}
+                  alt={study.results.gifAlt}
+                  loading="lazy"
+                  style={{ width: "100%", display: "block" }}
+                />
+              </>
+            ) : (
+              <div
+                style={{
+                  width: "100%",
+                  aspectRatio: "16 / 9",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "var(--pk-muted)",
+                  fontFamily: "var(--pk-mono)",
+                  fontSize: "11px",
+                  letterSpacing: "0.06em",
+                  textTransform: "uppercase",
+                  opacity: 0.7,
+                }}
+              >
+                Comparison placeholder
+              </div>
+            )}
           </div>
           <div
             style={{
@@ -1016,7 +1025,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
                 key={img.src}
                 style={{ position: "relative", aspectRatio: "4/3", background: "var(--pk-bg3)", overflow: "hidden" }}
               >
-                <Image src={img.src} alt={img.alt} fill sizes="(max-width: 900px) 50vw, 33vw" style={{ objectFit: "cover" }} />
+                <Image src={img.src} alt={img.alt} fill sizes="(max-width: 900px) 50vw, 33vw" style={{ objectFit: "contain" }} />
               </div>
             ))}
           </div>

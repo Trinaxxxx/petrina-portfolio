@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import Lightbox from "@/components/Lightbox";
 
@@ -15,6 +14,7 @@ type Project = {
   desc: string;
   specs: [string, string][];
   media: MediaItem[];
+  mediaLayout?: "tall-right";
   caseStudy?: string;
   link?: { label: string; href: string };
 };
@@ -42,6 +42,31 @@ const projects: Project[] = [
   },
   {
     num: "02",
+    title: "Blender Automation Pipeline — Asset Processing",
+    tags: ["CAD/Revit", "Pipeline", "Python"],
+    featured: false,
+    desc: "Designed and implemented a suite of Blender Python tools automating asset replacement, material assignment, scene cleanup, and collection organisation. Reduced manual environment setup time by 40–60% across hundreds of project assets. Full tool walkthrough and demos coming soon.",
+    specs: [
+      ["Impact", "40–60% time saved"],
+      ["Scale", "100s of assets"],
+      ["Role", "Tool Developer"],
+      ["Tools", "Blender, Python"],
+    ],
+    media: [
+      { src: "/projects/pipeline-ui.png", alt: "PipelineX Blender plugin — full UI panel" },
+      { src: "", alt: "Collection Organizer — tool demo", type: "placeholder" as const },
+      { src: "", alt: "Revit Asset Replacer — script walkthrough", type: "placeholder" as const },
+      { src: "", alt: "Scene cleanup — before / after", type: "placeholder" as const },
+      { src: "", alt: "Material assignment — batch automation", type: "placeholder" as const },
+      { src: "", alt: "Naming convention QA pass", type: "placeholder" as const },
+      { src: "", alt: "Batch export — pipeline output", type: "placeholder" as const },
+    ],
+    mediaLayout: "tall-right",
+    caseStudy: "/case-study/blender-automation",
+    link: { label: "View on GitHub ↗", href: "https://github.com/Trinaxxxx" },
+  },
+  {
+    num: "03",
     title: "Alpha Planes — Real-Time Optimisation",
     tags: ["Case Study", "Optimisation", "VR Profiling"],
     featured: false,
@@ -56,12 +81,12 @@ const projects: Project[] = [
       { src: "/projects/alphaplanes-lod.png",       alt: "Alpha Planes — LOD chain across 3 detail levels" },
       { src: "/projects/alphamass-breakdown.png",   alt: "Pod component breakdown — Top / Side / Middle / Front" },
       { src: "/projects/alphamass-bts.png",         alt: "Production BTS — Blender optimisation workflow" },
-      { src: "/projects/alphamass-comparison.gif",  alt: "Revit vs Alpha Planes — VR before/after comparison", type: "gif" },
+      { src: "",  alt: "Revit vs Alpha Planes — VR before/after comparison (placeholder)", type: "placeholder" },
     ],
     caseStudy: "/technical-breakdowns#alpha-planes",
   },
   {
-    num: "03",
+    num: "04",
     title: "TMX Metaverse — VR Sandbox Environments",
     tags: ["VR", "Blender", "Real-Time", "Live Event"],
     featured: false,
@@ -80,49 +105,35 @@ const projects: Project[] = [
     ],
     caseStudy: "/technical-breakdowns#tmx",
   },
-  {
-    num: "04",
-    title: "Blender Automation Pipeline — Asset Processing",
-    tags: ["CAD/Revit", "Pipeline", "Python"],
-    featured: false,
-    desc: "Designed and implemented a suite of Blender Python tools automating asset replacement, material assignment, scene cleanup, and collection organisation. Reduced manual environment setup time by 40–60% across hundreds of project assets. Full tool walkthrough and demos coming soon.",
-    specs: [
-      ["Impact", "40–60% time saved"],
-      ["Scale", "100s of assets"],
-      ["Role", "Tool Developer"],
-      ["Tools", "Blender, Python"],
-    ],
-    media: [
-      { src: "/projects/pipeline-ui.png", alt: "PipelineX Blender plugin — full UI panel" },
-      { src: "", alt: "Tool demo — Collection Organizer walkthrough", type: "placeholder" as const },
-      { src: "", alt: "Script walkthrough — Revit Asset Replacer", type: "placeholder" as const },
-      { src: "", alt: "Before / After — scene cleanup automation", type: "placeholder" as const },
-    ],
-    caseStudy: "/technical-breakdowns#blender-automation",
-    link: { label: "View on GitHub ↗", href: "https://github.com/Trinaxxxx" },
-  },
 ];
 
 function MediaCard({ item }: { item: MediaItem }) {
   const [failed, setFailed] = useState(false);
   const [lightbox, setLightbox] = useState(false);
-  const isGif = item.type === "gif" || item.src.endsWith(".gif");
   const isPlaceholder = item.type === "placeholder" || !item.src;
 
-  const baseStyle: React.CSSProperties = {
-    position: "relative",
-    background: "var(--pk-bg)",
+  // Each tile avoids breaking across masonry columns and renders at the
+  // image's natural aspect ratio — no cropping.
+  const tileStyle: React.CSSProperties = {
+    breakInside: "avoid",
+    marginBottom: "8px",
     border: "0.5px solid var(--pk-border)",
-    aspectRatio: "16/9",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    borderRadius: "2px",
     overflow: "hidden",
+    background: "var(--pk-bg)",
   };
 
   if (isPlaceholder || failed) {
     return (
-      <div style={baseStyle}>
+      <div
+        style={{
+          ...tileStyle,
+          aspectRatio: "16/9",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
         <span style={{ fontFamily: "var(--pk-mono)", fontSize: "9px", color: "var(--pk-muted)", opacity: 0.4, letterSpacing: "0.05em", textAlign: "center", padding: "0.5rem" }}>
           {item.alt}
         </span>
@@ -132,20 +143,123 @@ function MediaCard({ item }: { item: MediaItem }) {
 
   return (
     <>
-      <div
-        style={{ ...baseStyle, cursor: "zoom-in" }}
+      <figure
+        style={{ ...tileStyle, margin: 0, marginBottom: "8px", cursor: "zoom-in", transition: "border-color 0.2s" }}
         onClick={() => setLightbox(true)}
         title="Click to enlarge"
+        onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--pk-border-accent)")}
+        onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--pk-border)")}
       >
-        {isGif ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={item.src} alt={item.alt} onError={() => setFailed(true)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-        ) : (
-          <Image src={item.src} alt={item.alt} fill sizes="(max-width: 900px) 50vw, 25vw" style={{ objectFit: "cover" }} onError={() => setFailed(true)} />
-        )}
-      </div>
+        {/* Plain <img> at natural ratio — shows the whole frame, never crops detail */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={item.src}
+          alt={item.alt}
+          loading="lazy"
+          onError={() => setFailed(true)}
+          style={{ width: "100%", height: "auto", display: "block" }}
+        />
+      </figure>
       {lightbox && <Lightbox item={item} onClose={() => setLightbox(false)} />}
     </>
+  );
+}
+
+// Tall hero image on the right, a grid of placeholders on the left stretched
+// to match the image's height. Used for the Blender Automation project, whose
+// hero is a tall vertical UI panel.
+function TallRightMedia({ media }: { media: MediaItem[] }) {
+  const [lightbox, setLightbox] = useState(false);
+  const [failed, setFailed] = useState(false);
+
+  const hero = media[0];
+  const fillers = media.slice(1);
+  const heroIsPlaceholder = hero?.type === "placeholder" || !hero?.src || failed;
+
+  const fillerStyle: React.CSSProperties = {
+    border: "0.5px solid var(--pk-border)",
+    borderRadius: "2px",
+    background: "var(--pk-bg)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: 0,
+    padding: "0.5rem",
+  };
+  const fillerLabel: React.CSSProperties = {
+    fontFamily: "var(--pk-mono)",
+    fontSize: "9px",
+    color: "var(--pk-muted)",
+    opacity: 0.4,
+    letterSpacing: "0.05em",
+    textAlign: "center",
+    lineHeight: 1.4,
+  };
+
+  return (
+    <div
+      className="media-tall-right"
+      style={{
+        direction: "ltr",
+        padding: "clamp(1rem, 2.5vw, 1.75rem)",
+        display: "grid",
+        gridTemplateColumns: "1fr clamp(120px, 24%, 168px)",
+        gap: "8px",
+        alignItems: "stretch",
+      }}
+    >
+      {/* Left — placeholder grid; rows divide the hero's height evenly */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gridAutoRows: "1fr",
+          gap: "8px",
+          minHeight: 0,
+        }}
+      >
+        {fillers.map((item, i) => (
+          <div key={item.src || `ph-${i}`} style={fillerStyle}>
+            <span style={fillerLabel}>{item.alt}</span>
+          </div>
+        ))}
+      </div>
+
+      {/* Right — tall hero image at natural ratio (defines the row height) */}
+      {heroIsPlaceholder ? (
+        <div style={{ ...fillerStyle, minHeight: "420px" }}>
+          <span style={fillerLabel}>{hero?.alt}</span>
+        </div>
+      ) : (
+        <>
+          <figure
+            style={{
+              margin: 0,
+              cursor: "zoom-in",
+              border: "0.5px solid var(--pk-border)",
+              borderRadius: "2px",
+              overflow: "hidden",
+              background: "var(--pk-bg)",
+              transition: "border-color 0.2s",
+            }}
+            onClick={() => setLightbox(true)}
+            title="Click to enlarge"
+            onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--pk-border-accent)")}
+            onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--pk-border)")}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={hero.src}
+              alt={hero.alt}
+              loading="lazy"
+              onError={() => setFailed(true)}
+              style={{ width: "100%", height: "auto", display: "block" }}
+            />
+          </figure>
+          {lightbox && <Lightbox item={hero} onClose={() => setLightbox(false)} />}
+        </>
+      )}
+    </div>
   );
 }
 
@@ -219,23 +333,23 @@ export default function Projects() {
             }}
             className="project-card"
           >
-            {/* Media grid */}
-            <div
-              style={{
-                direction: "ltr",
-                background: "var(--pk-bg3)",
-                border: "0.5px solid var(--pk-border)",
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gridTemplateRows: "1fr 1fr",
-                gap: "1px",
-                minHeight: "280px",
-              }}
-            >
-              {p.media.map((item, i) => (
-                <MediaCard key={item.src || `placeholder-${i}`} item={item} />
-              ))}
-            </div>
+            {/* Media — tall hero + placeholder grid, or editorial masonry */}
+            {p.mediaLayout === "tall-right" ? (
+              <TallRightMedia media={p.media} />
+            ) : (
+              <div
+                className="media-masonry"
+                style={{
+                  direction: "ltr",
+                  padding: "clamp(1rem, 2.5vw, 1.75rem)",
+                  alignSelf: "stretch",
+                }}
+              >
+                {p.media.map((item, i) => (
+                  <MediaCard key={item.src || `placeholder-${i}`} item={item} />
+                ))}
+              </div>
+            )}
 
             {/* Info */}
             <div
@@ -392,11 +506,18 @@ export default function Projects() {
       </div>
 
       <style>{`
+        .media-masonry {
+          column-count: 2;
+          column-gap: 8px;
+        }
         @media (max-width: 900px) {
           .project-card {
             grid-template-columns: 1fr !important;
             direction: ltr !important;
           }
+        }
+        @media (max-width: 560px) {
+          .media-masonry { column-count: 1; }
         }
       `}</style>
     </section>

@@ -38,9 +38,9 @@ function MediaCard({ item }: { item: MediaItem }) {
       <div style={{ ...base, cursor: "zoom-in" }} onClick={() => setLightbox(true)} title="Click to enlarge">
         {isGif ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={item.src} alt={item.alt} onError={() => setFailed(true)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          <img src={item.src} alt={item.alt} onError={() => setFailed(true)} style={{ width: "100%", height: "100%", objectFit: "contain" }} />
         ) : (
-          <Image src={item.src} alt={item.alt} fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw" style={{ objectFit: "cover" }} onError={() => setFailed(true)} />
+          <Image src={item.src} alt={item.alt} fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw" style={{ objectFit: "contain" }} onError={() => setFailed(true)} />
         )}
       </div>
       {lightbox && <Lightbox item={item} onClose={() => setLightbox(false)} />}
