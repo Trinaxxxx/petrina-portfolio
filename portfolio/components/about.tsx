@@ -108,7 +108,7 @@ export default function About() {
         <div className="skills-grid">
           {skills.map((s) => (
             <div
-              key={s.code}
+              key={s.title}
               style={{
                 background: "var(--pk-bg2)",
                 padding: "1.25rem",
