@@ -66,7 +66,7 @@ function PipelineNav() {
       </nav>
       <div style={{ position: "fixed", right: "20px", top: "50%", transform: "translateY(-50%)", zIndex: 50, pointerEvents: "none" }}>
         <div style={{ width: "2px", height: "120px", background: "rgba(200,195,190,0.12)", borderRadius: "2px", position: "relative" }}>
-          <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: `${scrollPct * 100}%`, background: "var(--pk-accent)", borderRadius: "2px", transition: "height 0.08s linear" }} />
+          <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "var(--pk-accent)", borderRadius: "2px", transition: "transform 0.08s linear", transformOrigin: "top", transform: `scaleY(${scrollPct})` }} />
         </div>
       </div>
     </>
@@ -179,11 +179,11 @@ function FeatureRow({ f, flip }: { f: Feature; flip: boolean }) {
           ))}
 
           {/* Value-add callout */}
-          <div style={{ borderLeft: "2px solid var(--pk-accent)", paddingLeft: "1rem", borderRadius: 0 }}>
-            <div style={{ fontFamily: "var(--pk-mono)", fontSize: "10px", color: "var(--pk-accent)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.35rem" }}>
+          <div style={{ border: "0.5px solid var(--pk-border-accent)", background: "rgba(200,195,190,0.03)", padding: "0.9rem 1rem", borderRadius: "1px" }}>
+            <strong style={{ display: "block", fontFamily: "var(--pk-mono)", fontSize: "11px", color: "var(--pk-accent)", fontWeight: 500, marginBottom: "0.35rem", letterSpacing: "0.03em" }}>
               Value to the team
-            </div>
-            <p style={{ fontSize: "14px", color: "var(--pk-text)", lineHeight: 1.6, fontWeight: 400 }}>
+            </strong>
+            <p style={{ fontSize: "14px", color: "var(--pk-text)", lineHeight: 1.6, fontWeight: 400, margin: 0 }}>
               {f.valueAdd}
             </p>
           </div>
@@ -222,9 +222,6 @@ export default function PipelinePage() {
           <span>/</span>
           <span style={{ color: "var(--pk-text)" }}>PipelineX</span>
         </div>
-        <div style={{ fontFamily: "var(--pk-mono)", fontSize: "11px", color: "var(--pk-accent)", letterSpacing: "0.18em", textTransform: "uppercase", marginBottom: "1rem" }}>
-          {p.eyebrow}
-        </div>
         <h1 style={{ fontSize: "clamp(2.8rem, 7vw, 5.5rem)", fontWeight: 300, letterSpacing: "-0.025em", lineHeight: 1.0, marginBottom: "0.75rem", color: "var(--pk-text)" }}>
           {p.title}
         </h1>
@@ -254,7 +251,7 @@ export default function PipelinePage() {
       {/* Problem */}
       <section style={{ borderTop: "0.5px solid var(--pk-border)", background: "var(--pk-bg2)", padding: "clamp(3rem, 7vw, 5rem) clamp(1.25rem, 5vw, 3rem)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          <SectionLabel>The problem it solves</SectionLabel>
+          <h2 style={{ fontSize: "clamp(1.6rem, 3vw, 2.4rem)", fontWeight: 300, letterSpacing: "-0.02em", marginBottom: "1.5rem", color: "var(--pk-text)" }}>The problem it solves</h2>
           <div style={{ maxWidth: "720px" }}>
             {p.problem.body.map((para, i) => (
               <p key={i} style={{ fontSize: "clamp(1rem, 1.8vw, 1.25rem)", fontWeight: 300, color: "var(--pk-text)", lineHeight: 1.7, marginBottom: i < p.problem.body.length - 1 ? "1.25rem" : 0 }}>
@@ -282,7 +279,6 @@ export default function PipelinePage() {
       {/* Overall assessment — moved up, right after the summary */}
       <section style={{ borderTop: "0.5px solid var(--pk-border)", padding: "clamp(3rem, 7vw, 5rem) clamp(1.25rem, 5vw, 3rem)" }}>
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-          <SectionLabel>Overall assessment</SectionLabel>
           <h2 style={{ fontSize: "clamp(1.6rem, 3vw, 2.4rem)", fontWeight: 300, letterSpacing: "-0.02em", marginBottom: "2.5rem" }}>
             Before and after
           </h2>
@@ -321,10 +317,10 @@ export default function PipelinePage() {
       {/* Features */}
       <section style={{ padding: "clamp(1rem, 3vw, 2rem) clamp(1.25rem, 5vw, 3rem) 0", maxWidth: "1200px", margin: "0 auto" }}>
         <div style={{ paddingTop: "clamp(2.5rem, 6vw, 4rem)" }}>
-          <SectionLabel>The toolset — 12 tools</SectionLabel>
-          <h2 style={{ fontSize: "clamp(1.6rem, 3vw, 2.4rem)", fontWeight: 300, letterSpacing: "-0.02em", marginBottom: "1rem" }}>
+          <h2 style={{ fontSize: "clamp(1.6rem, 3vw, 2.4rem)", fontWeight: 300, letterSpacing: "-0.02em", marginBottom: "0.5rem" }}>
             Every tool, and the value it adds
           </h2>
+          <p style={{ fontFamily: "var(--pk-mono)", fontSize: "12px", color: "var(--pk-muted)", letterSpacing: "0.04em", marginBottom: "2rem" }}>12 tools in the suite</p>
         </div>
         {p.features.map((f, i) => (
           <FeatureRow key={f.num} f={f} flip={i % 2 === 1} />
@@ -343,3 +339,4 @@ export default function PipelinePage() {
     </>
   );
 }
+

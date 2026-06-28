@@ -1,6 +1,5 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
 import CountUp from "@/components/CountUp";
 import FadeContent from "@/components/FadeContent";
 
@@ -15,34 +14,28 @@ const stats: Stat[] = [
 
 const skills = [
   {
-    code: "// ENV",
     title: "Environment Art",
     items: ["Modular environment design", "LOD generation & management", "Real-time scene optimisation", "Terrain & vegetation systems"],
   },
   {
-    code: "// PIPE",
     title: "Pipeline & Automation",
     items: ["Blender Python scripting", "CAD / Revit integration", "Asset management systems", "Naming conventions & QA"],
   },
   {
-    code: "// MAT",
     title: "Materials & Textures",
     items: ["PBR material authoring", "UV mapping & atlasing", "Substance Designer / Painter", "Texture scaling & consolidation"],
   },
   {
-    code: "// RT",
     title: "Real-Time & VR",
     items: ["Unreal Engine 5", "Blender real-time render", "VR performance budgeting", "Draw call optimisation"],
   },
   {
-    code: "// DCC",
     title: "DCC Tools",
-    items: ["Blender (primary)", "Maya, Unity", "Photoshop / Illustrator", "After Effects"],
+    items: ["Blender (primary)", "Maya", "Unity", "Photoshop / Illustrator"],
   },
   {
-    code: "// TECH",
     title: "Technical",
-    items: ["Python scripting", "Topology & mesh cleanup", "BIM / engineering standards", "Cross-team collaboration"],
+    items: ["Topology & mesh cleanup", "BIM / engineering standards", "File format conversion", "Git / version control"],
   },
 ];
 
@@ -52,19 +45,6 @@ export default function About() {
       id="about"
       style={{ padding: "clamp(2rem, 6vw, 4rem) clamp(1.25rem, 5vw, 3rem) 0", maxWidth: "1200px", margin: "0 auto", overflowX: "clip" }}
     >
-      {/* Section label */}
-      <div
-        style={{
-          fontFamily: "var(--pk-mono)",
-          fontSize: "11px",
-          color: "var(--pk-accent)",
-          letterSpacing: "0.14em",
-          textTransform: "uppercase",
-          marginBottom: "0.75rem",
-        }}
-      >
-        About
-      </div>
 
       {/* Bio — condensed */}
       <FadeContent blur duration={900} threshold={0.1}>
@@ -122,73 +102,28 @@ export default function About() {
         </div>
       </FadeContent>
 
-      {/* Skills grid — immediately below stats */}
+      {/* Skills — 3×2 card grid */}
       <FadeContent duration={900} delay={240} threshold={0.05}>
-      <div id="skills">
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(6, 1fr)",
-            gap: "1px",
-            background: "var(--pk-border)",
-            border: "0.5px solid var(--pk-border)",
-            borderTop: "none",
-          }}
-          className="skills-grid"
-        >
-          {skills.map((s, si) => (
+      <div id="skills" style={{ borderTop: "0.5px solid var(--pk-border)", paddingTop: "1.5rem", marginTop: "1px" }}>
+        <div className="skills-grid">
+          {skills.map((s) => (
             <div
-              key={`skill-${si}`}
+              key={s.code}
               style={{
                 background: "var(--pk-bg2)",
-                padding: "1.5rem",
-                transition: "background 0.2s",
-                minWidth: 0,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                textAlign: "center",
+                padding: "1.25rem",
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = "var(--pk-bg3)")}
-              onMouseLeave={(e) => (e.currentTarget.style.background = "var(--pk-bg2)")}
             >
-              <div
-                style={{
-                  fontFamily: "var(--pk-mono)",
-                  fontSize: "11px",
-                  color: "var(--pk-accent)",
-                  marginBottom: "0.6rem",
-                  letterSpacing: "0.08em",
-                }}
-              >
-                {s.code}
-              </div>
-              <div style={{ fontSize: "13px", fontWeight: 500, color: "var(--pk-text)", marginBottom: "0.6rem" }}>
+              <p style={{ fontSize: "13px", fontWeight: 500, color: "var(--pk-text)", margin: "0 0 0.75rem" }}>
                 {s.title}
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: "4px", width: "100%" }}>
-                {s.items.map((item, ii) => (
-                  <Badge
-                    key={`${si}-item-${ii}`}
-                    variant="outline"
-                    style={{
-                      fontSize: "10px",
-                      color: "var(--pk-muted)",
-                      borderColor: "var(--pk-border-accent)",
-                      background: "transparent",
-                      justifyContent: "center",
-                      textAlign: "center",
-                      whiteSpace: "normal",
-                      height: "auto",
-                      width: "100%",
-                      padding: "3px 6px",
-                      letterSpacing: "0.02em",
-                    }}
-                  >
+              </p>
+              <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
+                {s.items.map((item) => (
+                  <li key={item} style={{ fontFamily: "var(--pk-mono)", fontSize: "11px", color: "var(--pk-muted)", lineHeight: 1.8 }}>
                     {item}
-                  </Badge>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
           ))}
         </div>
@@ -196,16 +131,20 @@ export default function About() {
       </FadeContent>
 
       <style>{`
-        @media (max-width: 1100px) {
-          .skills-grid { grid-template-columns: repeat(3, 1fr) !important; }
-        }
         @media (max-width: 900px) {
           .stats-row { grid-template-columns: repeat(2, 1fr) !important; }
-          .skills-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }
-        @media (max-width: 500px) {
-          .stats-row { grid-template-columns: repeat(2, 1fr) !important; }
-          .skills-grid { grid-template-columns: 1fr !important; }
+        .skills-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1px;
+          background: var(--pk-border);
+        }
+        @media (max-width: 700px) {
+          .skills-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 420px) {
+          .skills-grid { grid-template-columns: 1fr; }
         }
       `}</style>
     </section>

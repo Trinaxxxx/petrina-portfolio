@@ -23,22 +23,6 @@ export default function Contact() {
       >
         {/* Content */}
         <div style={{ position: "relative", zIndex: 1 }}>
-          <div
-            style={{
-              fontFamily: "var(--pk-mono)",
-              fontSize: "11px",
-              color: "var(--pk-accent)",
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              marginBottom: "0.75rem",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "0.75rem",
-            }}
-          >
-            Contact
-          </div>
 
           <h2
             style={{
@@ -46,7 +30,8 @@ export default function Contact() {
               fontWeight: 300,
               letterSpacing: "-0.02em",
               marginBottom: "1rem",
-            }}
+              textWrap: "balance",
+            } as React.CSSProperties}
           >
             Available for environment art and pipeline work.
           </h2>

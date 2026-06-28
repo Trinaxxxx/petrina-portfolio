@@ -49,18 +49,6 @@ export default function Process() {
       style={{ position: "relative", padding: "clamp(3rem, 8vw, 6rem) clamp(1.25rem, 5vw, 3rem)", maxWidth: "1200px", margin: "0 auto" }}
     >
       <div>
-        <div
-          style={{
-            fontFamily: "var(--pk-mono)",
-            fontSize: "11px",
-            color: "var(--pk-accent)",
-            letterSpacing: "0.14em",
-            textTransform: "uppercase",
-            marginBottom: "0.75rem",
-          }}
-        >
-          Process
-        </div>
         <h2
           style={{
             fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)",

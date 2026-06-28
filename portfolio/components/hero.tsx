@@ -53,38 +53,15 @@ export default function Hero() {
           width: "100%",
         }}
       >
-        <div
-          style={{
-            fontFamily: "var(--pk-mono)",
-            fontSize: "11px",
-            color: "var(--pk-accent)",
-            letterSpacing: "0.14em",
-            textTransform: "uppercase",
-            marginBottom: "1.5rem",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.75rem",
-          }}
-        >
-          Technical Environment Artist · Real-Time
-          <span
-            style={{
-              display: "block",
-              height: "0.5px",
-              width: "48px",
-              background: "var(--pk-accent)",
-            }}
-          />
-        </div>
-
         <h1
           style={{
             fontSize: "clamp(3rem, 7vw, 6rem)",
             fontWeight: 400,
             letterSpacing: "-0.025em",
             lineHeight: 1.05,
-            marginBottom: "1.5rem",
-          }}
+            marginBottom: "1.25rem",
+            textWrap: "balance",
+          } as React.CSSProperties}
         >
           Petrina{" "}
           <span style={{ color: "var(--pk-accent)", fontWeight: 600 }}>
@@ -126,7 +103,7 @@ export default function Hero() {
             View Work
           </a>
           <a
-            href="#environment"
+            href="/technical-breakdowns"
             style={{
               border: "0.5px solid var(--pk-accent)",
               color: "var(--pk-accent)",
@@ -146,7 +123,7 @@ export default function Hero() {
               e.currentTarget.style.color = "var(--pk-accent)";
             }}
           >
-            3D Environment
+            Technical Breakdowns
           </a>
         </div>
       </div>

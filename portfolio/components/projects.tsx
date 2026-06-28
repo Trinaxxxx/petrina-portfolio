@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import Lightbox from "@/components/Lightbox";
 
@@ -21,9 +22,9 @@ type Project = {
 
 const projects: Project[] = [
   {
-    num: "01 — In Progress",
+    num: "01",
     title: "Laundromat — Environment Art + Pipeline Showcase",
-    tags: ["Featured", "Personal", "Revit Source", "Three.js"],
+    tags: ["Featured", "In Progress", "Personal", "Revit Source", "Three.js"],
     featured: true,
     desc: "A personal real-time environment study sourced from Revit/SketchUp data — proving the full CAD-to-real-time pipeline. Prop-dense interior with washing machines, dryers, vending units, and industrial piping. Designed for interactive browser deployment with LOD, instancing, and a live performance HUD.",
     specs: [
@@ -150,15 +151,17 @@ function MediaCard({ item }: { item: MediaItem }) {
         onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--pk-border-accent)")}
         onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--pk-border)")}
       >
-        {/* Plain <img> at natural ratio — shows the whole frame, never crops detail */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={item.src}
-          alt={item.alt}
-          loading="lazy"
-          onError={() => setFailed(true)}
-          style={{ width: "100%", height: "auto", display: "block" }}
-        />
+        {/* Render at natural ratio without cropping detail */}
+        {item.src && (
+          <Image
+            src={item.src}
+            alt={item.alt}
+            width={1600}
+            height={900}
+            onError={() => setFailed(true)}
+            style={{ width: "100%", height: "auto", display: "block" }}
+          />
+        )}
       </figure>
       {lightbox && <Lightbox item={item} onClose={() => setLightbox(false)} />}
     </>
@@ -247,11 +250,11 @@ function TallRightMedia({ media }: { media: MediaItem[] }) {
             onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--pk-border-accent)")}
             onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--pk-border)")}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src={hero.src}
               alt={hero.alt}
-              loading="lazy"
+              width={1600}
+              height={900}
               onError={() => setFailed(true)}
               style={{ width: "100%", height: "auto", display: "block" }}
             />
@@ -269,18 +272,6 @@ export default function Projects() {
       id="work"
       style={{ padding: "clamp(3rem, 8vw, 6rem) clamp(1.25rem, 5vw, 3rem)", maxWidth: "1200px", margin: "0 auto" }}
     >
-      <div
-        style={{
-          fontFamily: "var(--pk-mono)",
-          fontSize: "11px",
-          color: "var(--pk-accent)",
-          letterSpacing: "0.14em",
-          textTransform: "uppercase",
-          marginBottom: "0.75rem",
-      }}
-      >
-        Work
-      </div>
 
       <h2
         style={{
@@ -319,17 +310,14 @@ export default function Projects() {
               display: "grid",
               gridTemplateColumns: "1fr 1fr",
               minHeight: "400px",
-              transition: "background 0.2s, border-left 0.2s",
+              transition: "background 0.2s",
               direction: idx % 2 === 1 ? "rtl" : "ltr",
-              borderLeft: "2px solid transparent",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = "var(--pk-bg2)";
-              e.currentTarget.style.borderLeft = "2px solid var(--pk-accent)";
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.background = "var(--pk-bg)";
-              e.currentTarget.style.borderLeft = "2px solid transparent";
             }}
             className="project-card"
           >
@@ -361,17 +349,6 @@ export default function Projects() {
                 justifyContent: "center",
               }}
             >
-              <div
-                style={{
-                  fontFamily: "var(--pk-mono)",
-                  fontSize: "11px",
-                  color: "var(--pk-accent)",
-                  marginBottom: "0.75rem",
-                  letterSpacing: "0.08em",
-                }}
-              >
-                Project {p.num}
-              </div>
 
               <div
                 style={{
@@ -523,3 +500,4 @@ export default function Projects() {
     </section>
   );
 }
+
