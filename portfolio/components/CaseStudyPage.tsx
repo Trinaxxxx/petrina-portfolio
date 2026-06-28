@@ -122,7 +122,7 @@ function CaseStudyNav() {
               height: `${scrollPct * 100}%`,
               background: "var(--pk-accent)",
               borderRadius: "2px",
-              transition: "height 0.08s linear",
+              transition: "opacity 0.08s linear",
             }}
           />
           <div
@@ -1185,3 +1185,4 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
     </>
   );
 }
+

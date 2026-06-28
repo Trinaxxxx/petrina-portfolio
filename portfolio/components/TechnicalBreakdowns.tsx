@@ -129,9 +129,6 @@ function MobileCard({ b, cardRef }: { b: Breakdown; cardRef: (el: HTMLDivElement
       </div>
 
       <div style={{ padding: "1.25rem 1.5rem 2rem" }}>
-        <div style={{ fontFamily: "var(--pk-mono)", fontSize: "10px", color: "var(--pk-accent)", letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: "0.4rem" }}>
-          Technical Breakdown
-        </div>
         <h2 style={{ fontSize: "clamp(1.2rem, 5vw, 1.5rem)", fontWeight: 400, letterSpacing: "-0.01em", marginBottom: "0.3rem", color: "var(--pk-text)", lineHeight: 1.25 }}>
           {b.title}
         </h2>
@@ -173,7 +170,7 @@ function TabletCard({ b }: { b: Breakdown }) {
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      style={{ background: "var(--pk-bg)", borderLeft: hovered ? "2px solid var(--pk-accent)" : "2px solid transparent", transition: "background 0.2s, border-left 0.2s", display: "flex", flexDirection: "column" }}
+      style={{ background: hovered ? "var(--pk-bg2)" : "var(--pk-bg)", transition: "background 0.2s", display: "flex", flexDirection: "column" }}
     >
       <MediaGrid media={b.media} />
       <div style={{ padding: "1.75rem", display: "flex", flexDirection: "column", flex: 1 }}>
@@ -192,9 +189,6 @@ function TabletCard({ b }: { b: Breakdown }) {
 function BreakdownDetail({ b }: { b: Breakdown }) {
   return (
     <div>
-      <div style={{ fontFamily: "var(--pk-mono)", fontSize: "11px", color: "var(--pk-accent)", letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: "0.75rem" }}>
-        Technical Breakdown
-      </div>
       <h2 style={{ fontSize: "clamp(1.6rem, 3vw, 2.4rem)", fontWeight: 400, letterSpacing: "-0.015em", marginBottom: "0.5rem", color: "var(--pk-text)" }}>
         {b.title}
       </h2>
@@ -271,13 +265,12 @@ export default function TechnicalBreakdowns() {
           display: block; width: 100%; text-align: left;
           background: none; border: none; cursor: pointer;
           padding: 0.9rem 1rem 0.9rem 1.25rem;
-          border-left: 2px solid transparent;
-          transition: border-left 0.15s, color 0.15s;
+          transition: background 0.15s, color 0.15s;
           font-family: var(--pk-mono); font-size: 12px; letter-spacing: 0.04em;
           color: var(--pk-muted); line-height: 1.4;
         }
-        .tb-left-btn:hover { color: var(--pk-text); }
-        .tb-left-btn.active { border-left-color: var(--pk-accent); color: var(--pk-text); }
+        .tb-left-btn:hover { color: var(--pk-text); background: rgba(200,195,190,0.04); }
+        .tb-left-btn.active { background: rgba(200,195,190,0.07); color: var(--pk-text); }
         @media (min-width: 641px) {
           .tb-mobile  { display: none; }
           .tb-tablet  { display: grid !important; }
@@ -290,9 +283,6 @@ export default function TechnicalBreakdowns() {
 
       {/* Page header */}
       <div style={{ padding: "clamp(3rem, 8vw, 5rem) clamp(1.25rem, 5vw, 3rem) clamp(1.5rem, 4vw, 2.5rem)", maxWidth: "1200px", margin: "0 auto" }}>
-        <div style={{ fontFamily: "var(--pk-mono)", fontSize: "11px", color: "var(--pk-accent)", letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: "0.75rem" }}>
-          Technical Breakdowns
-        </div>
         <h1 style={{ fontSize: "clamp(1.8rem, 4vw, 3rem)", fontWeight: 400, letterSpacing: "-0.02em", marginBottom: "0.75rem", color: "var(--pk-text)" }}>
           How it gets built
         </h1>
@@ -310,7 +300,7 @@ export default function TechnicalBreakdowns() {
               key={b.slug}
               onClick={() => scrollToCard(i)}
               aria-label={`Go to ${b.title}`}
-              style={{ width: i === activeIndex ? "20px" : "6px", height: "6px", borderRadius: "3px", background: i === activeIndex ? "var(--pk-accent)" : "var(--pk-border-accent)", border: "none", cursor: "pointer", padding: 0, transition: "width 0.2s, background 0.2s" }}
+              style={{ width: "6px", height: "6px", borderRadius: "3px", background: i === activeIndex ? "var(--pk-accent)" : "var(--pk-border-accent)", border: "none", cursor: "pointer", padding: 0, transition: "transform 0.2s, background 0.2s", transform: i === activeIndex ? "scaleX(3.33)" : "scaleX(1)" }}
             />
           ))}
           {/* Animated nudge arrow — plays twice on load then fades out */}
@@ -347,9 +337,7 @@ export default function TechnicalBreakdowns() {
       <div className="tb-desktop" style={{ borderTop: "0.5px solid var(--pk-border)", height: "calc(100vh - 60px)" }}>
         {/* Left panel */}
         <div style={{ width: "280px", flexShrink: 0, borderRight: "0.5px solid var(--pk-border)", overflowY: "auto", padding: "2.5rem 0" }}>
-          <div style={{ fontFamily: "var(--pk-mono)", fontSize: "10px", color: "var(--pk-muted)", letterSpacing: "0.12em", textTransform: "uppercase", padding: "0 1.25rem 1rem", borderBottom: "0.5px solid var(--pk-border)", marginBottom: "0.5rem" }}>
-            Projects
-          </div>
+          <div style={{ height: "0.5px", background: "var(--pk-border)", margin: "0 1.25rem 0.5rem" }} />
           {breakdowns.map((b) => (
             <button
               key={b.slug}
@@ -370,3 +358,4 @@ export default function TechnicalBreakdowns() {
     </>
   );
 }
+

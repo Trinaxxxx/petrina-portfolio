@@ -6,7 +6,7 @@ import Link from "next/link";
 const links = [
   { href: "/", label: "Home" },
   { href: "/technical-breakdowns", label: "Breakdowns" },
-  { href: "/#environment", label: "3D Environment" },
+  { href: "/#work", label: "Work" },
   { href: "/#contact", label: "Contact" },
   { href: "https://github.com/Trinaxxxx", label: "GitHub ↗", external: true },
 ];
@@ -148,7 +148,7 @@ export default function Nav() {
               height: `${scrollPct * 100}%`,
               background: "var(--pk-accent)",
               borderRadius: "2px",
-              transition: "height 0.08s linear",
+              transition: "opacity 0.08s linear",
             }}
           />
           <div
@@ -222,3 +222,4 @@ export default function Nav() {
     </>
   );
 }
+
