@@ -34,13 +34,13 @@ The `.claude/launch.json` (at repo root) runs `npm run dev` from `portfolio/` on
 
 All component styling uses inline `style={{ }}` with CSS custom properties. Tailwind v4 is configured via `@theme` in `globals.css` (no `tailwind.config.ts`). Tailwind utilities appear in `layout.tsx` (body classes) and `nav.tsx` (responsive show/hide: `hidden md:flex`, `md:hidden`) — nowhere else.
 
-**Theme vars** (defined in `globals.css :root`):
+**Theme vars** (defined in `globals.css :root`, color-role system locked 2026-07-02):
 ```
---pk-bg / --pk-bg2 / --pk-bg3      dark background layers (#0b0d09 / #111410 / #181c14)
---pk-border / --pk-border-accent   subtle green-tinted borders
---pk-text / --pk-muted             foreground colours (#e6e8df / #84887a)
---pk-accent / --pk-accent2         sage green (#8aaa74 / #5e7a48)
---pk-warm                          warm gold (#c8a86a)
+--pk-bg / --pk-bg2 / --pk-bg3      dark background layers (#0b0b0d / #181e14 elevated card / #1e251a recessed panel)
+--pk-border / --pk-border-accent   subtle olive-tinted borders
+--pk-text / --pk-muted             bone body text / warm-muted secondary text (#d8d1bb / #918a7a)
+--pk-accent                        olive — "data": brand mark, stat numbers, featured tags, secondary buttons (#9fae6b)
+--pk-copper                        copper — "action": primary CTAs, sequence numbers, case-study links (#d18a4f)
 --pk-mono                          JetBrains Mono stack
 ```
 

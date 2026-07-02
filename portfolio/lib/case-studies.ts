@@ -44,7 +44,7 @@ const caseStudies: CaseStudy[] = [
     slug: "alpha-planes",
     title: "Alpha Planes",
     subtitle: "Real-Time Optimisation",
-    eyebrow: "Case Study — 02",
+    eyebrow: "Case Study",
     tags: ["Optimisation", "VR Profiling", "Texture Baking", "Blender Python"],
     hero: "/projects/alphamass-components.png",
     heroAlt: "Alpha Mass component breakdown — shelf elements deconstructed into alpha planes",

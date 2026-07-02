@@ -11,21 +11,6 @@ export default function Environment() {
           padding: "clamp(3rem, 8vw, 6rem) clamp(1.25rem, 5vw, 3rem) 3rem",
         }}
       >
-        <div
-          style={{
-            fontFamily: "var(--pk-mono)",
-            fontSize: "11px",
-            color: "var(--pk-accent)",
-            letterSpacing: "0.14em",
-            textTransform: "uppercase",
-            marginBottom: "0.75rem",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.75rem",
-          }}
-        >
-          Interactive
-        </div>
         <h2
           style={{
             fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)",

@@ -118,8 +118,11 @@ export default function Nav() {
         </button>
       </nav>
 
-      {/* Vertical scroll progress — home page only (breakdowns page uses panel-level scroll) */}
+      {/* Vertical scroll progress — home page only, desktop only (hidden on mobile so it
+          never overlaps hero body text; breakdowns page uses panel-level scroll) */}
+      {pathname === "/" && (
       <div
+        className="hidden md:block"
         style={{
           position: "fixed",
           right: "20px",
@@ -127,14 +130,13 @@ export default function Nav() {
           transform: "translateY(-50%)",
           zIndex: 50,
           pointerEvents: "none",
-          display: pathname === "/" ? undefined : "none",
         }}
       >
         <div
           style={{
             width: "2px",
             height: "120px",
-            background: "rgba(200,195,190,0.12)",
+            background: "rgba(216,209,187,0.12)",
             borderRadius: "2px",
             position: "relative",
           }}
@@ -161,12 +163,13 @@ export default function Nav() {
               height: "6px",
               borderRadius: "50%",
               background: "var(--pk-accent)",
-              boxShadow: "0 0 8px rgba(200,195,190,0.3)",
+              boxShadow: "0 0 8px rgba(216,209,187,0.3)",
               transition: "top 0.08s linear",
             }}
           />
         </div>
       </div>
+      )}
 
       {/* Mobile menu */}
       {open && (

@@ -8,5 +8,21 @@
       "Bash(python)",
       "PowerShell(Get-ChildItem \"C:\\\\Users\\\\pkinz\\\\OneDrive\\\\Documents\\\\Claude Portfolio\\\\portfolio\\\\public\\\\projects\" | Where-Object { $_.Name -match ' ' -or $_.Name -match '\\\\.mov$' -or $_.Name -match '\\\\.PNG$' -or $_.Name -match '\\\\.mp4$' -and $_.Name -notmatch '^showreel' } | Select-Object Name)"
     ]
-  }
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR}/.claude/skills/impeccable/scripts/hook.mjs\"",
+            "timeout": 5,
+            "statusMessage": "Checking UI changes"
+          }
+        ]
+      }
+    ]
+  },
+  "description": "Impeccable design detector: runs after Edit/Write/MultiEdit on UI files and surfaces findings as system reminders."
 }

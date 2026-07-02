@@ -45,7 +45,7 @@ function PipelineNav() {
         }}
       >
         <Link href="/" style={{ fontFamily: "var(--pk-mono)", fontSize: "14px", color: "var(--pk-accent)", letterSpacing: "0.05em", textDecoration: "none" }}>
-          PK // TEA
+          PK
         </Link>
         <ul className="hidden md:flex" style={{ listStyle: "none", gap: "2.5rem" }}>
           {links.map((l) => (
@@ -65,7 +65,7 @@ function PipelineNav() {
         </ul>
       </nav>
       <div style={{ position: "fixed", right: "20px", top: "50%", transform: "translateY(-50%)", zIndex: 50, pointerEvents: "none" }}>
-        <div style={{ width: "2px", height: "120px", background: "rgba(200,195,190,0.12)", borderRadius: "2px", position: "relative" }}>
+        <div style={{ width: "2px", height: "120px", background: "rgba(216,209,187,0.12)", borderRadius: "2px", position: "relative" }}>
           <div style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", background: "var(--pk-accent)", borderRadius: "2px", transition: "transform 0.08s linear", transformOrigin: "top", transform: `scaleY(${scrollPct})` }} />
         </div>
       </div>
@@ -179,7 +179,7 @@ function FeatureRow({ f, flip }: { f: Feature; flip: boolean }) {
           ))}
 
           {/* Value-add callout */}
-          <div style={{ border: "0.5px solid var(--pk-border-accent)", background: "rgba(200,195,190,0.03)", padding: "0.9rem 1rem", borderRadius: "1px" }}>
+          <div style={{ border: "0.5px solid var(--pk-border-accent)", background: "rgba(216,209,187,0.03)", padding: "0.9rem 1rem", borderRadius: "1px" }}>
             <strong style={{ display: "block", fontFamily: "var(--pk-mono)", fontSize: "11px", color: "var(--pk-accent)", fontWeight: 500, marginBottom: "0.35rem", letterSpacing: "0.03em" }}>
               Value to the team
             </strong>
@@ -217,15 +217,15 @@ export default function PipelinePage() {
 
       {/* Hero */}
       <section style={{ position: "relative", paddingTop: "clamp(7rem, 14vh, 10rem)", paddingBottom: "clamp(3rem, 6vw, 4rem)", paddingLeft: "clamp(1.25rem, 5vw, 3rem)", paddingRight: "clamp(1.25rem, 5vw, 3rem)", maxWidth: "1200px", margin: "0 auto" }}>
-        <div style={{ fontFamily: "var(--pk-mono)", fontSize: "11px", letterSpacing: "0.1em", color: "rgba(230,232,223,0.45)", marginBottom: "1.5rem", display: "flex", gap: "0.5rem", alignItems: "center" }}>
-          <Link href="/#work" style={{ color: "rgba(230,232,223,0.45)", textDecoration: "none" }}>← Portfolio</Link>
+        <div style={{ fontFamily: "var(--pk-mono)", fontSize: "11px", letterSpacing: "0.1em", color: "rgba(216,209,187,0.45)", marginBottom: "1.5rem", display: "flex", gap: "0.5rem", alignItems: "center" }}>
+          <Link href="/#work" style={{ color: "rgba(216,209,187,0.45)", textDecoration: "none", transition: "color 0.2s" }} onMouseEnter={(e) => (e.currentTarget.style.color = "var(--pk-copper)")} onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(216,209,187,0.45)")}>← Portfolio</Link>
           <span>/</span>
           <span style={{ color: "var(--pk-text)" }}>PipelineX</span>
         </div>
         <h1 style={{ fontSize: "clamp(2.8rem, 7vw, 5.5rem)", fontWeight: 300, letterSpacing: "-0.025em", lineHeight: 1.0, marginBottom: "0.75rem", color: "var(--pk-text)" }}>
           {p.title}
         </h1>
-        <p style={{ fontSize: "clamp(1rem, 2.5vw, 1.4rem)", fontWeight: 300, color: "rgba(230,232,223,0.65)", marginBottom: "1.75rem", letterSpacing: "-0.01em", maxWidth: "640px" }}>
+        <p style={{ fontSize: "clamp(1rem, 2.5vw, 1.4rem)", fontWeight: 300, color: "rgba(216,209,187,0.65)", marginBottom: "1.75rem", letterSpacing: "-0.01em", maxWidth: "640px" }}>
           {p.subtitle}
         </p>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginBottom: "2.5rem" }}>
@@ -329,7 +329,7 @@ export default function PipelinePage() {
 
       {/* Footer CTA */}
       <section style={{ borderTop: "0.5px solid var(--pk-border)", padding: "4rem clamp(1.25rem, 5vw, 3rem)", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1.5rem", maxWidth: "1200px", margin: "0 auto" }}>
-        <Link href="/#work" style={{ fontFamily: "var(--pk-mono)", fontSize: "13px", color: "var(--pk-accent)", textDecoration: "none", letterSpacing: "0.06em" }}>
+        <Link href="/#work" style={{ fontFamily: "var(--pk-mono)", fontSize: "13px", color: "var(--pk-copper)", textDecoration: "none", letterSpacing: "0.06em" }}>
           ← Back to Portfolio
         </Link>
         <a href="https://github.com/Trinaxxxx" target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--pk-mono)", fontSize: "11px", color: "var(--pk-muted)", letterSpacing: "0.08em", textDecoration: "none" }}>
