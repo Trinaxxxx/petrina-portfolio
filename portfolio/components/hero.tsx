@@ -63,10 +63,7 @@ export default function Hero() {
             textWrap: "balance",
           } as React.CSSProperties}
         >
-          Petrina{" "}
-          <span style={{ color: "var(--pk-accent)", fontWeight: 600 }}>
-            Kinzel
-          </span>
+          Petrina Kinzel
         </h1>
 
         <p
@@ -87,7 +84,7 @@ export default function Hero() {
           <a
             href="#work"
             style={{
-              background: "var(--pk-accent)",
+              background: "var(--pk-copper)",
               color: "var(--pk-bg)",
               padding: "0.75rem 1.75rem",
               fontFamily: "var(--pk-mono)",

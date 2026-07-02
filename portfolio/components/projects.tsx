@@ -446,7 +446,7 @@ export default function Projects() {
                     style={{
                       fontFamily: "var(--pk-mono)",
                       fontSize: "12px",
-                      color: "var(--pk-accent)",
+                      color: "var(--pk-copper)",
                       textDecoration: "none",
                       letterSpacing: "0.06em",
                       transition: "opacity 0.2s",

@@ -87,7 +87,7 @@ function CTALinks({ b }: { b: Breakdown }) {
   return (
     <div style={{ display: "flex", gap: "1rem", marginTop: "1.25rem", flexWrap: "wrap" }}>
       {b.caseStudyHref && (
-        <a href={b.caseStudyHref} style={{ fontFamily: "var(--pk-mono)", fontSize: "12px", color: "var(--pk-accent)", textDecoration: "none", letterSpacing: "0.06em" }}>
+        <a href={b.caseStudyHref} style={{ fontFamily: "var(--pk-mono)", fontSize: "12px", color: "var(--pk-copper)", textDecoration: "none", letterSpacing: "0.06em" }}>
           Read the breakdown →
         </a>
       )}
@@ -269,8 +269,8 @@ export default function TechnicalBreakdowns() {
           font-family: var(--pk-mono); font-size: 12px; letter-spacing: 0.04em;
           color: var(--pk-muted); line-height: 1.4;
         }
-        .tb-left-btn:hover { color: var(--pk-text); background: rgba(200,195,190,0.04); }
-        .tb-left-btn.active { background: rgba(200,195,190,0.07); color: var(--pk-text); }
+        .tb-left-btn:hover { color: var(--pk-text); background: rgba(216,209,187,0.04); }
+        .tb-left-btn.active { background: rgba(216,209,187,0.07); color: var(--pk-text); }
         @media (min-width: 641px) {
           .tb-mobile  { display: none; }
           .tb-tablet  { display: grid !important; }

@@ -63,7 +63,7 @@ function CaseStudyNav() {
             textDecoration: "none",
           }}
         >
-          PK // TEA
+          PK
         </Link>
 
         <ul
@@ -108,7 +108,7 @@ function CaseStudyNav() {
           style={{
             width: "2px",
             height: "120px",
-            background: "rgba(138,170,116,0.12)",
+            background: "rgba(159,174,107,0.12)",
             borderRadius: "2px",
             position: "relative",
           }}
@@ -135,7 +135,7 @@ function CaseStudyNav() {
               height: "6px",
               borderRadius: "50%",
               background: "var(--pk-accent)",
-              boxShadow: "0 0 8px rgba(138,170,116,0.5)",
+              boxShadow: "0 0 8px rgba(159,174,107,0.5)",
               transition: "top 0.08s linear",
             }}
           />
@@ -211,6 +211,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
   return (
     <>
       <style>{`
+        section[id] { scroll-margin-top: 80px; }
         .cs-stat-grid { display: flex; gap: 0; }
         .cs-stat-item { flex: 1; padding: 2.5rem 2rem; border-right: 0.5px solid var(--pk-border); }
         .cs-stat-item:last-child { border-right: none; }
@@ -285,18 +286,18 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
             fontFamily: "var(--pk-mono)",
             fontSize: "11px",
             letterSpacing: "0.1em",
-            color: "rgba(230,232,223,0.45)",
+            color: "rgba(216,209,187,0.45)",
           }}
         >
           <Link
             href="/#work"
             style={{
-              color: "rgba(230,232,223,0.45)",
+              color: "rgba(216,209,187,0.45)",
               textDecoration: "none",
               transition: "color 0.2s",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--pk-accent)")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(230,232,223,0.45)")}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--pk-copper)")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(216,209,187,0.45)")}
           >
             ← Portfolio
           </Link>
@@ -343,7 +344,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
             style={{
               fontSize: "clamp(1rem, 2.5vw, 1.5rem)",
               fontWeight: 300,
-              color: "rgba(230,232,223,0.65)",
+              color: "rgba(216,209,187,0.65)",
               marginBottom: "1.75rem",
               letterSpacing: "-0.01em",
             }}
@@ -360,7 +361,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
                   letterSpacing: "0.1em",
                   textTransform: "uppercase",
                   padding: "4px 10px",
-                  border: "0.5px solid rgba(138,170,116,0.4)",
+                  border: "0.5px solid rgba(159,174,107,0.4)",
                   color: "var(--pk-accent)",
                   borderRadius: "2px",
                 }}
@@ -390,7 +391,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
                       fontSize: "clamp(1.8rem, 3vw, 2.6rem)",
                       fontWeight: 300,
                       letterSpacing: "-0.02em",
-                      color: "var(--pk-text)",
+                      color: "var(--pk-accent)",
                       fontFamily: "var(--pk-mono)",
                       lineHeight: 1,
                       marginBottom: "0.5rem",
@@ -409,7 +410,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
                       fontSize: "clamp(1.8rem, 3vw, 2.6rem)",
                       fontWeight: 300,
                       letterSpacing: "-0.02em",
-                      color: "var(--pk-text)",
+                      color: "var(--pk-accent)",
                       fontFamily: "var(--pk-mono)",
                       lineHeight: 1,
                       marginBottom: "0.5rem",
@@ -442,12 +443,65 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
         </div>
       </div>
 
+      {/* ── Jump to ──────────────────────────────────────────────────────────── */}
+      <div
+        style={{
+          borderBottom: "0.5px solid var(--pk-border)",
+          padding: "1rem 3rem",
+          display: "flex",
+          gap: "1.5rem",
+          flexWrap: "wrap",
+          alignItems: "center",
+          maxWidth: "1200px",
+          margin: "0 auto",
+        }}
+      >
+        <span
+          style={{
+            fontFamily: "var(--pk-mono)",
+            fontSize: "10px",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+            color: "var(--pk-muted)",
+          }}
+        >
+          Jump to
+        </span>
+        {[
+          ["challenge", "Challenge"],
+          ["technique", "Technique"],
+          ["workflow", "Workflow"],
+          ["breakdown", "Breakdown"],
+          ["qa", "Q&A"],
+          ["benchmarks", "Benchmarks"],
+          ["results", "Results"],
+          ["stack", "Tech Stack"],
+        ].map(([id, label]) => (
+          <a
+            key={id}
+            href={`#${id}`}
+            style={{
+              fontFamily: "var(--pk-mono)",
+              fontSize: "11px",
+              letterSpacing: "0.04em",
+              color: "var(--pk-muted)",
+              textDecoration: "none",
+              transition: "color 0.2s",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "var(--pk-text)")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "var(--pk-muted)")}
+          >
+            {label}
+          </a>
+        ))}
+      </div>
+
       {/* ── Problem ───────────────────────────────────────────────────────────── */}
-      <section style={{ padding: "6rem 3rem", maxWidth: "1200px", margin: "0 auto" }}>
+      <section id="challenge" style={{ padding: "6rem 3rem", maxWidth: "1200px", margin: "0 auto" }}>
         <FadeContent duration={800}>
           <div className="cs-problem-grid">
             <div>
-              <SectionLabel>01 / Challenge</SectionLabel>
+              <SectionLabel>Challenge</SectionLabel>
               <h2
                 style={{
                   fontSize: "clamp(1.6rem, 3vw, 2.4rem)",
@@ -484,6 +538,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
 
       {/* ── Technique ─────────────────────────────────────────────────────────── */}
       <section
+        id="technique"
         style={{
           background: "var(--pk-bg2)",
           borderTop: "0.5px solid var(--pk-border)",
@@ -495,7 +550,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
           <FadeContent duration={800}>
             <div style={{ maxWidth: "700px", margin: "0 auto", textAlign: "center", marginBottom: "4rem" }}>
               <SectionLabel>
-                <span style={{ margin: "0 auto" }}>02 / Technique</span>
+                <span style={{ margin: "0 auto" }}>Technique</span>
               </SectionLabel>
               <h2
                 style={{
@@ -590,9 +645,9 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
       </section>
 
       {/* ── Process ───────────────────────────────────────────────────────────── */}
-      <section style={{ padding: "6rem 3rem", maxWidth: "1200px", margin: "0 auto" }}>
+      <section id="workflow" style={{ padding: "6rem 3rem", maxWidth: "1200px", margin: "0 auto" }}>
         <FadeContent duration={700}>
-          <SectionLabel>03 / Workflow</SectionLabel>
+          <SectionLabel>Workflow</SectionLabel>
           <h2
             style={{
               fontSize: "clamp(1.6rem, 3vw, 2.4rem)",
@@ -670,6 +725,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
 
       {/* ── Component Breakdown ───────────────────────────────────────────────── */}
       <section
+        id="breakdown"
         style={{
           background: "var(--pk-bg2)",
           borderTop: "0.5px solid var(--pk-border)",
@@ -679,7 +735,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
       >
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <FadeContent duration={700}>
-            <SectionLabel>04 / Breakdown</SectionLabel>
+            <SectionLabel>Breakdown</SectionLabel>
             <h2
               style={{
                 fontSize: "clamp(1.6rem, 3vw, 2.4rem)",
@@ -761,9 +817,9 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
       </section>
 
       {/* ── Q & A ─────────────────────────────────────────────────────────────── */}
-      <section style={{ padding: "6rem 3rem", maxWidth: "1200px", margin: "0 auto" }}>
+      <section id="qa" style={{ padding: "6rem 3rem", maxWidth: "1200px", margin: "0 auto" }}>
         <FadeContent duration={700}>
-          <SectionLabel>05 / Technical Q&A</SectionLabel>
+          <SectionLabel>Technical Q&A</SectionLabel>
           <h2
             style={{
               fontSize: "clamp(1.6rem, 3vw, 2.4rem)",
@@ -815,6 +871,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
 
       {/* ── Performance Table ─────────────────────────────────────────────────── */}
       <section
+        id="benchmarks"
         style={{
           background: "var(--pk-bg2)",
           borderTop: "0.5px solid var(--pk-border)",
@@ -824,7 +881,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
       >
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
           <FadeContent duration={700}>
-            <SectionLabel>06 / Benchmarks</SectionLabel>
+            <SectionLabel>Benchmarks</SectionLabel>
             <h2
               style={{
                 fontSize: "clamp(1.6rem, 3vw, 2.4rem)",
@@ -885,9 +942,8 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
                             color:
                               ci === 2
                                 ? "var(--pk-accent)"
-                                : ci === 3
-                                ? "var(--pk-warm)"
                                 : "var(--pk-text)",
+                            fontWeight: ci === 3 ? 600 : 400,
                             lineHeight: 1.5,
                             whiteSpace: "nowrap",
                           }}
@@ -957,9 +1013,9 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
       </section>
 
       {/* ── Results ───────────────────────────────────────────────────────────── */}
-      <section style={{ padding: "6rem 3rem", maxWidth: "1200px", margin: "0 auto" }}>
+      <section id="results" style={{ padding: "6rem 3rem", maxWidth: "1200px", margin: "0 auto" }}>
         <FadeContent duration={700}>
-          <SectionLabel>07 / Results</SectionLabel>
+          <SectionLabel>Results</SectionLabel>
           <h2
             style={{
               fontSize: "clamp(1.6rem, 3vw, 2.4rem)",
@@ -1072,6 +1128,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
 
       {/* ── Tech Stack ────────────────────────────────────────────────────────── */}
       <section
+        id="stack"
         style={{
           background: "var(--pk-bg2)",
           borderTop: "0.5px solid var(--pk-border)",
@@ -1157,7 +1214,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
           style={{
             fontFamily: "var(--pk-mono)",
             fontSize: "13px",
-            color: "var(--pk-accent)",
+            color: "var(--pk-copper)",
             textDecoration: "none",
             letterSpacing: "0.06em",
             display: "flex",
