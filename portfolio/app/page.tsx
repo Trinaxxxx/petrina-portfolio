@@ -2,7 +2,7 @@ import Nav from "@/components/nav";
 import Hero from "@/components/hero";
 import About from "@/components/about";
 import Projects from "@/components/projects";
-import Environment from "@/components/environment";
+import AiWork from "@/components/ai-work";
 import Process from "@/components/process";
 import Achievements from "@/components/achievements";
 import Contact from "@/components/contact";
@@ -15,7 +15,7 @@ export default function Home() {
         <Hero />
         <About />
         <Projects />
-        <Environment />
+        <AiWork />
         <Process />
         <Achievements />
         <Contact />

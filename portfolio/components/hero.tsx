@@ -1,86 +1,102 @@
 "use client";
 
+/* Proof rail — the three hardest numbers on the site, clickable, above the fold. */
+const proof = [
+  { metric: "96.5%", label: "poly reduction, 27ms → 7ms frame time", href: "#work" },
+  { metric: "3mo → 1wk", label: "environment pipeline, GPT-assisted tooling", href: "#ai-work" },
+  { metric: "200+", label: "stakeholders, live VR launch event", href: "#achievements" },
+];
+
+
 export default function Hero() {
   return (
     <section
       id="hero"
       style={{
         position: "relative",
-        height: "100svh",
-        minHeight: "600px",
+        minHeight: "100svh",
         display: "flex",
-        alignItems: "center",
+        flexDirection: "column",
+        justifyContent: "flex-end",
         overflow: "hidden",
       }}
     >
-      {/* Layer 0 — Laundromat cinematic background */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/projects/laundromat-cinematic.webp"
-        alt=""
-        aria-hidden="true"
-        fetchPriority="high"
-        decoding="async"
-        style={{
-          position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
-          objectPosition: "center",
-          zIndex: 0,
-        }}
-      />
-
-      {/* Layer 1 — Dark scrim */}
+      {/* Layer 1 — scrim in Bokara tones */}
       <div
         style={{
           position: "absolute",
           inset: 0,
           background:
-            "linear-gradient(to bottom, rgba(11,11,13,0.55) 0%, rgba(11,11,13,0.65) 50%, rgba(11,11,13,0.8) 100%)",
+            "linear-gradient(105deg, rgba(33,30,28,0.88) 0%, rgba(33,30,28,0.62) 45%, rgba(33,30,28,0.35) 100%), linear-gradient(to bottom, rgba(33,30,28,0.25) 0%, rgba(33,30,28,0.35) 55%, rgba(33,30,28,0.92) 100%)",
           zIndex: 1,
         }}
       />
 
-      {/* Layer 2 — Hero content */}
+      {/* Layer 2 — content */}
       <div
         style={{
           position: "relative",
           zIndex: 3,
-          padding: "0 clamp(1.25rem, 5vw, 3rem)",
-          maxWidth: "900px",
+          padding: "7rem clamp(2rem, 5vw, 3rem) 2.5rem",
+          maxWidth: "1200px",
           width: "100%",
+          margin: "0 auto",
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
         }}
       >
-        <h1
+        <p
+          className="hero-in hero-kicker"
           style={{
-            fontSize: "clamp(3rem, 7vw, 6rem)",
+            fontFamily: "var(--pk-mono)",
+            fontSize: "12px",
+            color: "var(--pk-accent)",
+            letterSpacing: "0.1em",
+            marginBottom: "1.25rem",
+            animationDelay: "0.05s",
+          }}
+        >
+          Technical Environment Artist — CAD/Revit → real-time
+        </p>
+
+        <h1
+          className="hero-in"
+          style={{
+            fontSize: "clamp(2.75rem, 7vw, 5.5rem)",
             fontWeight: 400,
             letterSpacing: "-0.025em",
-            lineHeight: 1.05,
-            marginBottom: "1.25rem",
+            lineHeight: 1.04,
+            marginBottom: "1.5rem",
+            maxWidth: "820px",
             textWrap: "balance",
+            animationDelay: "0.12s",
           } as React.CSSProperties}
         >
-          Petrina Kinzel
+          Environments that hit frame rate. Pipelines that hit deadlines.
         </h1>
 
         <p
+          className="hero-in"
           style={{
             fontSize: "clamp(14px, 1.5vw, 17px)",
             color: "var(--pk-text)",
-            lineHeight: 1.8,
-            maxWidth: "520px",
-            marginBottom: "2.5rem",
+            lineHeight: 1.75,
+            maxWidth: "560px",
+            marginBottom: "2.25rem",
+            animationDelay: "0.2s",
           }}
         >
-          Real-time environments and pipeline tools for VR, digital twin, and
-          architectural visualisation. CAD/Revit → optimised, interactive
-          experiences.
+          I&apos;m Petrina Kinzel. I build real-time VR environments from raw
+          CAD and Revit data, and I write the Blender Python tools that cut
+          a 3-month manual process to one week.
         </p>
 
-        <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+        <div
+          className="hero-in"
+          style={{ display: "flex", gap: "1rem", flexWrap: "wrap", animationDelay: "0.28s" }}
+        >
           <a
             href="#work"
             style={{
@@ -91,7 +107,7 @@ export default function Hero() {
               fontSize: "12px",
               letterSpacing: "0.08em",
               textDecoration: "none",
-              fontWeight: 500,
+              fontWeight: 600,
               transition: "opacity 0.2s",
             }}
             onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.85")}
@@ -102,7 +118,7 @@ export default function Hero() {
           <a
             href="/technical-breakdowns"
             style={{
-              border: "0.5px solid var(--pk-accent)",
+              border: "1px solid var(--pk-accent)",
               color: "var(--pk-accent)",
               padding: "0.75rem 1.75rem",
               fontFamily: "var(--pk-mono)",
@@ -125,6 +141,86 @@ export default function Hero() {
         </div>
       </div>
 
+      {/* Layer 4 — proof rail */}
+      <div
+        className="hero-in"
+        style={{
+          position: "relative",
+          zIndex: 3,
+          borderTop: "1px solid var(--pk-border-accent)",
+          background: "rgba(33,30,28,0.78)",
+          backdropFilter: "blur(8px)",
+          animationDelay: "0.4s",
+        }}
+      >
+        <div
+          className="proof-rail"
+          style={{ maxWidth: "1200px", margin: "0 auto" }}
+        >
+          {proof.map((p) => (
+            <a
+              key={p.metric}
+              href={p.href}
+              className="proof-item"
+              style={{ textDecoration: "none" }}
+            >
+              <span
+                style={{
+                  fontFamily: "var(--pk-mono)",
+                  fontSize: "clamp(1.2rem, 2vw, 1.6rem)",
+                  fontWeight: 500,
+                  color: "var(--pk-copper)",
+                  lineHeight: 1,
+                  display: "block",
+                  marginBottom: "0.4rem",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {p.metric}
+              </span>
+              <span
+                style={{
+                  fontSize: "12px",
+                  color: "var(--pk-muted)",
+                  lineHeight: 1.5,
+                  display: "block",
+                }}
+              >
+                {p.label}
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes hero-in {
+          from { opacity: 0; transform: translateY(18px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .hero-in {
+          animation: hero-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+.proof-rail {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .proof-item {
+          padding: 1.1rem clamp(1.25rem, 3vw, 2rem);
+          border-left: 1px solid var(--pk-border);
+          transition: background 0.2s;
+        }
+        .proof-item:first-child { border-left: none; }
+        .proof-item:hover { background: rgba(145,166,115,0.08); }
+        @media (max-width: 640px) {
+          .proof-rail { grid-template-columns: 1fr; }
+          .proof-item { border-left: none; border-top: 1px solid var(--pk-border); padding: 0.85rem 1.25rem; }
+          .proof-item:first-child { border-top: none; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .hero-in { animation: none; }
+        }
+      `}</style>
     </section>
   );
 }
