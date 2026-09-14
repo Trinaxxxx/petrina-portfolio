@@ -12,8 +12,11 @@ type Project = {
   title: string;
   tags: string[];
   featured: boolean;
-  desc: string;
-  specs: [string, string][];
+  goal: string;
+  role: string;
+  results: [string, string][];
+  decisions: string[];
+  outcome: string;
   media: MediaItem[];
   mediaLayout?: "tall-right";
   caseStudy?: string;
@@ -23,36 +26,23 @@ type Project = {
 const projects: Project[] = [
   {
     num: "01",
-    title: "Laundromat — Environment Art + Pipeline Showcase",
-    tags: ["Featured", "In Progress", "Personal", "Revit Source", "Three.js"],
-    featured: true,
-    desc: "A personal real-time environment study sourced from Revit/SketchUp data — proving the full CAD-to-real-time pipeline. Prop-dense interior with washing machines, dryers, vending units, and industrial piping. Designed for interactive browser deployment with LOD, instancing, and a live performance HUD.",
-    specs: [
-      ["Source", "Revit / SketchUp"],
-      ["Delivery", "Three.js / WebGL"],
-      ["Focus", "Pipeline + Art"],
-      ["Status", "In progress"],
-    ],
-    media: [
-      { src: "/projects/laundromat-isometric.png", alt: "Laundromat — isometric diorama view" },
-      { src: "/projects/laundromat-cinematic.png", alt: "Laundromat — moody cinematic render" },
-      { src: "/projects/laundromat-kit.png",       alt: "Modular building kit — all props with LOD strategy" },
-      { src: "/projects/laundromat-breakdown.png", alt: "Scene asset breakdown with optimisation strategy" },
-    ],
-    caseStudy: "/technical-breakdowns#laundromat",
-  },
-  {
-    num: "02",
     title: "Blender Automation Pipeline — Asset Processing",
     tags: ["CAD/Revit", "Pipeline", "Python"],
     featured: false,
-    desc: "Designed and implemented a suite of Blender Python tools automating asset replacement, material assignment, scene cleanup, and collection organisation. Reduced manual environment setup time by 40–60% across hundreds of project assets. Full tool walkthrough and demos coming soon.",
-    specs: [
+    goal: "Kill the repetitive manual work in CAD-to-environment conversion: asset replacement, materials, cleanup, organisation.",
+    role: "Tool developer: designed, built, and shipped the addon suite.",
+    results: [
       ["Impact", "40–60% time saved"],
       ["Scale", "100s of assets"],
-      ["Role", "Tool Developer"],
-      ["Tools", "Blender, Python"],
+      ["Stack", "Blender + Python"],
+      ["Users", "Studio production team"],
     ],
+    decisions: [
+      "One-click batch operations instead of per-asset dialogs",
+      "Non-destructive: source data preserved in collections",
+      "Naming-convention QA built in, so errors get caught before export",
+    ],
+    outcome: "Adopted across studio production. Environment setup that took days now runs in minutes.",
     media: [
       { src: "/projects/pipeline-ui.png", alt: "PipelineX Blender plugin — full UI panel" },
       { src: "", alt: "Collection Organizer — tool demo", type: "placeholder" as const },
@@ -67,17 +57,24 @@ const projects: Project[] = [
     link: { label: "View on GitHub ↗", href: "https://github.com/Trinaxxxx" },
   },
   {
-    num: "03",
+    num: "02",
     title: "Alpha Planes — Real-Time Optimisation",
     tags: ["Case Study", "Optimisation", "VR Profiling"],
     featured: false,
-    desc: "Solved GPU-critical performance failures in standalone VR by developing the Alpha Planes pipeline — baking complex Revit geometry into optimised alpha-mapped planes. Achieved 96.5% polygon reduction across 1,000+ instanced warehouse racks while maintaining photorealistic density.",
-    specs: [
+    goal: "Standalone VR was GPU-bound at 35 FPS: 1,000+ warehouse racks of raw Revit geometry in one scene.",
+    role: "Pipeline author: devised the technique and productionised it.",
+    results: [
       ["Frame Time", "27ms → 7ms"],
       ["Poly Reduction", "96.5%"],
-      ["FPS Gain", "35 → 72 FPS (locked)"],
+      ["FPS", "35 → 72 (locked)"],
       ["Scale", "1,000+ instances"],
     ],
+    decisions: [
+      "Baked complex geometry to alpha-mapped planes instead of decimating it",
+      "Four instanced pod variants replace thousands of unique meshes",
+      "Silhouette fidelity kept where the headset actually looks",
+    ],
+    outcome: "Locked 72 FPS on standalone VR with photoreal rack density intact.",
     media: [
       { src: "/projects/alphaplanes-lod.png",       alt: "Alpha Planes — LOD chain across 3 detail levels" },
       { src: "/projects/alphamass-breakdown.png",   alt: "Pod component breakdown — Top / Side / Middle / Front" },
@@ -87,17 +84,24 @@ const projects: Project[] = [
     caseStudy: "/technical-breakdowns#alpha-planes",
   },
   {
-    num: "04",
+    num: "03",
     title: "TMX Metaverse — VR Sandbox Environments",
     tags: ["VR", "Blender", "Real-Time", "Live Event"],
     featured: false,
-    desc: "Led the 2-month technical build for the international TMX Metaverse launch in Bangkok. Delivered two distinct VR sandbox environments (Project 1 & Project 2) for 200+ high-level stakeholders across a 5-day live event.",
-    specs: [
+    goal: "Two distinct VR sandbox environments for an international launch: two-month deadline, live audience in Bangkok.",
+    role: "Technical lead: build, optimisation, and on-site delivery in Bangkok.",
+    results: [
       ["Platform", "VR / Real-time"],
-      ["Location", "Bangkok, TH"],
-      ["Role", "Technical Lead"],
-      ["Environments", "2 projects"],
+      ["Timeline", "2 months"],
+      ["Audience", "200+ stakeholders"],
+      ["Event", "5 days, live"],
     ],
+    decisions: [
+      "Performance budget locked first; art fitted to the budget",
+      "Demo-proofed every scene: no scripted failure points in exec-driven demos",
+      "Coached executive presenters on live VR delivery",
+    ],
+    outcome: "Five-day live event ran without a technical failure.",
     media: [
       { src: "/projects/tmx-p1-1.png", alt: "TMX VR Environment — Project 1, shot 1" },
       { src: "/projects/tmx-p1-3.png", alt: "TMX VR Environment — Project 1, shot 3" },
@@ -107,6 +111,11 @@ const projects: Project[] = [
     caseStudy: "/technical-breakdowns#tmx",
   },
 ];
+
+const protectMedia = {
+  draggable: false,
+  onContextMenu: (e: React.SyntheticEvent) => e.preventDefault(),
+};
 
 function MediaCard({ item }: { item: MediaItem }) {
   const [failed, setFailed] = useState(false);
@@ -135,7 +144,7 @@ function MediaCard({ item }: { item: MediaItem }) {
           justifyContent: "center",
         }}
       >
-        <span style={{ fontFamily: "var(--pk-mono)", fontSize: "9px", color: "var(--pk-muted)", opacity: 0.4, letterSpacing: "0.05em", textAlign: "center", padding: "0.5rem" }}>
+        <span style={{ fontFamily: "var(--pk-mono)", fontSize: "9px", color: "var(--pk-muted)", opacity: 0.55, letterSpacing: "0.05em", textAlign: "center", padding: "0.5rem" }}>
           {item.alt}
         </span>
       </div>
@@ -158,8 +167,10 @@ function MediaCard({ item }: { item: MediaItem }) {
             alt={item.alt}
             width={1600}
             height={900}
+            sizes="(max-width: 560px) 100vw, (max-width: 900px) 46vw, 24vw"
             onError={() => setFailed(true)}
             style={{ width: "100%", height: "auto", display: "block" }}
+            {...protectMedia}
           />
         )}
       </figure>
@@ -193,7 +204,7 @@ function TallRightMedia({ media }: { media: MediaItem[] }) {
     fontFamily: "var(--pk-mono)",
     fontSize: "9px",
     color: "var(--pk-muted)",
-    opacity: 0.4,
+    opacity: 0.55,
     letterSpacing: "0.05em",
     textAlign: "center",
     lineHeight: 1.4,
@@ -255,13 +266,46 @@ function TallRightMedia({ media }: { media: MediaItem[] }) {
               alt={hero.alt}
               width={1600}
               height={900}
+              sizes="(max-width: 900px) 30vw, 170px"
               onError={() => setFailed(true)}
               style={{ width: "100%", height: "auto", display: "block" }}
+              {...protectMedia}
             />
           </figure>
           {lightbox && <Lightbox item={hero} onClose={() => setLightbox(false)} />}
         </>
       )}
+    </div>
+  );
+}
+
+/* Compact labelled line — Goal / Role / Outcome */
+function InfoLine({ label, children, strong }: { label: string; children: React.ReactNode; strong?: boolean }) {
+  return (
+    <div style={{ marginBottom: "0.9rem" }}>
+      <span
+        style={{
+          fontFamily: "var(--pk-mono)",
+          fontSize: "10px",
+          color: "var(--pk-accent)",
+          letterSpacing: "0.1em",
+          textTransform: "uppercase",
+          display: "block",
+          marginBottom: "0.25rem",
+        }}
+      >
+        {label}
+      </span>
+      <p
+        style={{
+          fontSize: "13px",
+          color: strong ? "var(--pk-text)" : "var(--pk-muted)",
+          lineHeight: 1.65,
+          margin: 0,
+        }}
+      >
+        {children}
+      </p>
     </div>
   );
 }
@@ -339,7 +383,7 @@ export default function Projects() {
               </div>
             )}
 
-            {/* Info */}
+            {/* Info — Goal → Results → Role → Decisions → Outcome */}
             <div
               style={{
                 direction: "ltr",
@@ -385,8 +429,7 @@ export default function Projects() {
                 style={{
                   fontSize: "1.35rem",
                   fontWeight: 400,
-                  color: "var(--pk-text)",
-                  marginBottom: "1rem",
+                  marginBottom: "1.25rem",
                   letterSpacing: "-0.01em",
                   lineHeight: 1.3,
                 }}
@@ -394,29 +437,22 @@ export default function Projects() {
                 {p.title}
               </h3>
 
-              <p
-                style={{
-                  fontSize: "14px",
-                  color: "var(--pk-muted)",
-                  lineHeight: 1.85,
-                  marginBottom: "1.5rem",
-                }}
-              >
-                {p.desc}
-              </p>
+              <InfoLine label="Goal">{p.goal}</InfoLine>
 
               <div
                 style={{
                   display: "grid",
                   gridTemplateColumns: "1fr 1fr",
                   gap: "0.75rem",
-                  paddingTop: "1.5rem",
+                  padding: "1rem 0",
+                  margin: "0.25rem 0 1.15rem",
                   borderTop: "0.5px solid var(--pk-border)",
+                  borderBottom: "0.5px solid var(--pk-border)",
                 }}
               >
-                {p.specs.map(([label, val], si) => (
+                {p.results.map(([label, val], si) => (
                   <div
-                    key={`spec-${si}`}
+                    key={`res-${si}`}
                     style={{
                       fontFamily: "var(--pk-mono)",
                       fontSize: "11px",
@@ -439,7 +475,49 @@ export default function Projects() {
                 ))}
               </div>
 
-              <div style={{ display: "flex", gap: "1rem", marginTop: "1.5rem", flexWrap: "wrap" }}>
+              <InfoLine label="My role">{p.role}</InfoLine>
+
+              <div style={{ marginBottom: "0.9rem" }}>
+                <span
+                  style={{
+                    fontFamily: "var(--pk-mono)",
+                    fontSize: "10px",
+                    color: "var(--pk-accent)",
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    display: "block",
+                    marginBottom: "0.35rem",
+                  }}
+                >
+                  Key decisions
+                </span>
+                <ul style={{ margin: 0, padding: 0, listStyle: "none" }}>
+                  {p.decisions.map((d) => (
+                    <li
+                      key={d}
+                      style={{
+                        fontSize: "13px",
+                        color: "var(--pk-muted)",
+                        lineHeight: 1.6,
+                        padding: "0.15rem 0 0.15rem 1.1rem",
+                        position: "relative",
+                      }}
+                    >
+                      <span
+                        aria-hidden="true"
+                        style={{ position: "absolute", left: 0, color: "var(--pk-copper)", fontFamily: "var(--pk-mono)" }}
+                      >
+                        ›
+                      </span>
+                      {d}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <InfoLine label="Outcome" strong>{p.outcome}</InfoLine>
+
+              <div style={{ display: "flex", gap: "1rem", marginTop: "0.5rem", flexWrap: "wrap" }}>
                 {p.caseStudy && (
                   <a
                     href={p.caseStudy}
@@ -500,4 +578,3 @@ export default function Projects() {
     </section>
   );
 }
-
