@@ -41,7 +41,7 @@ export default function Environment() {
           width: "100%",
           minHeight: "clamp(300px, 50vh, 500px)",
           background:
-            "linear-gradient(135deg, var(--pk-bg3) 0%, var(--pk-bg) 100%)",
+            "linear-gradient(135deg, var(--pk-bg2) 0%, var(--pk-bg) 100%)",
           borderTop: "0.5px solid var(--pk-border)",
           borderBottom: "0.5px solid var(--pk-border)",
           display: "flex",
@@ -147,7 +147,13 @@ export default function Environment() {
           }}
         >
           Full interactive viewer will load a Draco-compressed GLB with orbit
-          controls, draw-call counter, and wireframe overlay. Check back soon.
+          controls, draw-call counter, and wireframe overlay. Until then,{" "}
+          <a
+            href="/technical-breakdowns#laundromat"
+            style={{ color: "var(--pk-copper)", textDecoration: "none" }}
+          >
+            read the build breakdown →
+          </a>
         </p>
       </div>
     </section>

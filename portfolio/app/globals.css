@@ -38,46 +38,55 @@
   --radius-xl: calc(var(--radius) * 1.4);
 }
 
-/* Organic dark portfolio palette — applied globally (dark-only site) */
+/* MP131 palette — color-role system locked 2026-07-08
+   Roles (verified WCAG AA, see contrast notes in CLAUDE.md):
+   base bg      #211E1C  deepened Bokara — page canvas
+   surface      #2A2725  Bokara Grey — elevated cards/panels
+   feature      #3A4A3F  Dark Hunter Green — media/feature panels (large or bone text only)
+   body text    #EAE2D3  Whisper White
+   headings     #F6F2F1  Bright White
+   muted        #C2B9A9  passes 4.5:1 on all three surfaces
+   data accent  #91A673  Lucious Lime — stats, tags, brand mark, secondary actions
+   action       #AE8F60  Wet Sand — CTAs, links, sequence markers */
 :root {
-  --background: #0b0b0d;
-  --foreground: #d8d1bb;
-  --card: #181e14;
-  --card-foreground: #d8d1bb;
-  --popover: #181e14;
-  --popover-foreground: #d8d1bb;
-  --primary: #d4cfc8;
-  --primary-foreground: #0b0b0d;
-  --secondary: #1e251a;
-  --secondary-foreground: #d8d1bb;
-  --muted: #1e251a;
-  --muted-foreground: #918a7a;
-  --accent: #d4cfc8;
-  --accent-foreground: #0b0b0d;
+  --background: #211e1c;
+  --foreground: #eae2d3;
+  --card: #2a2725;
+  --card-foreground: #eae2d3;
+  --popover: #2a2725;
+  --popover-foreground: #eae2d3;
+  --primary: #eae2d3;
+  --primary-foreground: #211e1c;
+  --secondary: #3a4a3f;
+  --secondary-foreground: #eae2d3;
+  --muted: #2a2725;
+  --muted-foreground: #c2b9a9;
+  --accent: #91a673;
+  --accent-foreground: #211e1c;
   --destructive: oklch(0.704 0.191 22.216);
-  --border: rgba(159,174,107,0.09);
-  --input: rgba(159,174,107,0.12);
-  --ring: #d4cfc8;
+  --border: rgba(145, 166, 115, 0.1);
+  --input: rgba(145, 166, 115, 0.14);
+  --ring: #91a673;
   --radius: 0.25rem;
-  --sidebar: #181e14;
-  --sidebar-foreground: #d8d1bb;
-  --sidebar-primary: #d4cfc8;
-  --sidebar-primary-foreground: #0b0b0d;
-  --sidebar-accent: #1e251a;
-  --sidebar-accent-foreground: #d8d1bb;
-  --sidebar-border: rgba(159,174,107,0.09);
-  --sidebar-ring: #d4cfc8;
+  --sidebar: #2a2725;
+  --sidebar-foreground: #eae2d3;
+  --sidebar-primary: #eae2d3;
+  --sidebar-primary-foreground: #211e1c;
+  --sidebar-accent: #3a4a3f;
+  --sidebar-accent-foreground: #eae2d3;
+  --sidebar-border: rgba(145, 166, 115, 0.1);
+  --sidebar-ring: #91a673;
 
-  /* Custom palette vars — color-role system locked 2026-07-02 */
-  --pk-bg: #0b0b0d;
-  --pk-bg2: #181e14;   /* elevated card/panel surface (stats, skills, projects) */
-  --pk-bg3: #1e251a;   /* recessed media/placeholder panels */
-  --pk-border: rgba(159, 174, 107, 0.09);
-  --pk-border-accent: rgba(159, 174, 107, 0.18);
-  --pk-text: #d8d1bb;      /* bone — all headings & body text */
-  --pk-muted: #918a7a;     /* warm muted — secondary/caption text */
-  --pk-accent: #9fae6b;    /* olive — data: brand mark, stat numbers, featured tags, secondary buttons */
-  --pk-copper: #c8a86a;    /* warm gold — action: primary CTAs, sequence numbers, case-study links */
+  --pk-bg: #211e1c;
+  --pk-bg2: #2a2725;
+  --pk-bg3: #3a4a3f;
+  --pk-border: rgba(145, 166, 115, 0.1);
+  --pk-border-accent: rgba(145, 166, 115, 0.22);
+  --pk-text: #eae2d3;
+  --pk-heading: #f6f2f1;
+  --pk-muted: #c2b9a9;
+  --pk-accent: #91a673;   /* lime — data */
+  --pk-copper: #ae8f60;   /* wet sand — action */
   --pk-mono: 'JetBrains Mono', 'Fira Mono', monospace;
 }
 
@@ -85,6 +94,7 @@
   * { @apply border-border outline-ring/50; }
   body { @apply bg-background text-foreground; }
   html { scroll-behavior: smooth; }
+  h1, h2, h3 { color: var(--pk-heading); }
 }
 
 ::-webkit-scrollbar { width: 4px; }
@@ -95,4 +105,22 @@
   outline: 2px solid var(--pk-accent);
   outline-offset: 3px;
   border-radius: 2px;
+}
+
+/* Best-effort media protection: blocks drag-to-save and long-press save.
+   (Screenshots and devtools cannot be blocked — by design of the web.) */
+img, video {
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
