@@ -87,7 +87,7 @@ export default function Lightbox({ item, onClose }: Props) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "rgba(8,10,6,0.88)",
+        background: "rgba(24,22,20,0.9)",
         backdropFilter: "blur(8px)",
         WebkitBackdropFilter: "blur(8px)",
         padding: "clamp(1rem, 5vw, 3rem)",
@@ -112,7 +112,7 @@ export default function Lightbox({ item, onClose }: Props) {
               border: "0.5px solid var(--pk-border)",
               borderRadius: "2px",
               overflow: "hidden",
-              background: "rgba(11,13,9,0.85)",
+              background: "rgba(33,30,28,0.85)",
             }}
           >
             {(["fit", "50", "100"] as const).map((z) => (
@@ -143,7 +143,7 @@ export default function Lightbox({ item, onClose }: Props) {
           onClick={onClose}
           aria-label="Close"
           style={{
-            background: "rgba(11,13,9,0.85)",
+            background: "rgba(33,30,28,0.85)",
             border: "0.5px solid var(--pk-border)",
             color: "var(--pk-muted)",
             fontFamily: "var(--pk-mono)",
@@ -179,9 +179,12 @@ export default function Lightbox({ item, onClose }: Props) {
           <video
             src={item.src}
             controls
+            controlsList="nodownload noremoteplayback"
+            disablePictureInPicture
             autoPlay
             loop
             playsInline
+            onContextMenu={(e) => e.preventDefault()}
             style={{ width: "100%", maxHeight: "85vh", display: "block", borderRadius: "2px" }}
           />
           <Caption alt={item.alt} />
@@ -204,6 +207,8 @@ export default function Lightbox({ item, onClose }: Props) {
           <img
             src={item.src}
             alt={item.alt}
+            draggable={false}
+            onContextMenu={(e) => e.preventDefault()}
             onLoad={(e) =>
               setNat({ w: e.currentTarget.naturalWidth, h: e.currentTarget.naturalHeight })
             }

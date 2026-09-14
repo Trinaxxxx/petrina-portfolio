@@ -22,11 +22,11 @@ The `.claude/launch.json` (at repo root) runs `npm run dev` from `portfolio/` on
 ## Architecture
 
 **Single-page home** (`app/page.tsx`) — vertical stack:
-`Nav → Hero → About → Projects → Environment → Process → Achievements → Contact`
+`Nav → Hero → About → Projects → AiWork → Environment → Process → Achievements → Contact`
 
 **Case study route** (`app/case-study/[slug]/page.tsx`) — async server component that awaits `params`, resolves slug via `lib/case-studies.ts`, returns `notFound()` if missing. Content rendered by `components/CaseStudyPage.tsx` (client component).
 
-`components/skills.tsx` and `components/spore-canvas.tsx` exist on disk but are not imported anywhere — dead files.
+`three` / `@react-three/fiber` were removed 2026-07-08 (nothing imported them); reinstall when the Phase 4 GLB viewer lands.
 
 ---
 
@@ -34,15 +34,17 @@ The `.claude/launch.json` (at repo root) runs `npm run dev` from `portfolio/` on
 
 All component styling uses inline `style={{ }}` with CSS custom properties. Tailwind v4 is configured via `@theme` in `globals.css` (no `tailwind.config.ts`). Tailwind utilities appear in `layout.tsx` (body classes) and `nav.tsx` (responsive show/hide: `hidden md:flex`, `md:hidden`) — nowhere else.
 
-**Theme vars** (defined in `globals.css :root`, color-role system locked 2026-07-02):
+**Theme vars** (defined in `globals.css :root`, MP131 color-role system locked 2026-07-08):
 ```
---pk-bg / --pk-bg2 / --pk-bg3      dark background layers (#0b0b0d / #181e14 elevated card / #1e251a recessed panel)
---pk-border / --pk-border-accent   subtle olive-tinted borders
---pk-text / --pk-muted             bone body text / warm-muted secondary text (#d8d1bb / #918a7a)
---pk-accent                        olive — "data": brand mark, stat numbers, featured tags, secondary buttons (#9fae6b)
---pk-copper                        copper — "action": primary CTAs, sequence numbers, case-study links (#d18a4f)
+--pk-bg / --pk-bg2 / --pk-bg3      #211e1c deepened-Bokara base / #2a2725 Bokara elevated card / #3a4a3f Hunter Green feature panel
+--pk-border / --pk-border-accent   lime-tinted borders rgba(145,166,115, 0.10 / 0.22)
+--pk-text / --pk-heading           #eae2d3 Whisper White body / #f6f2f1 Bright White headings (h1–h3 set globally)
+--pk-muted                         #c2b9a9 — passes 4.5:1 on all three surfaces
+--pk-accent                        #91a673 Lucious Lime — "data": brand mark, stats, tags, secondary buttons
+--pk-copper                        #ae8f60 Wet Sand — "action": CTAs, links, decision markers (4.9:1 on bg2; large-text only on bg3)
 --pk-mono                          JetBrains Mono stack
 ```
+Contrast rule: on `--pk-bg3` (Hunter Green) use only `--pk-text`, `--pk-heading`, or `--pk-muted` for small text; lime/sand pass only at display sizes there.
 
 Media queries go in a `<style>` block inside the component (see `projects.tsx`, `CaseStudyPage.tsx`).
 
