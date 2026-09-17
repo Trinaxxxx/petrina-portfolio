@@ -34,17 +34,19 @@ The `.claude/launch.json` (at repo root) runs `npm run dev` from `portfolio/` on
 
 All component styling uses inline `style={{ }}` with CSS custom properties. Tailwind v4 is configured via `@theme` in `globals.css` (no `tailwind.config.ts`). Tailwind utilities appear in `layout.tsx` (body classes) and `nav.tsx` (responsive show/hide: `hidden md:flex`, `md:hidden`) — nowhere else.
 
-**Theme vars** (defined in `globals.css :root`, MP131 color-role system locked 2026-07-08):
+**Theme vars** (defined in `globals.css :root`, Ink Gallery color-role system reworked 2026-09-17):
 ```
---pk-bg / --pk-bg2 / --pk-bg3      #211e1c deepened-Bokara base / #2a2725 Bokara elevated card / #3a4a3f Hunter Green feature panel
---pk-border / --pk-border-accent   lime-tinted borders rgba(145,166,115, 0.10 / 0.22)
---pk-text / --pk-heading           #eae2d3 Whisper White body / #f6f2f1 Bright White headings (h1–h3 set globally)
---pk-muted                         #c2b9a9 — passes 4.5:1 on all three surfaces
---pk-accent                        #91a673 Lucious Lime — "data": brand mark, stats, tags, secondary buttons
---pk-copper                        #ae8f60 Wet Sand — "action": CTAs, links, decision markers (4.9:1 on bg2; large-text only on bg3)
+--pk-bg / --pk-bg2 / --pk-bg3      #10141e ink-black base / #181d29 lifted-ink card / #232838 ink feature panel
+--pk-border / --pk-border-accent   ash-tinted borders rgba(185,208,199, 0.10 / 0.22)
+--pk-text / --pk-heading           #dbdcdb alabaster body / #f7efed parchment headings (h1–h3 set globally)
+--pk-muted                         #9aa3b1 cool grey — passes 4.5:1 on all three dark surfaces
+--pk-accent                        #b9d0c7 ash-grey — "data": brand mark, stats, tags (outline chips), section labels
+--pk-copper                        #f7efed parchment — "action": CTA fills, links
 --pk-mono                          JetBrains Mono stack
 ```
-Contrast rule: on `--pk-bg3` (Hunter Green) use only `--pk-text`, `--pk-heading`, or `--pk-muted` for small text; lime/sand pass only at display sizes there.
+(`--pk-copper` keeps its name for compatibility; it now holds parchment, not copper.)
+Model: black page + near-white text is the default (a dark gallery backdrop for 3D art). The ash/alabaster/parchment tones are LIGHT ACCENTS.
+**PAIRING RULE (contrast):** any element whose *background* is a light accent (`--pk-accent` ash or `--pk-copper` parchment) MUST set its text to `var(--pk-bg)` (ink-black) — e.g. the hero primary CTA does `background: var(--pk-copper); color: var(--pk-bg)`. Light accent used as *text/border/decoration* on a dark surface needs no pairing (all pass AA). Every current pairing verified AA 2026-09-17.
 
 Media queries go in a `<style>` block inside the component (see `projects.tsx`, `CaseStudyPage.tsx`).
 

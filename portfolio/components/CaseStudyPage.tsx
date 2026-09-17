@@ -43,7 +43,7 @@ function CaseStudyNav() {
           left: 0,
           right: 0,
           zIndex: 100,
-          background: "rgba(11,13,9,0.92)",
+          background: "rgba(16,20,30,0.92)",
           backdropFilter: "blur(12px)",
           borderBottom: "0.5px solid var(--pk-border)",
           display: "flex",
@@ -108,7 +108,7 @@ function CaseStudyNav() {
           style={{
             width: "2px",
             height: "120px",
-            background: "rgba(159,174,107,0.12)",
+            background: "rgba(185,208,199,0.12)",
             borderRadius: "2px",
             position: "relative",
           }}
@@ -135,7 +135,7 @@ function CaseStudyNav() {
               height: "6px",
               borderRadius: "50%",
               background: "var(--pk-accent)",
-              boxShadow: "0 0 8px rgba(159,174,107,0.5)",
+              boxShadow: "0 0 8px rgba(185,208,199,0.5)",
               transition: "top 0.08s linear",
             }}
           />
@@ -271,7 +271,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
             position: "absolute",
             inset: 0,
             background:
-              "linear-gradient(to bottom, rgba(11,13,9,0.25) 0%, rgba(11,13,9,0.72) 60%, rgba(11,13,9,0.92) 100%)",
+              "linear-gradient(to bottom, rgba(16,20,30,0.25) 0%, rgba(16,20,30,0.72) 60%, rgba(16,20,30,0.92) 100%)",
           }}
         />
         {/* Breadcrumb */}
@@ -286,18 +286,18 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
             fontFamily: "var(--pk-mono)",
             fontSize: "11px",
             letterSpacing: "0.1em",
-            color: "rgba(216,209,187,0.45)",
+            color: "rgba(219,220,219,0.45)",
           }}
         >
           <Link
             href="/#work"
             style={{
-              color: "rgba(216,209,187,0.45)",
+              color: "rgba(219,220,219,0.45)",
               textDecoration: "none",
               transition: "color 0.2s",
             }}
             onMouseEnter={(e) => (e.currentTarget.style.color = "var(--pk-copper)")}
-            onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(216,209,187,0.45)")}
+            onMouseLeave={(e) => (e.currentTarget.style.color = "rgba(219,220,219,0.45)")}
           >
             ← Portfolio
           </Link>
@@ -344,7 +344,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
             style={{
               fontSize: "clamp(1rem, 2.5vw, 1.5rem)",
               fontWeight: 300,
-              color: "rgba(216,209,187,0.65)",
+              color: "rgba(219,220,219,0.65)",
               marginBottom: "1.75rem",
               letterSpacing: "-0.01em",
             }}
@@ -361,7 +361,7 @@ export default function CaseStudyPage({ study }: { study: CaseStudy }) {
                   letterSpacing: "0.1em",
                   textTransform: "uppercase",
                   padding: "4px 10px",
-                  border: "0.5px solid rgba(159,174,107,0.4)",
+                  border: "0.5px solid rgba(185,208,199,0.4)",
                   color: "var(--pk-accent)",
                   borderRadius: "2px",
                 }}

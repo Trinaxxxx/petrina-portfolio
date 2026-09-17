@@ -297,8 +297,8 @@ export default function AiToolsPage() {
           font-family: var(--pk-mono); font-size: 12px; letter-spacing: 0.04em;
           color: var(--pk-muted); line-height: 1.4;
         }
-        .at-left-btn:hover { color: var(--pk-text); background: rgba(216,209,187,0.04); }
-        .at-left-btn.active { background: rgba(216,209,187,0.07); color: var(--pk-text); }
+        .at-left-btn:hover { color: var(--pk-text); background: rgba(219,220,219,0.04); }
+        .at-left-btn.active { background: rgba(219,220,219,0.07); color: var(--pk-text); }
         @media (min-width: 641px) {
           .at-mobile  { display: none; }
           .at-tablet  { display: grid !important; }

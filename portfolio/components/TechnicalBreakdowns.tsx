@@ -269,8 +269,8 @@ export default function TechnicalBreakdowns() {
           font-family: var(--pk-mono); font-size: 12px; letter-spacing: 0.04em;
           color: var(--pk-muted); line-height: 1.4;
         }
-        .tb-left-btn:hover { color: var(--pk-text); background: rgba(216,209,187,0.04); }
-        .tb-left-btn.active { background: rgba(216,209,187,0.07); color: var(--pk-text); }
+        .tb-left-btn:hover { color: var(--pk-text); background: rgba(219,220,219,0.04); }
+        .tb-left-btn.active { background: rgba(219,220,219,0.07); color: var(--pk-text); }
         @media (min-width: 641px) {
           .tb-mobile  { display: none; }
           .tb-tablet  { display: grid !important; }

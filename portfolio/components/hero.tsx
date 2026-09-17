@@ -21,13 +21,13 @@ export default function Hero() {
         overflow: "hidden",
       }}
     >
-      {/* Layer 1 — scrim in Bokara tones */}
+      {/* Layer 1 — scrim in aubergine base tones */}
       <div
         style={{
           position: "absolute",
           inset: 0,
           background:
-            "linear-gradient(105deg, rgba(33,30,28,0.88) 0%, rgba(33,30,28,0.62) 45%, rgba(33,30,28,0.35) 100%), linear-gradient(to bottom, rgba(33,30,28,0.25) 0%, rgba(33,30,28,0.35) 55%, rgba(33,30,28,0.92) 100%)",
+            "linear-gradient(105deg, rgba(16,20,30,0.88) 0%, rgba(16,20,30,0.62) 45%, rgba(16,20,30,0.35) 100%), linear-gradient(to bottom, rgba(16,20,30,0.25) 0%, rgba(16,20,30,0.35) 55%, rgba(16,20,30,0.92) 100%)",
           zIndex: 1,
         }}
       />
@@ -88,9 +88,9 @@ export default function Hero() {
             animationDelay: "0.2s",
           }}
         >
-          I&apos;m Petrina Kinzel. I build real-time VR environments from raw
-          CAD and Revit data, and I write the Blender Python tools that cut
-          a 3-month manual process to one week.
+          I&apos;m Petrina. I turn raw CAD and Revit data into real-time VR
+          environments, and I build the Blender tools that let a team ship
+          them in a week instead of a quarter.
         </p>
 
         <div
@@ -148,7 +148,7 @@ export default function Hero() {
           position: "relative",
           zIndex: 3,
           borderTop: "1px solid var(--pk-border-accent)",
-          background: "rgba(33,30,28,0.78)",
+          background: "rgba(16,20,30,0.78)",
           backdropFilter: "blur(8px)",
           animationDelay: "0.4s",
         }}
@@ -211,7 +211,7 @@ export default function Hero() {
           transition: background 0.2s;
         }
         .proof-item:first-child { border-left: none; }
-        .proof-item:hover { background: rgba(145,166,115,0.08); }
+        .proof-item:hover { background: rgba(185,208,199,0.08); }
         @media (max-width: 640px) {
           .proof-rail { grid-template-columns: 1fr; }
           .proof-item { border-left: none; border-top: 1px solid var(--pk-border); padding: 0.85rem 1.25rem; }
