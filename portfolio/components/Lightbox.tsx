@@ -87,7 +87,7 @@ export default function Lightbox({ item, onClose }: Props) {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "rgba(24,22,20,0.9)",
+        background: "rgba(16,20,30,0.9)",
         backdropFilter: "blur(8px)",
         WebkitBackdropFilter: "blur(8px)",
         padding: "clamp(1rem, 5vw, 3rem)",
@@ -112,7 +112,7 @@ export default function Lightbox({ item, onClose }: Props) {
               border: "0.5px solid var(--pk-border)",
               borderRadius: "2px",
               overflow: "hidden",
-              background: "rgba(33,30,28,0.85)",
+              background: "rgba(16,20,30,0.85)",
             }}
           >
             {(["fit", "50", "100"] as const).map((z) => (
@@ -143,7 +143,7 @@ export default function Lightbox({ item, onClose }: Props) {
           onClick={onClose}
           aria-label="Close"
           style={{
-            background: "rgba(33,30,28,0.85)",
+            background: "rgba(16,20,30,0.85)",
             border: "0.5px solid var(--pk-border)",
             color: "var(--pk-muted)",
             fontFamily: "var(--pk-mono)",

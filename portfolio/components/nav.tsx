@@ -37,7 +37,7 @@ export default function Nav() {
           left: 0,
           right: 0,
           zIndex: 100,
-          background: "rgba(33,30,28,0.92)",
+          background: "rgba(16,20,30,0.92)",
           backdropFilter: "blur(12px)",
           borderBottom: "0.5px solid var(--pk-border)",
           display: "flex",
@@ -136,7 +136,7 @@ export default function Nav() {
           style={{
             width: "2px",
             height: "120px",
-            background: "rgba(234,226,211,0.14)",
+            background: "rgba(219,220,219,0.14)",
             borderRadius: "2px",
             position: "relative",
           }}
@@ -163,7 +163,7 @@ export default function Nav() {
               height: "6px",
               borderRadius: "50%",
               background: "var(--pk-accent)",
-              boxShadow: "0 0 8px rgba(234,226,211,0.3)",
+              boxShadow: "0 0 8px rgba(219,220,219,0.3)",
               transition: "top 0.08s linear",
             }}
           />
@@ -179,7 +179,7 @@ export default function Nav() {
             top: "60px",
             left: 0,
             right: 0,
-            background: "rgba(33,30,28,0.97)",
+            background: "rgba(16,20,30,0.97)",
             borderBottom: "0.5px solid var(--pk-border)",
             padding: "1.5rem",
             zIndex: 99,

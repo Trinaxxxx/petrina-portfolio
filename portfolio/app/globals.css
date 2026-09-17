@@ -38,55 +38,59 @@
   --radius-xl: calc(var(--radius) * 1.4);
 }
 
-/* MP131 palette — color-role system locked 2026-07-08
-   Roles (verified WCAG AA, see contrast notes in CLAUDE.md):
-   base bg      #211E1C  deepened Bokara — page canvas
-   surface      #2A2725  Bokara Grey — elevated cards/panels
-   feature      #3A4A3F  Dark Hunter Green — media/feature panels (large or bone text only)
-   body text    #EAE2D3  Whisper White
-   headings     #F6F2F1  Bright White
-   muted        #C2B9A9  passes 4.5:1 on all three surfaces
-   data accent  #91A673  Lucious Lime — stats, tags, brand mark, secondary actions
-   action       #AE8F60  Wet Sand — CTAs, links, sequence markers */
+/* Ink Gallery palette — color-role system reworked 2026-09-17
+   Black page + near-white text (dramatic backdrop for 3D art), with the
+   ash/alabaster/parchment tones used as LIGHT ACCENTS that always carry
+   ink-black text. All pairings verified WCAG AA (see notes in CLAUDE.md).
+   base bg      #10141E  ink-black — page canvas
+   surface      #181D29  lifted ink — elevated cards/panels
+   feature      #232838  ink feature panel — media/feature panels
+   body text    #DBDCDB  alabaster (reads white on ink)
+   headings     #F7EFED  parchment (bright warm white)
+   muted        #9AA3B1  cool grey — passes 4.5:1 on all three dark surfaces
+   data accent  #B9D0C7  ash-grey — stats, tags, brand mark (as fill: ink-black text)
+   action       #F7EFED  parchment — CTA fills (ink-black text), links
+   PAIRING RULE: any element whose BACKGROUND is ash/alabaster/parchment
+   must set text to var(--pk-bg) (ink-black). */
 :root {
-  --background: #211e1c;
-  --foreground: #eae2d3;
-  --card: #2a2725;
-  --card-foreground: #eae2d3;
-  --popover: #2a2725;
-  --popover-foreground: #eae2d3;
-  --primary: #eae2d3;
-  --primary-foreground: #211e1c;
-  --secondary: #3a4a3f;
-  --secondary-foreground: #eae2d3;
-  --muted: #2a2725;
-  --muted-foreground: #c2b9a9;
-  --accent: #91a673;
-  --accent-foreground: #211e1c;
+  --background: #10141e;
+  --foreground: #dbdcdb;
+  --card: #181d29;
+  --card-foreground: #dbdcdb;
+  --popover: #181d29;
+  --popover-foreground: #dbdcdb;
+  --primary: #f7efed;
+  --primary-foreground: #10141e;
+  --secondary: #232838;
+  --secondary-foreground: #dbdcdb;
+  --muted: #181d29;
+  --muted-foreground: #9aa3b1;
+  --accent: #b9d0c7;
+  --accent-foreground: #10141e;
   --destructive: oklch(0.704 0.191 22.216);
-  --border: rgba(145, 166, 115, 0.1);
-  --input: rgba(145, 166, 115, 0.14);
-  --ring: #91a673;
+  --border: rgba(185, 208, 199, 0.1);
+  --input: rgba(185, 208, 199, 0.14);
+  --ring: #b9d0c7;
   --radius: 0.25rem;
-  --sidebar: #2a2725;
-  --sidebar-foreground: #eae2d3;
-  --sidebar-primary: #eae2d3;
-  --sidebar-primary-foreground: #211e1c;
-  --sidebar-accent: #3a4a3f;
-  --sidebar-accent-foreground: #eae2d3;
-  --sidebar-border: rgba(145, 166, 115, 0.1);
-  --sidebar-ring: #91a673;
+  --sidebar: #181d29;
+  --sidebar-foreground: #dbdcdb;
+  --sidebar-primary: #f7efed;
+  --sidebar-primary-foreground: #10141e;
+  --sidebar-accent: #232838;
+  --sidebar-accent-foreground: #dbdcdb;
+  --sidebar-border: rgba(185, 208, 199, 0.1);
+  --sidebar-ring: #b9d0c7;
 
-  --pk-bg: #211e1c;
-  --pk-bg2: #2a2725;
-  --pk-bg3: #3a4a3f;
-  --pk-border: rgba(145, 166, 115, 0.1);
-  --pk-border-accent: rgba(145, 166, 115, 0.22);
-  --pk-text: #eae2d3;
-  --pk-heading: #f6f2f1;
-  --pk-muted: #c2b9a9;
-  --pk-accent: #91a673;   /* lime — data */
-  --pk-copper: #ae8f60;   /* wet sand — action */
+  --pk-bg: #10141e;
+  --pk-bg2: #181d29;
+  --pk-bg3: #232838;
+  --pk-border: rgba(185, 208, 199, 0.1);
+  --pk-border-accent: rgba(185, 208, 199, 0.22);
+  --pk-text: #dbdcdb;
+  --pk-heading: #f7efed;
+  --pk-muted: #9aa3b1;
+  --pk-accent: #b9d0c7;   /* ash-grey — data / tags (ink-black text when used as fill) */
+  --pk-copper: #f7efed;   /* parchment — action: CTA fills (ink-black text), links */
   --pk-mono: 'JetBrains Mono', 'Fira Mono', monospace;
 }
 

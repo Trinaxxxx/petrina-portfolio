@@ -1,10 +1,9 @@
 "use client";
 
 const timeline = [
-  { span: "3 months", note: "Manual baseline" },
-  { span: "3 weeks", note: "First GPT scripts" },
-  { span: "1 week", note: "Mature pipeline" },
-  { span: "1 day", note: "MVP sites" },
+  { span: "3 months", note: "Manual baseline", days: 90 },
+  { span: "3 weeks", note: "First GPT scripts", days: 21 },
+  { span: "1 week", note: "Mature pipeline", days: 7 },
 ];
 
 export default function AiWork() {
@@ -51,8 +50,7 @@ export default function AiWork() {
               marginBottom: "1rem",
             }}
           >
-            From a 3-month bottleneck to a 1-week pipeline, written with GPT
-            before I could really code.
+            A three-month bottleneck, rebuilt into a one-week pipeline.
           </h2>
           <p
             style={{
@@ -62,11 +60,12 @@ export default function AiWork() {
               marginBottom: "2rem",
             }}
           >
-            Processing one client environment took three months of repetitive
-            manual work. It was the bottleneck on everything. With almost no
-            coding background, I used GPT to write Blender Python tool by tool
-            until the repetition was automated. That pipeline now runs at studio
-            scale — and led to two more AI tools in active use.
+            One client environment used to eat three months of repetitive
+            manual work. I paired with GPT to write the Blender Python for
+            it, tool by tool, until the repetition was gone. That pipeline
+            now runs at studio scale, with two more AI-built tools in
+            production behind it — proof that artists can prototype the
+            tooling that actually fits our workflow.
           </p>
           <a
             href="/ai-tools"
@@ -87,78 +86,82 @@ export default function AiWork() {
           </a>
         </div>
 
-        {/* Right — timeline stat strip */}
+        {/* Right — shrinking-bar timeline: bar length maps to duration */}
         <div className="ai-teaser-timeline">
-          {timeline.map((t, i) => (
-            <div
-              key={t.span}
-              style={{
-                paddingTop: "1rem",
-                borderTop: `1px solid rgba(234,226,211,0.2)`,
-                position: "relative",
-              }}
-            >
-              <span
-                aria-hidden="true"
-                style={{
-                  position: "absolute",
-                  top: "-4px",
-                  left: 0,
-                  width: "7px",
-                  height: "7px",
-                  borderRadius: "50%",
-                  background:
-                    i === timeline.length - 1
-                      ? "var(--pk-copper)"
-                      : "var(--pk-accent)",
-                }}
-              />
-              <div
-                style={{
-                  fontFamily: "var(--pk-mono)",
-                  fontSize: "clamp(1rem, 1.8vw, 1.4rem)",
-                  fontWeight: 500,
-                  color: "var(--pk-heading)",
-                  lineHeight: 1.1,
-                  marginBottom: "0.3rem",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {t.span}
+          {timeline.map((t, i) => {
+            // Bar width tracks the duration on a log scale (90 days = full width)
+            // so the strip visibly collapses months → weeks → days.
+            const frac = Math.log(t.days) / Math.log(90);
+            const isLast = i === timeline.length - 1;
+            const color = isLast ? "var(--pk-copper)" : "var(--pk-accent)";
+            return (
+              <div key={t.span} className="ai-tl-row">
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "baseline",
+                    justifyContent: "space-between",
+                    gap: "0.75rem",
+                    marginBottom: "0.45rem",
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: "var(--pk-mono)",
+                      fontSize: "clamp(0.95rem, 1.6vw, 1.25rem)",
+                      fontWeight: 500,
+                      color: "var(--pk-heading)",
+                      lineHeight: 1.1,
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {t.span}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "11px",
+                      color: "var(--pk-muted)",
+                      lineHeight: 1.5,
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {t.note}
+                  </span>
+                </div>
+                <div
+                  aria-hidden="true"
+                  style={{
+                    height: "8px",
+                    borderRadius: "999px",
+                    background: "rgba(185,208,199,0.10)",
+                    overflow: "hidden",
+                  }}
+                >
+                  <div
+                    style={{
+                      width: `${Math.max(frac * 100, 4)}%`,
+                      height: "100%",
+                      borderRadius: "999px",
+                      background: color,
+                    }}
+                  />
+                </div>
               </div>
-              <p
-                style={{
-                  fontSize: "11px",
-                  color: "var(--pk-muted)",
-                  margin: 0,
-                  lineHeight: 1.5,
-                }}
-              >
-                {t.note}
-              </p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
       <style>{`
         .ai-teaser-timeline {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 1.5rem;
+          display: flex;
+          flex-direction: column;
+          gap: 1.1rem;
           min-width: 0;
         }
         @media (max-width: 900px) {
           section#ai-work > div {
             grid-template-columns: 1fr;
-          }
-          .ai-teaser-timeline {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
-        @media (max-width: 480px) {
-          .ai-teaser-timeline {
-            grid-template-columns: 1fr 1fr;
           }
         }
         @media (prefers-reduced-motion: reduce) {
