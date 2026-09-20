@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Badge } from "@/components/ui/badge";
 import { aiTools, type AiTool, type MediaItem } from "@/lib/ai-tools";
+import { useHashSelection } from "@/lib/useHashSelection";
 
 function MediaCard({ item }: { item: MediaItem }) {
   const isPlaceholder = item.type === "placeholder" || !item.src;
@@ -247,18 +248,15 @@ function ToolDetail({ t }: { t: AiTool }) {
 }
 
 export default function AiToolsPage() {
-  const [selectedSlug, setSelectedSlug] = useState(aiTools[0].slug);
+  // Seeded from the URL hash, overridable by clicking a tool.
+  const [selectedSlug, setSelectedSlug] = useHashSelection(
+    aiTools.map((t) => t.slug),
+    aiTools[0].slug,
+  );
   const [activeIndex, setActiveIndex] = useState(0);
   const rightPanelRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const selected = aiTools.find((t) => t.slug === selectedSlug)!;
-
-  useEffect(() => {
-    const slug = window.location.hash.slice(1);
-    if (slug && aiTools.find((t) => t.slug === slug)) {
-      setSelectedSlug(slug);
-    }
-  }, []);
 
   useEffect(() => {
     rightPanelRef.current?.scrollTo({ top: 0 });

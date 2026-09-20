@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { breakdowns, type Breakdown, type MediaItem } from "@/lib/breakdowns";
 import Lightbox from "@/components/Lightbox";
+import { useHashSelection } from "@/lib/useHashSelection";
 
 function MediaCard({ item }: { item: MediaItem }) {
   const [failed, setFailed] = useState(false);
@@ -208,19 +209,15 @@ function BreakdownDetail({ b }: { b: Breakdown }) {
 
 /* ── Main component ──────────────────────────────────────── */
 export default function TechnicalBreakdowns() {
-  const [selectedSlug, setSelectedSlug] = useState(breakdowns[0].slug);
+  // Seeded from the URL hash, overridable by clicking a breakdown.
+  const [selectedSlug, setSelectedSlug] = useHashSelection(
+    breakdowns.map((b) => b.slug),
+    breakdowns[0].slug,
+  );
   const [activeIndex, setActiveIndex] = useState(0);
   const rightPanelRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const selected = breakdowns.find((b) => b.slug === selectedSlug)!;
-
-  // On mount, read URL hash and pre-select the matching breakdown
-  useEffect(() => {
-    const slug = window.location.hash.slice(1);
-    if (slug && breakdowns.find((b) => b.slug === slug)) {
-      setSelectedSlug(slug);
-    }
-  }, []);
 
   // Reset right panel scroll on project switch
   useEffect(() => {
