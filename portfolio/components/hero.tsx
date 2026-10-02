@@ -18,6 +18,7 @@ const HEADLINE = "Architecture, rendered in real time.";
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
+  const headGroupRef = useRef<HTMLDivElement>(null);
   const kickerRef = useRef<HTMLParagraphElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
   const subheadRef = useRef<HTMLParagraphElement>(null);
@@ -29,6 +30,7 @@ export default function Hero() {
     const stage = stageRef.current;
     if (!section || !stage) return;
 
+    const headGroup = headGroupRef.current!;
     const kicker = kickerRef.current!;
     const headline = headlineRef.current!;
     const subhead = subheadRef.current!;
@@ -36,6 +38,11 @@ export default function Hero() {
     const proofEl = proofRef.current!;
     const chars = headline.querySelectorAll<HTMLElement>(".char");
     const sequenced = [subhead, ctas, proofEl];
+
+    // How far to drop the name+headline so they start at the bottom of the
+    // composition on load, then rise to their resting spot on first scroll.
+    const dropOffset = () =>
+      ctas.getBoundingClientRect().bottom - headGroup.getBoundingClientRect().bottom;
 
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReduced) {
@@ -63,22 +70,28 @@ export default function Hero() {
 
       // On scroll: reveal subhead -> CTAs -> proof rail, one step at a time.
       gsap.set(sequenced, { autoAlpha: 0, y: 28, filter: "blur(8px)" });
+      // Name + headline start dropped to the bottom, visible on load.
+      gsap.set(headGroup, { y: dropOffset() });
 
       const tl = gsap.timeline({
         defaults: { ease: "power3.out" },
         scrollTrigger: {
           trigger: section,
           start: "top top",
-          end: "+=230%", // long scroll distance = slow, deliberate pacing
+          end: "+=280%", // long scroll distance = slow, deliberate pacing
           pin: stage,
           scrub: 1.1, // smoothing lag so the motion glides instead of tracking 1:1
           anticipatePin: 1,
+          invalidateOnRefresh: true, // recompute dropOffset on resize
         },
       });
 
       const HOLD = 0.5; // dwell so each step sits fully placed before the next begins
 
-      tl.to(subhead, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1 }).to({}, { duration: HOLD });
+      // 1 — raise name + headline from the bottom to their resting position.
+      tl.to(headGroup, { y: 0, duration: 1.2, ease: "power2.inOut" }).to({}, { duration: HOLD });
+      // 2 — subhead
+      tl.to(subhead, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1 }, ">").to({}, { duration: HOLD });
       tl.to(ctas, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1 }, ">").to({}, { duration: HOLD });
       tl.to(proofEl, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1 }, ">");
     }, section);
@@ -132,6 +145,7 @@ export default function Hero() {
             justifyContent: "flex-end",
           }}
         >
+          <div ref={headGroupRef}>
           <p
             ref={kickerRef}
             style={{
@@ -165,6 +179,7 @@ export default function Hero() {
               </span>
             ))}
           </h1>
+          </div>
 
           <p
             ref={subheadRef}
