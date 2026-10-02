@@ -35,31 +35,41 @@ export default function Hero() {
     const ctas = ctasRef.current!;
     const proofEl = proofRef.current!;
     const chars = headline.querySelectorAll<HTMLElement>(".char");
-    const blocks = [kicker, subhead, ctas, proofEl];
+    const sequenced = [subhead, ctas, proofEl];
 
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReduced) {
-      gsap.set([...blocks, ...chars], { autoAlpha: 1, y: 0, yPercent: 0, scaleX: 1, scaleY: 1, filter: "blur(0px)" });
+      gsap.set([kicker, ...sequenced, ...chars], {
+        autoAlpha: 1, y: 0, yPercent: 0, scaleX: 1, scaleY: 1, filter: "blur(0px)",
+      });
       return;
     }
 
     const ctx = gsap.context(() => {
-      gsap.set(blocks, { autoAlpha: 0, y: 28, filter: "blur(8px)" });
-      gsap.set(chars, {
+      // On load: name + headline animate in once, then rest in place (not scroll-gated).
+      gsap.from(kicker, { autoAlpha: 0, y: 20, filter: "blur(8px)", duration: 0.9, ease: "power3.out", delay: 0.1 });
+      gsap.from(chars, {
         autoAlpha: 0,
         yPercent: 120,
         scaleY: 2.3,
         scaleX: 0.7,
         transformOrigin: "50% 0%",
         filter: "blur(6px)",
+        duration: 1.1,
+        stagger: 0.035,
+        ease: "power3.out",
+        delay: 0.25,
       });
+
+      // On scroll: reveal subhead -> CTAs -> proof rail, one step at a time.
+      gsap.set(sequenced, { autoAlpha: 0, y: 28, filter: "blur(8px)" });
 
       const tl = gsap.timeline({
         defaults: { ease: "power3.out" },
         scrollTrigger: {
           trigger: section,
           start: "top top",
-          end: "+=340%", // long scroll distance = slow, deliberate pacing
+          end: "+=230%", // long scroll distance = slow, deliberate pacing
           pin: stage,
           scrub: 1.1, // smoothing lag so the motion glides instead of tracking 1:1
           anticipatePin: 1,
@@ -68,19 +78,8 @@ export default function Hero() {
 
       const HOLD = 0.5; // dwell so each step sits fully placed before the next begins
 
-      // 1 — kicker
-      tl.to(kicker, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1 }).to({}, { duration: HOLD });
-      // 2 — headline, character float
-      tl.to(
-        chars,
-        { autoAlpha: 1, yPercent: 0, scaleY: 1, scaleX: 1, filter: "blur(0px)", duration: 1.2, stagger: 0.04 },
-        ">"
-      ).to({}, { duration: HOLD });
-      // 3 — subhead
-      tl.to(subhead, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1 }, ">").to({}, { duration: HOLD });
-      // 4 — CTAs
+      tl.to(subhead, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1 }).to({}, { duration: HOLD });
       tl.to(ctas, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1 }, ">").to({}, { duration: HOLD });
-      // 5 — proof rail
       tl.to(proofEl, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1 }, ">");
     }, section);
 
@@ -90,7 +89,10 @@ export default function Hero() {
   return (
     <section id="hero" ref={sectionRef} style={{ position: "relative", background: "var(--pk-bg)" }}>
       {/* Pinned full-screen stage: video + the whole revealing composition. */}
-      <div ref={stageRef} style={{ height: "100svh", overflow: "hidden", position: "relative" }}>
+      <div
+        ref={stageRef}
+        style={{ height: "100svh", overflow: "hidden", position: "relative", display: "flex", flexDirection: "column" }}
+      >
         <video
           autoPlay
           muted
@@ -117,15 +119,17 @@ export default function Hero() {
         {/* Composition — kicker, headline, subhead, CTAs. */}
         <div
           style={{
-            position: "absolute",
-            inset: 0,
+            position: "relative",
             zIndex: 3,
+            flex: 1,
+            minHeight: 0,
+            width: "100%",
             maxWidth: "1200px",
             margin: "0 auto",
-            padding: "7rem clamp(2rem, 5vw, 3rem) 7rem",
+            padding: "7rem clamp(2rem, 5vw, 3rem) 2.5rem",
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
+            justifyContent: "flex-end",
           }}
         >
           <p
@@ -223,7 +227,7 @@ export default function Hero() {
         </div>
 
         {/* Proof rail pinned to the bottom of the stage, revealed last. */}
-        <div ref={proofRef} style={{ position: "absolute", left: 0, right: 0, bottom: 0, zIndex: 3 }}>
+        <div ref={proofRef} style={{ position: "relative", zIndex: 3, flexShrink: 0 }}>
           <div
             style={{
               borderTop: "1px solid var(--pk-border-accent)",
