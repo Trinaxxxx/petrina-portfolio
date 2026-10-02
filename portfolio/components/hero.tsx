@@ -48,7 +48,7 @@ export default function Hero() {
           position: "absolute",
           inset: 0,
           background:
-            "linear-gradient(105deg, rgba(16,20,30,0.88) 0%, rgba(16,20,30,0.62) 45%, rgba(16,20,30,0.35) 100%), linear-gradient(to bottom, rgba(16,20,30,0.25) 0%, rgba(16,20,30,0.35) 55%, rgba(16,20,30,0.92) 100%)",
+            "linear-gradient(105deg, rgba(16,20,30,0.68) 0%, rgba(16,20,30,0.42) 45%, rgba(16,20,30,0.14) 100%), linear-gradient(to bottom, rgba(16,20,30,0.08) 0%, rgba(16,20,30,0.18) 55%, rgba(16,20,30,0.78) 100%)",
           zIndex: 1,
         }}
       />
