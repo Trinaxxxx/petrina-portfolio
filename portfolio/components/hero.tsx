@@ -49,68 +49,56 @@ export default function Hero() {
             position: "absolute",
             inset: 0,
             background:
-              "linear-gradient(105deg, rgba(16,20,30,0.68) 0%, rgba(16,20,30,0.42) 45%, rgba(16,20,30,0.14) 100%), linear-gradient(to bottom, rgba(16,20,30,0.08) 0%, rgba(16,20,30,0.18) 55%, rgba(16,20,30,0.78) 100%)",
+              "linear-gradient(105deg, rgba(16,20,30,0.68) 0%, rgba(16,20,30,0.42) 45%, rgba(16,20,30,0.14) 100%), linear-gradient(to bottom, rgba(16,20,30,0.08) 0%, rgba(16,20,30,0.30) 60%, rgba(16,20,30,0.82) 100%)",
             zIndex: 1,
           }}
         />
       </div>
 
-      {/* SEO/a11y heading (ScrollFloat renders a decorative h2 below). */}
-      <h1
-        style={{
-          position: "absolute",
-          width: 1,
-          height: 1,
-          padding: 0,
-          margin: -1,
-          overflow: "hidden",
-          clip: "rect(0,0,0,0)",
-          whiteSpace: "nowrap",
-          border: 0,
-        }}
-      >
-        Petrina Kinzel — Real-Time Environment &amp; VR Artist. Architecture,
-        rendered in real time.
-      </h1>
-
-      {/* Overlay content — pulled up over the sticky stage, revealed on scroll. */}
+      {/* Overlay content — pulled up over the sticky stage. */}
       <div style={{ position: "relative", zIndex: 3, marginTop: "-100svh" }}>
-        {/* First screen: video only. */}
-        <div style={{ height: "100svh" }} aria-hidden="true" />
+        {/* Fold: name + headline, visible on load (no scroll gate). */}
+        <div
+          style={{
+            minHeight: "100svh",
+            maxWidth: "1200px",
+            margin: "0 auto",
+            padding: "7rem clamp(2rem, 5vw, 3rem) clamp(4rem, 12vh, 9rem)",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-end",
+          }}
+        >
+          <p
+            className="hero-in"
+            style={{
+              fontFamily: "var(--pk-mono)",
+              fontSize: "12px",
+              color: "var(--pk-accent)",
+              letterSpacing: "0.1em",
+              marginBottom: "1.25rem",
+              animationDelay: "0.05s",
+            }}
+          >
+            Petrina Kinzel · Real-Time Environment &amp; VR Artist
+          </p>
 
-        {/* The hero composition, revealed group by group as it scrolls in. */}
+          <div style={{ maxWidth: "820px" }}>
+            <ScrollFloat as="h1" playOnLoad animationDuration={1.1} stagger={0.035} delay={0.15}>
+              Architecture, rendered in real time.
+            </ScrollFloat>
+          </div>
+        </div>
+
+        {/* Revealed on scroll: subhead + CTAs. */}
         <div
           style={{
             maxWidth: "1200px",
             margin: "0 auto",
-            padding: "0 clamp(2rem, 5vw, 3rem)",
-            minHeight: "80svh",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
+            padding: "2rem clamp(2rem, 5vw, 3rem) 4rem",
           }}
         >
-          <FadeContent blur duration={900} threshold={0.2}>
-            <p
-              style={{
-                fontFamily: "var(--pk-mono)",
-                fontSize: "12px",
-                color: "var(--pk-accent)",
-                letterSpacing: "0.1em",
-                marginBottom: "1.25rem",
-              }}
-            >
-              Petrina Kinzel · Real-Time Environment &amp; VR Artist
-            </p>
-          </FadeContent>
-
-          <div style={{ maxWidth: "820px", marginBottom: "1.5rem" }}>
-            <ScrollFloat animationDuration={1.1} stagger={0.035}>
-              Architecture, rendered in real time.
-            </ScrollFloat>
-          </div>
-
-          <FadeContent blur duration={1000} delay={120} threshold={0.2}>
+          <FadeContent blur duration={1000} threshold={0.25}>
             <p
               style={{
                 fontSize: "clamp(14px, 1.5vw, 17px)",
@@ -118,6 +106,7 @@ export default function Hero() {
                 lineHeight: 1.75,
                 maxWidth: "560px",
                 marginBottom: "2.25rem",
+                textWrap: "pretty",
               }}
             >
               Immersive VR and web walkthroughs built from CAD and Revit,
@@ -125,7 +114,7 @@ export default function Hero() {
             </p>
           </FadeContent>
 
-          <FadeContent blur duration={1000} delay={260} threshold={0.2}>
+          <FadeContent blur duration={1000} delay={140} threshold={0.25}>
             <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
               <a
                 href="#walkthrough"
@@ -210,6 +199,13 @@ export default function Hero() {
       </div>
 
       <style>{`
+        @keyframes hero-in {
+          from { opacity: 0; transform: translateY(18px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .hero-in {
+          animation: hero-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
         .proof-rail {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
@@ -225,6 +221,9 @@ export default function Hero() {
           .proof-rail { grid-template-columns: 1fr; }
           .proof-item { border-left: none; border-top: 1px solid var(--pk-border); padding: 0.85rem 1.25rem; }
           .proof-item:first-child { border-top: none; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .hero-in { animation: none; }
         }
       `}</style>
     </section>
