@@ -21,6 +21,27 @@ export default function Hero() {
         overflow: "hidden",
       }}
     >
+      {/* Layer 0 — autoplaying background video */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        poster="/projects/hero-poster.jpg"
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          zIndex: 0,
+        }}
+      >
+        <source src="/projects/hero-bg.mp4" type="video/mp4" />
+      </video>
+
       {/* Layer 1 — scrim in aubergine base tones */}
       <div
         style={{
@@ -58,7 +79,7 @@ export default function Hero() {
             animationDelay: "0.05s",
           }}
         >
-          Technical Environment Artist — CAD/Revit → real-time
+          Petrina Kinzel · Real-Time Environment &amp; VR Artist
         </p>
 
         <h1
@@ -74,7 +95,7 @@ export default function Hero() {
             animationDelay: "0.12s",
           } as React.CSSProperties}
         >
-          Environments that hit frame rate. Pipelines that hit deadlines.
+          Architecture, rendered in real time.
         </h1>
 
         <p
@@ -88,9 +109,8 @@ export default function Hero() {
             animationDelay: "0.2s",
           }}
         >
-          I&apos;m Petrina. I turn raw CAD and Revit data into real-time VR
-          environments, and I build the Blender tools that let a team ship
-          them in a week instead of a quarter.
+          Immersive VR and web walkthroughs built from CAD and Revit,
+          designed to feel like the finished space, running live at 90fps.
         </p>
 
         <div
@@ -98,7 +118,7 @@ export default function Hero() {
           style={{ display: "flex", gap: "1rem", flexWrap: "wrap", animationDelay: "0.28s" }}
         >
           <a
-            href="#work"
+            href="#walkthrough"
             style={{
               background: "var(--pk-copper)",
               color: "var(--pk-bg)",
@@ -113,10 +133,11 @@ export default function Hero() {
             onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.85")}
             onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
           >
-            View Work
+            Watch VR Walkthrough
           </a>
+          {/* secondary CTA follows */}
           <a
-            href="/technical-breakdowns"
+            href="#work"
             style={{
               border: "1px solid var(--pk-accent)",
               color: "var(--pk-accent)",
@@ -136,7 +157,7 @@ export default function Hero() {
               e.currentTarget.style.color = "var(--pk-accent)";
             }}
           >
-            Technical Breakdowns
+            View Projects
           </a>
         </div>
       </div>
