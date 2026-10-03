@@ -41,7 +41,10 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.youtube.com" />
         <link rel="dns-prefetch" href="https://www.linkedin.com" />
       </head>
-      <body className="min-h-full antialiased bg-[var(--pk-bg)] text-[var(--pk-text)]">
+      <body
+        className="min-h-full antialiased bg-[var(--pk-bg)] text-[var(--pk-text)]"
+        suppressHydrationWarning
+      >
         {children}
       </body>
     </html>
