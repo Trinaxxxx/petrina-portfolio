@@ -16,6 +16,7 @@ const proof = [
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
+  const headGroupRef = useRef<HTMLDivElement>(null);
   const subheadRef = useRef<HTMLParagraphElement>(null);
   const ctasRef = useRef<HTMLDivElement>(null);
   const proofRef = useRef<HTMLDivElement>(null);
@@ -25,10 +26,12 @@ export default function Hero() {
     const stage = stageRef.current;
     if (!section || !stage) return;
 
+    const headGroup = headGroupRef.current!;
     const sequenced = [subheadRef.current!, ctasRef.current!, proofRef.current!];
 
-    // Reduced motion: just show everything, no pin, no reveal.
+    // Reduced motion: show everything at rest, no pin, no slide/reveal.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      gsap.set(headGroup, { clearProps: "transform" });
       gsap.set(sequenced, { autoAlpha: 1, y: 0, filter: "blur(0px)" });
       return;
     }
@@ -43,7 +46,7 @@ export default function Hero() {
         scrollTrigger: {
           trigger: section,
           start: "top top",
-          end: "+=220%",
+          end: "+=260%",
           pin: stage,
           scrub: 1.1,
           anticipatePin: 1,
@@ -51,7 +54,10 @@ export default function Hero() {
       });
 
       const HOLD = 0.5; // dwell so each step sits fully placed before the next begins
-      tl.to(subheadRef.current, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1 }).to({}, { duration: HOLD });
+      // 1 — slide name + headline up from their low on-load position (set in CSS).
+      tl.to(headGroup, { y: 0, duration: 1.3, ease: "power2.inOut" }).to({}, { duration: HOLD });
+      // 2..4 — reveal subhead, CTAs, proof rail, one at a time.
+      tl.to(subheadRef.current, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1 }, ">").to({}, { duration: HOLD });
       tl.to(ctasRef.current, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1 }, ">").to({}, { duration: HOLD });
       tl.to(proofRef.current, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1 }, ">");
     }, section);
@@ -63,7 +69,7 @@ export default function Hero() {
     <section id="hero" ref={sectionRef} style={{ position: "relative", background: "var(--pk-bg)" }}>
       {/* No-JS / safety: if the script never runs, show the revealed items. */}
       <noscript>
-        <style>{`.reveal-init { opacity: 1 !important; }`}</style>
+        <style>{`.reveal-init { opacity: 1 !important; } .head-group { transform: none !important; }`}</style>
       </noscript>
 
       {/* Pinned full-screen stage: video + the whole composition. */}
@@ -110,31 +116,33 @@ export default function Hero() {
             justifyContent: "flex-end",
           }}
         >
-          <p
-            style={{
-              fontFamily: "var(--pk-mono)",
-              fontSize: "12px",
-              color: "var(--pk-accent)",
-              letterSpacing: "0.1em",
-              marginBottom: "1.25rem",
-            }}
-          >
-            Petrina Kinzel · Real-Time Environment &amp; VR Artist
-          </p>
+          <div ref={headGroupRef} className="head-group" style={{ transform: "translateY(18vh)" }}>
+            <p
+              style={{
+                fontFamily: "var(--pk-mono)",
+                fontSize: "12px",
+                color: "var(--pk-accent)",
+                letterSpacing: "0.1em",
+                marginBottom: "1.25rem",
+              }}
+            >
+              Petrina Kinzel · Real-Time Environment &amp; VR Artist
+            </p>
 
-          <h1
-            style={{
-              fontSize: "clamp(2.75rem, 7vw, 5.5rem)",
-              fontWeight: 400,
-              letterSpacing: "-0.025em",
-              lineHeight: 1.04,
-              margin: "0 0 1.5rem",
-              maxWidth: "820px",
-              textWrap: "balance",
-            } as React.CSSProperties}
-          >
-            Architecture, rendered in real time.
-          </h1>
+            <h1
+              style={{
+                fontSize: "clamp(2.75rem, 7vw, 5.5rem)",
+                fontWeight: 400,
+                letterSpacing: "-0.025em",
+                lineHeight: 1.04,
+                margin: "0 0 1.5rem",
+                maxWidth: "820px",
+                textWrap: "balance",
+              } as React.CSSProperties}
+            >
+              Architecture, rendered in real time.
+            </h1>
+          </div>
 
           <p
             ref={subheadRef}
@@ -251,6 +259,7 @@ export default function Hero() {
         }
         @media (prefers-reduced-motion: reduce) {
           .reveal-init { opacity: 1 !important; }
+          .head-group { transform: none !important; }
         }
       `}</style>
     </section>
