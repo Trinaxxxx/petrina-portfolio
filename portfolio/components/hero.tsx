@@ -13,14 +13,9 @@ const proof = [
   { metric: "200+", label: "stakeholders, live VR launch event", href: "#achievements" },
 ];
 
-const HEADLINE = "Architecture, rendered in real time.";
-
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
-  const headGroupRef = useRef<HTMLDivElement>(null);
-  const kickerRef = useRef<HTMLParagraphElement>(null);
-  const headlineRef = useRef<HTMLHeadingElement>(null);
   const subheadRef = useRef<HTMLParagraphElement>(null);
   const ctasRef = useRef<HTMLDivElement>(null);
   const proofRef = useRef<HTMLDivElement>(null);
@@ -30,70 +25,35 @@ export default function Hero() {
     const stage = stageRef.current;
     if (!section || !stage) return;
 
-    const headGroup = headGroupRef.current!;
-    const kicker = kickerRef.current!;
-    const headline = headlineRef.current!;
-    const subhead = subheadRef.current!;
-    const ctas = ctasRef.current!;
-    const proofEl = proofRef.current!;
-    const chars = headline.querySelectorAll<HTMLElement>(".char");
-    const sequenced = [subhead, ctas, proofEl];
+    const sequenced = [subheadRef.current!, ctasRef.current!, proofRef.current!];
 
-    // How far to drop the name+headline so they start at the bottom of the
-    // composition on load, then rise to their resting spot on first scroll.
-    const dropOffset = () =>
-      ctas.getBoundingClientRect().bottom - headGroup.getBoundingClientRect().bottom;
-
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReduced) {
-      gsap.set([kicker, ...sequenced, ...chars], {
-        autoAlpha: 1, y: 0, yPercent: 0, scaleX: 1, scaleY: 1, filter: "blur(0px)",
-      });
+    // Reduced motion: just show everything, no pin, no reveal.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      gsap.set(sequenced, { autoAlpha: 1, y: 0, filter: "blur(0px)" });
       return;
     }
 
     const ctx = gsap.context(() => {
-      // On load: name + headline animate in once, then rest in place (not scroll-gated).
-      gsap.from(kicker, { autoAlpha: 0, y: 20, filter: "blur(8px)", duration: 0.9, ease: "power3.out", delay: 0.1 });
-      gsap.from(chars, {
-        autoAlpha: 0,
-        yPercent: 120,
-        scaleY: 2.3,
-        scaleX: 0.7,
-        transformOrigin: "50% 0%",
-        filter: "blur(6px)",
-        duration: 1.1,
-        stagger: 0.035,
-        ease: "power3.out",
-        delay: 0.25,
-      });
-
-      // On scroll: reveal subhead -> CTAs -> proof rail, one step at a time.
+      // These start hidden in the markup (reveal-init) so there is no flash of
+      // rendered content before JS runs. Keep them hidden, then reveal on scroll.
       gsap.set(sequenced, { autoAlpha: 0, y: 28, filter: "blur(8px)" });
-      // Name + headline start dropped to the bottom, visible on load.
-      gsap.set(headGroup, { y: dropOffset() });
 
       const tl = gsap.timeline({
         defaults: { ease: "power3.out" },
         scrollTrigger: {
           trigger: section,
           start: "top top",
-          end: "+=280%", // long scroll distance = slow, deliberate pacing
+          end: "+=220%",
           pin: stage,
-          scrub: 1.1, // smoothing lag so the motion glides instead of tracking 1:1
+          scrub: 1.1,
           anticipatePin: 1,
-          invalidateOnRefresh: true, // recompute dropOffset on resize
         },
       });
 
       const HOLD = 0.5; // dwell so each step sits fully placed before the next begins
-
-      // 1 — raise name + headline from the bottom to their resting position.
-      tl.to(headGroup, { y: 0, duration: 1.2, ease: "power2.inOut" }).to({}, { duration: HOLD });
-      // 2 — subhead
-      tl.to(subhead, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1 }, ">").to({}, { duration: HOLD });
-      tl.to(ctas, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1 }, ">").to({}, { duration: HOLD });
-      tl.to(proofEl, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1 }, ">");
+      tl.to(subheadRef.current, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1 }).to({}, { duration: HOLD });
+      tl.to(ctasRef.current, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1 }, ">").to({}, { duration: HOLD });
+      tl.to(proofRef.current, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1 }, ">");
     }, section);
 
     return () => ctx.revert();
@@ -101,7 +61,12 @@ export default function Hero() {
 
   return (
     <section id="hero" ref={sectionRef} style={{ position: "relative", background: "var(--pk-bg)" }}>
-      {/* Pinned full-screen stage: video + the whole revealing composition. */}
+      {/* No-JS / safety: if the script never runs, show the revealed items. */}
+      <noscript>
+        <style>{`.reveal-init { opacity: 1 !important; }`}</style>
+      </noscript>
+
+      {/* Pinned full-screen stage: video + the whole composition. */}
       <div
         ref={stageRef}
         style={{ height: "100svh", overflow: "hidden", position: "relative", display: "flex", flexDirection: "column" }}
@@ -129,7 +94,7 @@ export default function Hero() {
           }}
         />
 
-        {/* Composition — kicker, headline, subhead, CTAs. */}
+        {/* Composition — name + headline static on load; subhead/CTAs on scroll. */}
         <div
           style={{
             position: "relative",
@@ -145,9 +110,7 @@ export default function Hero() {
             justifyContent: "flex-end",
           }}
         >
-          <div ref={headGroupRef}>
           <p
-            ref={kickerRef}
             style={{
               fontFamily: "var(--pk-mono)",
               fontSize: "12px",
@@ -160,9 +123,6 @@ export default function Hero() {
           </p>
 
           <h1
-            ref={headlineRef}
-            aria-label={HEADLINE}
-            className="hero-headline"
             style={{
               fontSize: "clamp(2.75rem, 7vw, 5.5rem)",
               fontWeight: 400,
@@ -173,17 +133,14 @@ export default function Hero() {
               textWrap: "balance",
             } as React.CSSProperties}
           >
-            {HEADLINE.split("").map((c, i) => (
-              <span className="char" aria-hidden="true" key={i}>
-                {c === " " ? " " : c}
-              </span>
-            ))}
+            Architecture, rendered in real time.
           </h1>
-          </div>
 
           <p
             ref={subheadRef}
+            className="reveal-init"
             style={{
+              opacity: 0,
               fontSize: "clamp(14px, 1.5vw, 17px)",
               color: "var(--pk-text)",
               lineHeight: 1.75,
@@ -196,7 +153,7 @@ export default function Hero() {
             designed to feel like the finished space, running live at 90fps.
           </p>
 
-          <div ref={ctasRef} style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+          <div ref={ctasRef} className="reveal-init" style={{ opacity: 0, display: "flex", gap: "1rem", flexWrap: "wrap" }}>
             <a
               href="#walkthrough"
               style={{
@@ -241,8 +198,8 @@ export default function Hero() {
           </div>
         </div>
 
-        {/* Proof rail pinned to the bottom of the stage, revealed last. */}
-        <div ref={proofRef} style={{ position: "relative", zIndex: 3, flexShrink: 0 }}>
+        {/* Proof rail — revealed last. */}
+        <div ref={proofRef} className="reveal-init" style={{ opacity: 0, position: "relative", zIndex: 3, flexShrink: 0 }}>
           <div
             style={{
               borderTop: "1px solid var(--pk-border-accent)",
@@ -279,7 +236,6 @@ export default function Hero() {
       </div>
 
       <style>{`
-        .hero-headline .char { display: inline-block; will-change: transform, opacity; }
         .proof-rail { display: grid; grid-template-columns: repeat(3, 1fr); }
         .proof-item {
           padding: 1.1rem clamp(1.25rem, 3vw, 2rem);
@@ -292,6 +248,9 @@ export default function Hero() {
           .proof-rail { grid-template-columns: 1fr; }
           .proof-item { border-left: none; border-top: 1px solid var(--pk-border); padding: 0.7rem 1.25rem; }
           .proof-item:first-child { border-top: none; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .reveal-init { opacity: 1 !important; }
         }
       `}</style>
     </section>
