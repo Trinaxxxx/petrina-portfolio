@@ -1,6 +1,25 @@
+# dependencies
 node_modules/
+
+# builds / derived artifacts
 dist/
+build/
+*.tsbuildinfo
+
+# env & secrets
 .env
-.env.local
+.env.*
+
+# logs
 *.log
+
+# OS / editor cruft
 .DS_Store
+
+# deploy / tooling
+.vercel
+
+# local AI tooling & personal config (not part of the project)
+.claude/settings.local.json
+.impeccable/
+_local-notes/

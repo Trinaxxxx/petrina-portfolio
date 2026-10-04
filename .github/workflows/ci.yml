@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+
+jobs:
+  build:
+    name: Lint & build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: portfolio
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: portfolio/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Non-blocking: reports lint issues without failing the build.
+      # Flip continue-on-error to false once the lint backlog is cleared.
+      - name: Lint
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Build
+        run: npm run build
