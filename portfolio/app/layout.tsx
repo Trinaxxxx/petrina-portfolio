@@ -12,11 +12,11 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://petrina-portfolio.vercel.app"),
   title: "Petrina Kinzel | Technical Environment Artist",
   description:
-    "Real-time environment artist: Blender automation, CAD/Revit integration, Unreal Engine deployment.",
+    "Real-time environment artist: Blender automation, CAD/Revit integration, real-time VR delivery.",
   openGraph: {
     title: "Petrina Kinzel | Technical Environment Artist",
     description:
-      "Real-time environment artist: Blender automation, CAD/Revit integration, Unreal Engine deployment.",
+      "Real-time environment artist: Blender automation, CAD/Revit integration, real-time VR delivery.",
     type: "website",
     images: [{ url: "/projects/alphaplanes-hero.png", width: 1200, height: 630, alt: "Alpha Planes - Petrina Kinzel portfolio" }],
   },
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Petrina Kinzel | Technical Environment Artist",
     description:
-      "Real-time environment artist: Blender automation, CAD/Revit integration, Unreal Engine deployment.",
+      "Real-time environment artist: Blender automation, CAD/Revit integration, real-time VR delivery.",
     images: ["/projects/alphaplanes-hero.png"],
   },
 };

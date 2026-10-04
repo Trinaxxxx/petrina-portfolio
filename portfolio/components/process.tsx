@@ -10,7 +10,7 @@ const steps = [
   { num: "Step 02", title: "UV & Materials", body: "Texture atlasing, PBR material authoring in Substance Designer. Consolidation to reduce draw calls." },
   { num: "Step 03", title: "LOD & Optimisation", body: "LOD generation, mesh cleanup, texture scaling. Performance-budgeted for target VR frame rate." },
   { num: "Step 04", title: "Scene Assembly", body: "Modular placement using reusable asset libraries. Lighting and atmosphere rig. Final QA pass." },
-  { num: "Step 05", title: "VR Deployment", body: "Export to Unreal Engine or target platform. Live performance testing. Stakeholder delivery." },
+  { num: "Step 05", title: "VR Deployment", body: "Export to Unity / target VR platform. Live performance testing. Stakeholder delivery." },
 ];
 
 export default function Process() {
@@ -60,7 +60,7 @@ export default function Process() {
           How I build
         </h2>
         <p style={{ color: "var(--pk-muted)", fontSize: "15px", marginBottom: "3rem" }}>
-          The technical pipeline behind every environment — from brief to VR deployment.
+          The pipeline behind every environment, from brief to VR delivery.
         </p>
 
         <div

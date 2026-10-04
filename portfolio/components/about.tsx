@@ -27,7 +27,7 @@ const skills = [
   },
   {
     title: "Real-Time & VR",
-    items: ["Unreal Engine 5", "Blender real-time render", "VR performance budgeting", "Draw call optimisation"],
+    items: ["Unity (VR delivery)", "Blender EEVEE real-time", "VR performance budgeting", "Unreal Engine 5 (R&D)"],
   },
   {
     title: "DCC Tools",
@@ -49,8 +49,8 @@ export default function About() {
       {/* Bio — condensed */}
       <FadeContent blur duration={900} threshold={0.1}>
         <p style={{ color: "var(--pk-muted)", fontSize: "15px", lineHeight: 1.7, maxWidth: "680px", marginBottom: "2rem" }}>
-          <strong style={{ color: "var(--pk-text)", fontWeight: 500 }}>Technical Environment Artist</strong> with 3 years building real-time VR environments and automation pipelines at TMX Transform, Brisbane and Bangkok. Specialised in Revit/CAD to Unreal Engine delivery. Currently based in{" "}
-          <strong style={{ color: "var(--pk-text)", fontWeight: 500 }}>Kuala Lumpur, Malaysia</strong>.
+          <strong style={{ color: "var(--pk-text)", fontWeight: 500 }}>Technical Environment Artist</strong> with three years of experience across APAC, based in the Design, Architecture and Innovation team at TMX Transform (a supply chain consultancy). My work takes Revit and CAD data into shippable Unity environments, backed by AI tooling I write to automate repetitive processes. Now in{" "}
+          <strong style={{ color: "var(--pk-text)", fontWeight: 500 }}>Brisbane</strong> and open to remote or relocation.
         </p>
       </FadeContent>
 

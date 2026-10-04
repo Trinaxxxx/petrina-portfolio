@@ -1,5 +1,6 @@
-import { useInView, useMotionValue, useSpring } from 'motion/react';
-import { useCallback, useEffect, useRef } from 'react';
+"use client";
+
+import { useEffect, useRef } from 'react';
 
 interface CountUpProps {
   to: number;
@@ -14,6 +15,13 @@ interface CountUpProps {
   onEnd?: () => void;
 }
 
+/**
+ * Self-contained count-up: IntersectionObserver kicks off a requestAnimationFrame
+ * tween when the number scrolls into view, with a hard fallback timer so the final
+ * value always populates even if the observer never fires (hidden ancestor, reduced
+ * motion, flaky scroller). A stat tile stuck at "0" is worse than no animation, so
+ * correctness of the displayed number is guaranteed; the animation is best-effort.
+ */
 export default function CountUp({
   to,
   from = 0,
@@ -27,89 +35,104 @@ export default function CountUp({
   onEnd
 }: CountUpProps) {
   const ref = useRef<HTMLSpanElement>(null);
-  const motionValue = useMotionValue(direction === 'down' ? to : from);
 
-  const damping = 20 + 40 * (1 / duration);
-  const stiffness = 100 * (1 / duration);
-
-  const springValue = useSpring(motionValue, {
-    damping,
-    stiffness
-  });
-
-  const isInView = useInView(ref, { once: true, margin: '0px' });
+  const start = direction === 'down' ? to : from;
+  const end = direction === 'down' ? from : to;
 
   const getDecimalPlaces = (num: number): number => {
     const str = num.toString();
     if (str.includes('.')) {
       const decimals = str.split('.')[1];
-      if (parseInt(decimals) !== 0) {
-        return decimals.length;
-      }
+      if (parseInt(decimals) !== 0) return decimals.length;
     }
     return 0;
   };
 
   const maxDecimals = Math.max(getDecimalPlaces(from), getDecimalPlaces(to));
 
-  const formatValue = useCallback(
-    (latest: number) => {
-      const hasDecimals = maxDecimals > 0;
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
 
+    const format = (value: number): string => {
       const options: Intl.NumberFormatOptions = {
         useGrouping: !!separator,
-        minimumFractionDigits: hasDecimals ? maxDecimals : 0,
-        maximumFractionDigits: hasDecimals ? maxDecimals : 0
+        minimumFractionDigits: maxDecimals,
+        maximumFractionDigits: maxDecimals
       };
+      const formatted = Intl.NumberFormat('en-US', options).format(value);
+      return separator ? formatted.replace(/,/g, separator) : formatted;
+    };
 
-      const formattedNumber = Intl.NumberFormat('en-US', options).format(latest);
+    el.textContent = format(start);
 
-      return separator ? formattedNumber.replace(/,/g, separator) : formattedNumber;
-    },
-    [maxDecimals, separator]
-  );
+    if (!startWhen) return;
 
-  useEffect(() => {
-    if (ref.current) {
-      ref.current.textContent = formatValue(direction === 'down' ? to : from);
-    }
-  }, [from, to, direction, formatValue]);
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
-  useEffect(() => {
-    if (isInView && startWhen) {
-      if (typeof onStart === 'function') {
-        onStart();
+    let rafId = 0;
+    let startTimer: ReturnType<typeof setTimeout>;
+    let fallbackTimer: ReturnType<typeof setTimeout>;
+    let hasRun = false;
+
+    const snapToEnd = () => {
+      cancelAnimationFrame(rafId);
+      el.textContent = format(end);
+      onEnd?.();
+    };
+
+    const run = () => {
+      if (hasRun) return;
+      hasRun = true;
+      clearTimeout(fallbackTimer);
+
+      if (prefersReduced || duration <= 0) {
+        snapToEnd();
+        return;
       }
 
-      const timeoutId = setTimeout(() => {
-        motionValue.set(direction === 'down' ? from : to);
-      }, delay * 1000);
-
-      const durationTimeoutId = setTimeout(
-        () => {
-          if (typeof onEnd === 'function') {
-            onEnd();
+      startTimer = setTimeout(() => {
+        onStart?.();
+        const durationMs = duration * 1000;
+        const t0 = performance.now();
+        const tick = (now: number) => {
+          const progress = Math.min((now - t0) / durationMs, 1);
+          // easeOutExpo — fast then settle, matches the previous spring feel.
+          const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+          el.textContent = format(start + (end - start) * eased);
+          if (progress < 1) {
+            rafId = requestAnimationFrame(tick);
+          } else {
+            onEnd?.();
           }
-        },
-        delay * 1000 + duration * 1000
-      );
+        };
+        rafId = requestAnimationFrame(tick);
+      }, delay * 1000);
+    };
 
-      return () => {
-        clearTimeout(timeoutId);
-        clearTimeout(durationTimeoutId);
-      };
-    }
-  }, [isInView, startWhen, motionValue, direction, from, to, delay, onStart, onEnd, duration]);
+    // Guaranteed fallback: populate the real value even if we never scroll into view.
+    fallbackTimer = setTimeout(run, (delay + duration) * 1000 + 1500);
 
-  useEffect(() => {
-    const unsubscribe = springValue.on('change', (latest: number) => {
-      if (ref.current) {
-        ref.current.textContent = formatValue(latest);
-      }
-    });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          observer.disconnect();
+          run();
+        }
+      },
+      { threshold: 0 }
+    );
+    observer.observe(el);
 
-    return () => unsubscribe();
-  }, [springValue, formatValue]);
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(rafId);
+      clearTimeout(startTimer);
+      clearTimeout(fallbackTimer);
+    };
+  }, [start, end, delay, duration, startWhen, maxDecimals, separator, onStart, onEnd]);
 
   return <span className={className} ref={ref} />;
 }
