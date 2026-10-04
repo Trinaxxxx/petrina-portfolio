@@ -20,29 +20,6 @@ export type Breakdown = {
 
 export const breakdowns: Breakdown[] = [
   {
-    slug: "laundromat",
-    title: "Laundromat — Environment Art + Pipeline",
-    subtitle: "CAD-to-real-time pipeline study in Three.js / WebGL",
-    tags: ["Personal", "Revit Source", "Three.js", "In Progress"],
-    stats: [
-      { label: "Source", value: "Revit / SketchUp" },
-      { label: "Delivery", value: "Three.js / WebGL" },
-      { label: "Focus", value: "Pipeline + Art" },
-      { label: "Status", value: "In Progress" },
-    ],
-    summary: [
-      "A personal real-time environment study sourced from Revit/SketchUp data — proving the full CAD-to-real-time pipeline end to end. Prop-dense interior with washing machines, dryers, vending units, and industrial piping.",
-      "The goal is interactive browser deployment with LOD, draw-call instancing, and a live performance HUD — demonstrating that environment art doesn't have to stop at a static render.",
-      "Modular kit design allows each prop to be swapped, reused, and re-dressed. All assets are authored with PBR materials consolidated to texture atlases to minimise draw calls.",
-    ],
-    media: [
-      { src: "/projects/laundromat-isometric.png", alt: "Laundromat — isometric diorama view" },
-      { src: "/projects/laundromat-cinematic.png", alt: "Laundromat — moody cinematic render" },
-      { src: "/projects/laundromat-kit.png",        alt: "Modular building kit with LOD strategy" },
-      { src: "/projects/laundromat-breakdown.png",  alt: "Scene asset breakdown and optimisation strategy" },
-    ],
-  },
-  {
     slug: "blender-automation",
     title: "Blender Automation Pipeline",
     subtitle: "Python toolset for automated asset processing at studio scale",
