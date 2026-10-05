@@ -1,6 +1,8 @@
 /* VR walkthrough feature — the real-time deliverable, front and center for
    archviz / real-time render reviewers. Server component: <video controls>
    needs no client JS. */
+import { mediaUrl } from "@/lib/utils";
+
 export default function Walkthrough() {
   return (
     <section
@@ -73,7 +75,7 @@ export default function Walkthrough() {
               display: "block",
             }}
           >
-            <source src="/projects/vr-walkthrough.mp4" type="video/mp4" />
+            <source src={mediaUrl("projects/vr-walkthrough.mp4")} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
         </div>

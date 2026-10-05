@@ -6,6 +6,9 @@ dist/
 build/
 *.tsbuildinfo
 
+# large video media — hosted on Vercel Blob, not committed (see scripts/upload-videos.mjs)
+*.mp4
+
 # env & secrets
 .env
 .env.*

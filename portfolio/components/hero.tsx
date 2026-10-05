@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { mediaUrl } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -87,7 +88,7 @@ export default function Hero() {
           aria-hidden="true"
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }}
         >
-          <source src="/projects/hero-bg.mp4" type="video/mp4" />
+          <source src={mediaUrl("projects/hero-bg.mp4")} type="video/mp4" />
         </video>
 
         <div

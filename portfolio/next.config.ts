@@ -10,7 +10,7 @@ const csp = [
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "font-src 'self' data:",
-  "media-src 'self'",
+  "media-src 'self' https://*.public.blob.vercel-storage.com",
   "frame-src https://www.youtube.com https://www.linkedin.com",
   "connect-src 'self'",
   "object-src 'none'",
