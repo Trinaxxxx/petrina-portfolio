@@ -21,5 +21,7 @@ build/
 
 # local AI tooling & personal config (not part of the project)
 .claude/settings.local.json
+.claude/skills/
 .impeccable/
 _local-notes/
+portfolio/Skills/
