@@ -45,6 +45,9 @@ export default function About() {
       id="about"
       style={{ padding: "clamp(2rem, 6vw, 4rem) clamp(1.25rem, 5vw, 3rem) 0", maxWidth: "1200px", margin: "0 auto", overflowX: "clip" }}
     >
+      {/* The composition leads with the bold bio statement (no visible heading),
+          so this keeps the heading outline complete for screen readers / SEO. */}
+      <h2 className="sr-only">About Petrina Kinzel</h2>
 
       {/* Bio — condensed */}
       <FadeContent blur duration={900} threshold={0.1}>

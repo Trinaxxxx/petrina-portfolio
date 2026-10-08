@@ -68,6 +68,7 @@ export default function Walkthrough() {
             controls
             preload="none"
             poster="/projects/vr-walkthrough-poster.jpg"
+            aria-label="VR walkthrough of a high-density industrial site, taken from Revit data to a lit, walkable real-time environment running on standalone headsets"
             style={{
               width: "100%",
               height: "100%",

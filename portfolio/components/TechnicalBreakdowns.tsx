@@ -26,7 +26,7 @@ function MediaCard({ item }: { item: MediaItem }) {
   if (isPlaceholder) {
     return (
       <div style={base}>
-        <span style={{ fontFamily: "var(--pk-mono)", fontSize: "9px", color: "var(--pk-muted)", opacity: 0.4, letterSpacing: "0.05em", textAlign: "center", padding: "0.5rem" }}>
+        <span style={{ fontFamily: "var(--pk-mono)", fontSize: "10px", color: "var(--pk-muted)", letterSpacing: "0.05em", textAlign: "center", lineHeight: 1.5, padding: "0.5rem" }}>
           {item.alt}
         </span>
       </div>
@@ -345,7 +345,7 @@ export default function TechnicalBreakdowns() {
               className={`tb-left-btn${b.slug === selectedSlug ? " active" : ""}`}
             >
               <span style={{ display: "block", fontSize: "13px", marginBottom: "2px" }}>{b.title}</span>
-              <span style={{ display: "block", fontSize: "11px", opacity: 0.6 }}>{b.subtitle}</span>
+              <span style={{ display: "block", fontSize: "11px", color: "var(--pk-muted)" }}>{b.subtitle}</span>
             </button>
           ))}
         </div>

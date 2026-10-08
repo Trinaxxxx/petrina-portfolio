@@ -29,8 +29,8 @@ const projects: Project[] = [
     title: "Blender Automation Pipeline — Asset Processing",
     tags: ["CAD/Revit", "Pipeline", "Python"],
     featured: false,
-    goal: "Kill the repetitive manual work in CAD-to-environment conversion: asset replacement, materials, cleanup, organisation.",
-    role: "Tool developer: designed, built, and shipped the addon suite.",
+    goal: "Take the repetition out of CAD-to-environment conversion — asset replacement, materials, cleanup, and organisation, all in one pass.",
+    role: "Sole tool developer — designed, built, and shipped the addon suite.",
     results: [
       ["Impact", "40–60% time saved"],
       ["Scale", "100s of assets"],
@@ -42,7 +42,7 @@ const projects: Project[] = [
       "Non-destructive: source data preserved in collections",
       "Naming-convention QA built in, so errors get caught before export",
     ],
-    outcome: "Adopted across studio production. Environment setup that took days now runs in minutes.",
+    outcome: "Adopted across studio production. Setup that used to take days runs in minutes.",
     media: [
       { src: "/projects/pipeline-ui.png", alt: "PipelineX Blender plugin — full UI panel" },
       { src: "", alt: "Collection Organizer — tool demo", type: "placeholder" as const },
@@ -61,8 +61,8 @@ const projects: Project[] = [
     title: "Alpha Planes — Real-Time Optimisation",
     tags: ["Case Study", "Optimisation", "VR Profiling"],
     featured: false,
-    goal: "Standalone VR was GPU-bound at 35 FPS: 1,000+ warehouse racks of raw Revit geometry in one scene.",
-    role: "Pipeline author: devised the technique and productionised it.",
+    goal: "Standalone VR was GPU-bound at 35 FPS — 1,000+ warehouse racks of raw Revit geometry sharing one scene.",
+    role: "Devised the technique and turned it into a repeatable production pass.",
     results: [
       ["Frame Time", "27ms → 7ms"],
       ["Poly Reduction", "96.5%"],
@@ -74,7 +74,7 @@ const projects: Project[] = [
       "Four instanced pod variants replace thousands of unique meshes",
       "Silhouette fidelity kept where the headset actually looks",
     ],
-    outcome: "Locked 72 FPS on standalone VR with photoreal rack density intact.",
+    outcome: "Locked 72 FPS on standalone VR with the photoreal rack density intact.",
     media: [
       { src: "/projects/alphaplanes-lod.png",       alt: "Alpha Planes — LOD chain across 3 detail levels" },
       { src: "/projects/alphamass-breakdown.png",   alt: "Pod component breakdown — Top / Side / Middle / Front" },
@@ -88,8 +88,8 @@ const projects: Project[] = [
     title: "TMX Metaverse — VR Sandbox Environments",
     tags: ["VR", "Blender", "Real-Time", "Live Event"],
     featured: false,
-    goal: "Two distinct VR sandbox environments for an international launch: two-month deadline, live audience in Bangkok.",
-    role: "Technical lead: build, optimisation, and on-site delivery in Bangkok.",
+    goal: "Two distinct VR sandbox environments for an international launch — two-month build, live audience in Bangkok.",
+    role: "Technical lead on build, optimisation, and on-site delivery.",
     results: [
       ["Platform", "VR / Real-time"],
       ["Timeline", "2 months"],
@@ -97,11 +97,11 @@ const projects: Project[] = [
       ["Event", "5 days, live"],
     ],
     decisions: [
-      "Performance budget locked first; art fitted to the budget",
-      "Demo-proofed every scene: no scripted failure points in exec-driven demos",
-      "Coached executive presenters on live VR delivery",
+      "Performance budget locked first, art built to fit it",
+      "Demo-proofed every scene so exec-driven walkthroughs couldn't fail",
+      "Coached the executive presenters through live VR delivery",
     ],
-    outcome: "Five-day live event ran without a technical failure.",
+    outcome: "Five days of live demos, zero technical failures.",
     media: [
       { src: "/projects/tmx-p1-1.png", alt: "TMX VR Environment — Project 1, shot 1" },
       { src: "/projects/tmx-p1-3.png", alt: "TMX VR Environment — Project 1, shot 3" },
@@ -138,13 +138,17 @@ function MediaCard({ item }: { item: MediaItem }) {
       <div
         style={{
           ...tileStyle,
+          // Faint ash-accent wash so an empty slot reads as a deliberate media
+          // frame, not a dead grey box. Full-strength muted label (no opacity)
+          // clears WCAG AA on the ink surface.
+          background: "rgba(185,208,199,0.035)",
           aspectRatio: "16/9",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
         }}
       >
-        <span style={{ fontFamily: "var(--pk-mono)", fontSize: "9px", color: "var(--pk-muted)", opacity: 0.55, letterSpacing: "0.05em", textAlign: "center", padding: "0.5rem" }}>
+        <span style={{ fontFamily: "var(--pk-mono)", fontSize: "10px", color: "var(--pk-muted)", letterSpacing: "0.05em", lineHeight: 1.5, textAlign: "center", padding: "0.5rem" }}>
           {item.alt}
         </span>
       </div>
@@ -193,7 +197,8 @@ function TallRightMedia({ media }: { media: MediaItem[] }) {
   const fillerStyle: React.CSSProperties = {
     border: "0.5px solid var(--pk-border)",
     borderRadius: "2px",
-    background: "var(--pk-bg)",
+    // Faint ash-accent wash marks these as deliberate media frames.
+    background: "rgba(185,208,199,0.035)",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -202,12 +207,11 @@ function TallRightMedia({ media }: { media: MediaItem[] }) {
   };
   const fillerLabel: React.CSSProperties = {
     fontFamily: "var(--pk-mono)",
-    fontSize: "9px",
+    fontSize: "10px",
     color: "var(--pk-muted)",
-    opacity: 0.55,
     letterSpacing: "0.05em",
     textAlign: "center",
-    lineHeight: 1.4,
+    lineHeight: 1.5,
   };
 
   return (
@@ -334,7 +338,7 @@ export default function Projects() {
           marginBottom: "3rem",
         }}
       >
-        Real-time environments, pipeline tools, and optimisation case studies.
+        Environments, tools, and the optimisation work behind them.
       </p>
 
       <div

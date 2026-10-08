@@ -1,9 +1,18 @@
+"use client";
+
 import * as React from 'react';
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useLayoutEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
+
+// useLayoutEffect runs before the browser paints (so we can hide the element
+// before the reveal without a flash), but it warns during SSR. Fall back to
+// useEffect on the server. Crucially, the element renders VISIBLE in markup:
+// no-JS visitors and crawlers get the content, and JS opts into hide-then-reveal.
+const useIsomorphicLayoutEffect =
+  typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 interface FadeContentProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
@@ -41,13 +50,13 @@ const FadeContent: React.FC<FadeContentProps> = ({
 }) => {
   const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
 
-    // Reduced motion: reveal immediately, no fade/blur/scroll gate.
+    // Reduced motion: leave content at its visible default, no fade/blur/gate.
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      gsap.set(el, { autoAlpha: 1, filter: 'blur(0px)' });
+      gsap.set(el, { autoAlpha: 1, filter: 'blur(0px)', willChange: 'auto' });
       return;
     }
 
@@ -60,11 +69,15 @@ const FadeContent: React.FC<FadeContentProps> = ({
     const startPct = (1 - threshold) * 100;
     const getSeconds = (val: number) => (val > 10 ? val / 1000 : val);
 
+    // Hide now (before paint) so the visible-by-default markup never flashes
+    // before the scroll reveal. JS is present here by definition.
     gsap.set(el, {
       autoAlpha: initialOpacity,
       filter: blur ? 'blur(10px)' : 'blur(0px)',
       willChange: 'opacity, filter, transform'
     });
+
+    const clearHint = () => gsap.set(el, { willChange: 'auto' });
 
     const tl = gsap.timeline({
       paused: true,
@@ -78,8 +91,15 @@ const FadeContent: React.FC<FadeContentProps> = ({
             delay: getSeconds(disappearAfter),
             duration: getSeconds(disappearDuration),
             ease: disappearEase,
-            onComplete: () => onDisappearanceComplete?.()
+            onComplete: () => {
+              clearHint();
+              onDisappearanceComplete?.();
+            }
           });
+        } else {
+          // Drop the compositor hint once the one-shot reveal is done so we
+          // don't leave a promoted layer alive on every faded element.
+          clearHint();
         }
       }
     });
@@ -106,8 +126,11 @@ const FadeContent: React.FC<FadeContentProps> = ({
     };
   }, []);
 
+  // Renders VISIBLE by default. Without JS (crawlers, no-JS, failed hydration)
+  // the content stays on the page; with JS the layout effect hides it before
+  // paint and the ScrollTrigger fades it in.
   return (
-    <div ref={ref} className={className} style={{ visibility: 'hidden', ...style }} {...props}>
+    <div ref={ref} className={className} style={style} {...props}>
       {children}
     </div>
   );

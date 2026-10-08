@@ -9,14 +9,14 @@ const items: AchievementItem[] = [
   {
     type: "video",
     title: "TMX Metaverse — International Launch",
-    body: "Led the 2-month technical build and international launch of the TMX Metaverse. Managed VR sandbox environments and demo worlds for a 5-day event with 200+ high-level stakeholders. Prepared and coached Executive Heads on VR presentation delivery.",
+    body: "Led the two-month technical build and international launch of the TMX Metaverse: VR sandbox environments and demo worlds for a five-day event with 200+ senior stakeholders. Also coached the Executive Heads through their live VR presentations.",
     loc: "Bangkok, TH",
     embedSrc: "https://www.youtube.com/embed/ymVXZnOQRTw?si=GVvINlBamfRtsbAM",
   },
   {
     type: "social",
     title: "Autodesk Workshop XR — Beta Partnership",
-    body: "Selected as primary Technical Lead to stress-test Autodesk's emerging XR collaboration tools in high-scale industrial production. Provided critical feedback on spatial review workflows and API limitations that shaped the final platform release.",
+    body: "Chosen as primary Technical Lead to stress-test Autodesk's XR collaboration tools inside real industrial production. My feedback on spatial review workflows and API limits fed directly into the final platform release.",
     loc: "Brisbane, AU",
     embedSrc: "https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7275977702296182784?compact=1",
     embedHeight: 399,
@@ -24,7 +24,7 @@ const items: AchievementItem[] = [
   {
     type: "text",
     title: "Blender Pipeline Automation — 50% Efficiency Gain",
-    body: "Designed and shipped a suite of Blender Python automation tools — asset replacement, material assignment, scene cleanup, and collection organisation — cutting manual environment setup time by 40–60% across studio production.",
+    body: "Designed and shipped a Blender Python toolkit — asset replacement, material assignment, scene cleanup, collection organisation — that cut manual environment setup by 40–60% across studio production.",
     loc: "Brisbane / Bangkok",
   },
 ];

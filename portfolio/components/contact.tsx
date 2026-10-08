@@ -35,8 +35,8 @@ export default function Contact() {
           >
             Available for environment art and pipeline work.
           </h2>
-          <p style={{ color: "var(--pk-muted)", fontSize: "15px", maxWidth: "400px", margin: "0 auto 2.5rem" }}>
-            Open to senior environment artist and technical pipeline roles in games, VR, and architectural visualisation.
+          <p style={{ color: "var(--pk-muted)", fontSize: "15px", maxWidth: "420px", margin: "0 auto 2.5rem" }}>
+            Open to environment artist and technical/pipeline roles across games, VR, and arch-viz. Happy to chat about a project or a role.
           </p>
 
           <div style={{ display: "flex", justifyContent: "center", gap: "1rem", flexWrap: "wrap" }}>
@@ -46,6 +46,7 @@ export default function Contact() {
                 href={l.href}
                 target={l.target}
                 rel={l.target ? "noopener noreferrer" : undefined}
+                className="tap-target"
                 style={{
                   fontFamily: "var(--pk-mono)",
                   fontSize: "12px",
@@ -70,6 +71,7 @@ export default function Contact() {
               </a>
             ))}
             <span
+              className="tap-target"
               style={{
                 fontFamily: "var(--pk-mono)",
                 fontSize: "12px",

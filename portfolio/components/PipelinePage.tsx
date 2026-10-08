@@ -98,7 +98,7 @@ function PlaceholderTile({ alt }: { alt: string }) {
         padding: "1rem",
       }}
     >
-      <span style={{ fontFamily: "var(--pk-mono)", fontSize: "10px", color: "var(--pk-muted)", opacity: 0.45, letterSpacing: "0.05em", textAlign: "center", lineHeight: 1.5 }}>
+      <span style={{ fontFamily: "var(--pk-mono)", fontSize: "10px", color: "var(--pk-muted)", letterSpacing: "0.05em", textAlign: "center", lineHeight: 1.5 }}>
         {alt}
       </span>
     </div>

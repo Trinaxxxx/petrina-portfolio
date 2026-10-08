@@ -91,7 +91,7 @@
   --pk-muted: #9aa3b1;
   --pk-accent: #b9d0c7;   /* ash-grey — data / tags (ink-black text when used as fill) */
   --pk-copper: #f7efed;   /* parchment — action: CTA fills (ink-black text), links */
-  --pk-mono: 'JetBrains Mono', 'Fira Mono', monospace;
+  --pk-mono: var(--font-mono-custom), ui-monospace, 'JetBrains Mono', 'Fira Mono', monospace;
 }
 
 @layer base {
@@ -99,6 +99,32 @@
   body { @apply bg-background text-foreground; }
   html { scroll-behavior: smooth; }
   h1, h2, h3 { color: var(--pk-heading); }
+}
+
+/* Visually hidden, still read by screen readers and counted in the heading
+   outline. Used for section headings the composition intentionally omits. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* On touch devices, guarantee a 44px tap height without fattening the same
+   control for mouse users. Keyed to the input method, not the viewport width. */
+@media (pointer: coarse) {
+  .tap-target {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+  }
 }
 
 ::-webkit-scrollbar { width: 4px; }

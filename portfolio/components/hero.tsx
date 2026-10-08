@@ -33,11 +33,31 @@ export default function Hero() {
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-    if (v.readyState >= 3) {
+
+    // iOS Safari blocks muted autoplay unless the element is muted at the
+    // PROPERTY level — and React doesn't reliably reflect the `muted` JSX
+    // attribute to that property, so iOS denies autoplay and paints its
+    // play-button overlay. Set the properties imperatively and kick playback;
+    // if the browser still refuses (e.g. Low Power Mode) the lit poster
+    // underlay stays visible as the fallback.
+    v.muted = true;
+    v.playsInline = true;
+
+    const tryPlay = () => {
+      const p = v.play();
+      if (p && typeof p.catch === "function") p.catch(() => {});
+    };
+
+    const onReady = () => {
       setVideoReady(true);
+      tryPlay();
+    };
+
+    if (v.readyState >= 3) {
+      onReady();
       return;
     }
-    const onReady = () => setVideoReady(true);
+
     v.addEventListener("canplay", onReady);
     return () => v.removeEventListener("canplay", onReady);
   }, []);
@@ -50,16 +70,34 @@ export default function Hero() {
     const headGroup = headGroupRef.current!;
     const sequenced = [subheadRef.current!, ctasRef.current!, proofRef.current!];
 
-    // Reduced motion: show everything at rest, no pin, no slide/reveal.
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      gsap.set(headGroup, { clearProps: "transform" });
-      gsap.set(sequenced, { autoAlpha: 1, y: 0, filter: "blur(0px)" });
-      return;
-    }
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Input/size-aware: phones get a no-pin entrance; large screens get the
+    // pinned scrub. Read once on mount — a user doesn't resize across this line.
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
 
     const ctx = gsap.context(() => {
-      // These start hidden in the markup (reveal-init) so there is no flash of
-      // rendered content before JS runs. Keep them hidden, then reveal on scroll.
+      // Reduced motion: everything at rest, no pin, no slide/reveal.
+      if (reduceMotion) {
+        gsap.set(headGroup, { clearProps: "transform" });
+        gsap.set(sequenced, { autoAlpha: 1, y: 0, filter: "blur(0px)" });
+        return;
+      }
+
+      // Mobile: no pin, no scrub. A pinned 2.6×-height scrubbed stage over a
+      // playing video is the heaviest thing on the weakest hardware and reads
+      // as "stuck" on a phone. Content is visible by default and the entrance
+      // only *enhances* it (gsap.from), so a backgrounded/headless render that
+      // never advances the time-based tween still ships the hero fully visible.
+      if (isMobile) {
+        gsap.set(headGroup, { clearProps: "transform" });
+        gsap.set(sequenced, { autoAlpha: 1, filter: "blur(0px)" });
+        gsap.from(headGroup, { y: "8vh", duration: 0.9, ease: "power2.out" });
+        gsap.from(sequenced, { y: 16, duration: 0.7, stagger: 0.12, ease: "power3.out", clearProps: "transform" });
+        return;
+      }
+
+      // Desktop: the pinned, scrubbed choreography. These start hidden in the
+      // markup (reveal-init) so nothing flashes before JS runs.
       gsap.set(sequenced, { autoAlpha: 0, y: 28, filter: "blur(8px)" });
 
       const tl = gsap.timeline({
@@ -75,9 +113,7 @@ export default function Hero() {
       });
 
       const HOLD = 0.5; // dwell so each step sits fully placed before the next begins
-      // 1 — slide name + headline up from their low on-load position (set in CSS).
       tl.to(headGroup, { y: 0, duration: 1.3, ease: "power2.inOut" }).to({}, { duration: HOLD });
-      // 2..4 — reveal subhead, CTAs, proof rail, one at a time.
       tl.to(subheadRef.current, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1 }, ">").to({}, { duration: HOLD });
       tl.to(ctasRef.current, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1 }, ">").to({}, { duration: HOLD });
       tl.to(proofRef.current, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1 }, ">");
@@ -209,6 +245,7 @@ export default function Hero() {
           <div ref={ctasRef} className="reveal-init" style={{ opacity: 0, display: "flex", gap: "1rem", flexWrap: "wrap" }}>
             <a
               href="#walkthrough"
+              className="tap-target"
               style={{
                 background: "var(--pk-copper)",
                 color: "var(--pk-bg)",
@@ -227,6 +264,7 @@ export default function Hero() {
             </a>
             <a
               href="#work"
+              className="tap-target"
               style={{
                 border: "1px solid var(--pk-accent)",
                 color: "var(--pk-accent)",

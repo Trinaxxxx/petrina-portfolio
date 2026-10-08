@@ -397,7 +397,7 @@ export default function AiToolsPage() {
               className={`at-left-btn${t.slug === selectedSlug ? " active" : ""}`}
             >
               <span style={{ display: "block", fontSize: "13px", marginBottom: "2px" }}>{t.title}</span>
-              <span style={{ display: "block", fontSize: "11px", opacity: 0.6 }}>{t.subtitle}</span>
+              <span style={{ display: "block", fontSize: "11px", color: "var(--pk-muted)" }}>{t.subtitle}</span>
             </button>
           ))}
         </div>
