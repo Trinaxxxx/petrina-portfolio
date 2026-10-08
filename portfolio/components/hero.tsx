@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { mediaUrl } from "@/lib/utils";
@@ -21,6 +21,26 @@ export default function Hero() {
   const subheadRef = useRef<HTMLParagraphElement>(null);
   const ctasRef = useRef<HTMLDivElement>(null);
   const proofRef = useRef<HTMLDivElement>(null);
+
+  // Hero clip fades up from black. We hold a lit poster frame underneath and
+  // cross-fade the video in once it can play, so the black intro never shows.
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoReady, setVideoReady] = useState(false);
+
+  // The <video autoPlay> is server-rendered, so its `canplay` can fire before
+  // React attaches the handler during hydration. Re-check readyState on mount
+  // (and keep a listener) so the fade-in never gets stuck hidden.
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.readyState >= 3) {
+      setVideoReady(true);
+      return;
+    }
+    const onReady = () => setVideoReady(true);
+    v.addEventListener("canplay", onReady);
+    return () => v.removeEventListener("canplay", onReady);
+  }, []);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -78,7 +98,21 @@ export default function Hero() {
         ref={stageRef}
         style={{ height: "100svh", overflow: "hidden", position: "relative", display: "flex", flexDirection: "column" }}
       >
+        {/* Lit poster underlay — shown instantly, stays visible while the video
+            cross-fades in on top, masking the clip's fade-up-from-black intro. */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            inset: 0,
+            zIndex: 0,
+            backgroundImage: "url(/projects/hero-poster.jpg)",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
         <video
+          ref={videoRef}
           autoPlay
           muted
           loop
@@ -86,7 +120,17 @@ export default function Hero() {
           preload="metadata"
           poster="/projects/hero-poster.jpg"
           aria-hidden="true"
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }}
+          onCanPlay={() => setVideoReady(true)}
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            zIndex: 0,
+            opacity: videoReady ? 1 : 0,
+            transition: "opacity 1200ms ease",
+          }}
         >
           <source src={mediaUrl("projects/hero-bg.mp4")} type="video/mp4" />
         </video>
