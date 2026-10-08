@@ -5,16 +5,14 @@ Artist — environment art, tech-art, and the in-house tools built along the way
 
 **🔗 Live site:** https://petrina-portfolio.vercel.app
 
-## Where the project lives
-
 The production site is the Next.js app in **[`portfolio/`](portfolio/)** — see
 its [README](portfolio/README.md) for the stack, setup, and run steps.
 
-```bash
-cd portfolio
-npm install
-npm run dev
-```
+## What's inside
+
+- **Case studies** — environment art and tech-art work, with technical breakdowns
+- **Showreel** — the live site leads with the reel and selected projects
+- **In-house tools** — the pipeline add-ons built along the way
 
 ## Built with
 
