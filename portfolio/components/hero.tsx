@@ -27,19 +27,27 @@ export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoReady, setVideoReady] = useState(false);
 
-  // The <video autoPlay> is server-rendered, so its `canplay` can fire before
-  // React attaches the handler during hydration. Re-check readyState on mount
-  // (and keep a listener) so the fade-in never gets stuck hidden.
+  // Playback is driven entirely from JS (the markup renders the video with
+  // preload="none" and no autoPlay) so we can decide whether to fetch it at all.
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
 
-    // iOS Safari blocks muted autoplay unless the element is muted at the
-    // PROPERTY level — and React doesn't reliably reflect the `muted` JSX
-    // attribute to that property, so iOS denies autoplay and paints its
-    // play-button overlay. Set the properties imperatively and kick playback;
-    // if the browser still refuses (e.g. Low Power Mode) the lit poster
-    // underlay stays visible as the fallback.
+    // Adaptive loading: the background clip is ~10MB. On Save-Data or slow
+    // connections, don't download it at all — the lit poster underlay is the
+    // graceful fallback. A decorative loop isn't worth 10MB on a metered phone.
+    // (navigator.connection is Chromium-only; where it's absent — e.g. iOS —
+    // we proceed and play, since we can't detect a metered connection there.)
+    const conn = (navigator as Navigator & {
+      connection?: { saveData?: boolean; effectiveType?: string };
+    }).connection;
+    const et = conn?.effectiveType ?? "";
+    if (conn?.saveData || et === "slow-2g" || et === "2g" || et === "3g") return;
+
+    // iOS Safari blocks muted autoplay unless muted is set at the PROPERTY
+    // level (React doesn't reliably reflect the `muted` JSX attribute), so set
+    // it imperatively. If the browser still refuses (e.g. Low Power Mode) the
+    // lit poster underlay stays visible as the fallback.
     v.muted = true;
     v.playsInline = true;
 
@@ -59,6 +67,10 @@ export default function Hero() {
     }
 
     v.addEventListener("canplay", onReady);
+    // preload="none" means the fetch hasn't started — kick it off now that
+    // we've decided the connection can afford it.
+    v.preload = "auto";
+    v.load();
     return () => v.removeEventListener("canplay", onReady);
   }, []);
 
@@ -149,11 +161,10 @@ export default function Hero() {
         />
         <video
           ref={videoRef}
-          autoPlay
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="none"
           poster="/projects/hero-poster.jpg"
           aria-hidden="true"
           onCanPlay={() => setVideoReady(true)}
