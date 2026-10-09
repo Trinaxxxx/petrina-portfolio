@@ -51,9 +51,45 @@ export default function Hero() {
     v.muted = true;
     v.playsInline = true;
 
-    const tryPlay = () => {
+    // iOS in Low Power Mode (and some other autoplay blocks) rejects the
+    // muted-autoplay play() promise. iOS always honors playback started from a
+    // real user gesture, so if the programmatic play is refused we arm one-shot
+    // listeners that retry on the first tap/scroll. Cleaned up once it plays.
+    let gestureArmed = false;
+    const retryOnGesture = () => {
       const p = v.play();
       if (p && typeof p.catch === "function") p.catch(() => {});
+    };
+    const gestureEvents = ["touchstart", "pointerdown", "click", "scroll"] as const;
+    const armGestureFallback = () => {
+      if (gestureArmed) return;
+      gestureArmed = true;
+      gestureEvents.forEach((ev) =>
+        window.addEventListener(ev, retryOnGesture, { once: true, passive: true })
+      );
+    };
+    const disarmGestureFallback = () => {
+      if (!gestureArmed) return;
+      gestureArmed = false;
+      gestureEvents.forEach((ev) => window.removeEventListener(ev, retryOnGesture));
+    };
+    // When playback actually begins, the clip is live — drop the fallback and
+    // make sure the video is cross-faded in.
+    const onPlaying = () => {
+      setVideoReady(true);
+      disarmGestureFallback();
+    };
+    v.addEventListener("playing", onPlaying);
+
+    const tryPlay = () => {
+      const p = v.play();
+      if (p && typeof p.catch === "function") {
+        p.catch(() => armGestureFallback());
+      } else {
+        // Older browsers that don't return a promise: arm the fallback anyway
+        // in case autoplay was silently blocked.
+        armGestureFallback();
+      }
     };
 
     const onReady = () => {
@@ -63,7 +99,10 @@ export default function Hero() {
 
     if (v.readyState >= 3) {
       onReady();
-      return;
+      return () => {
+        v.removeEventListener("playing", onPlaying);
+        disarmGestureFallback();
+      };
     }
 
     v.addEventListener("canplay", onReady);
@@ -71,7 +110,11 @@ export default function Hero() {
     // we've decided the connection can afford it.
     v.preload = "auto";
     v.load();
-    return () => v.removeEventListener("canplay", onReady);
+    return () => {
+      v.removeEventListener("canplay", onReady);
+      v.removeEventListener("playing", onPlaying);
+      disarmGestureFallback();
+    };
   }, []);
 
   useEffect(() => {
