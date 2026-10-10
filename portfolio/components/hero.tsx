@@ -138,32 +138,32 @@ export default function Hero() {
         return;
       }
 
-      // Mobile: no pin, no scrub. A pinned 2.6×-height scrubbed stage over a
-      // playing video is the heaviest thing on the weakest hardware and reads
-      // as "stuck" on a phone. Content is visible by default and the entrance
-      // only *enhances* it (gsap.from), so a backgrounded/headless render that
-      // never advances the time-based tween still ships the hero fully visible.
-      if (isMobile) {
-        gsap.set(headGroup, { clearProps: "transform" });
-        gsap.set(sequenced, { autoAlpha: 1, filter: "blur(0px)" });
-        gsap.from(headGroup, { y: "8vh", duration: 0.9, ease: "power2.out" });
-        gsap.from(sequenced, { y: 16, duration: 0.7, stagger: 0.12, ease: "power3.out", clearProps: "transform" });
-        return;
-      }
-
-      // Desktop: the pinned, scrubbed choreography. These start hidden in the
-      // markup (reveal-init) so nothing flashes before JS runs.
+      // Both phone and desktop get the same pinned, scrubbed choreography:
+      // the name + headline sit anchored at the bottom-left on load, then the
+      // subhead → CTAs → proof rail slide into place as the user scrolls/swipes.
+      // Phones get a shorter scroll length (less thumb travel) and a snappier
+      // scrub; the heavier anticipatePin is desktop-only. These items start
+      // hidden in the markup (reveal-init) so nothing flashes before JS runs.
       gsap.set(sequenced, { autoAlpha: 0, y: 28, filter: "blur(8px)" });
+
+      // On phones the hidden subhead/CTAs/proof still reserve their layout
+      // space below the headline, which floats the title up to mid-screen on
+      // load. Push the head group further down so it loads anchored in the
+      // lower third (consistent across phone heights since it's vh-based), then
+      // the timeline lifts it back up to y:0 as the sequenced items reveal.
+      if (isMobile) {
+        gsap.set(headGroup, { y: "40vh" });
+      }
 
       const tl = gsap.timeline({
         defaults: { ease: "power3.out" },
         scrollTrigger: {
           trigger: section,
           start: "top top",
-          end: "+=260%",
+          end: isMobile ? "+=180%" : "+=260%",
           pin: stage,
-          scrub: 1.1,
-          anticipatePin: 1,
+          scrub: isMobile ? 0.6 : 1.1,
+          ...(isMobile ? {} : { anticipatePin: 1 }),
         },
       });
 
