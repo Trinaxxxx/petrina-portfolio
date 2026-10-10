@@ -51,9 +51,45 @@ export default function Hero() {
     v.muted = true;
     v.playsInline = true;
 
-    const tryPlay = () => {
+    // iOS in Low Power Mode (and some other autoplay blocks) rejects the
+    // muted-autoplay play() promise. iOS always honors playback started from a
+    // real user gesture, so if the programmatic play is refused we arm one-shot
+    // listeners that retry on the first tap/scroll. Cleaned up once it plays.
+    let gestureArmed = false;
+    const retryOnGesture = () => {
       const p = v.play();
       if (p && typeof p.catch === "function") p.catch(() => {});
+    };
+    const gestureEvents = ["touchstart", "pointerdown", "click", "scroll"] as const;
+    const armGestureFallback = () => {
+      if (gestureArmed) return;
+      gestureArmed = true;
+      gestureEvents.forEach((ev) =>
+        window.addEventListener(ev, retryOnGesture, { once: true, passive: true })
+      );
+    };
+    const disarmGestureFallback = () => {
+      if (!gestureArmed) return;
+      gestureArmed = false;
+      gestureEvents.forEach((ev) => window.removeEventListener(ev, retryOnGesture));
+    };
+    // When playback actually begins, the clip is live — drop the fallback and
+    // make sure the video is cross-faded in.
+    const onPlaying = () => {
+      setVideoReady(true);
+      disarmGestureFallback();
+    };
+    v.addEventListener("playing", onPlaying);
+
+    const tryPlay = () => {
+      const p = v.play();
+      if (p && typeof p.catch === "function") {
+        p.catch(() => armGestureFallback());
+      } else {
+        // Older browsers that don't return a promise: arm the fallback anyway
+        // in case autoplay was silently blocked.
+        armGestureFallback();
+      }
     };
 
     const onReady = () => {
@@ -63,7 +99,10 @@ export default function Hero() {
 
     if (v.readyState >= 3) {
       onReady();
-      return;
+      return () => {
+        v.removeEventListener("playing", onPlaying);
+        disarmGestureFallback();
+      };
     }
 
     v.addEventListener("canplay", onReady);
@@ -71,7 +110,11 @@ export default function Hero() {
     // we've decided the connection can afford it.
     v.preload = "auto";
     v.load();
-    return () => v.removeEventListener("canplay", onReady);
+    return () => {
+      v.removeEventListener("canplay", onReady);
+      v.removeEventListener("playing", onPlaying);
+      disarmGestureFallback();
+    };
   }, []);
 
   useEffect(() => {
@@ -95,32 +138,32 @@ export default function Hero() {
         return;
       }
 
-      // Mobile: no pin, no scrub. A pinned 2.6×-height scrubbed stage over a
-      // playing video is the heaviest thing on the weakest hardware and reads
-      // as "stuck" on a phone. Content is visible by default and the entrance
-      // only *enhances* it (gsap.from), so a backgrounded/headless render that
-      // never advances the time-based tween still ships the hero fully visible.
-      if (isMobile) {
-        gsap.set(headGroup, { clearProps: "transform" });
-        gsap.set(sequenced, { autoAlpha: 1, filter: "blur(0px)" });
-        gsap.from(headGroup, { y: "8vh", duration: 0.9, ease: "power2.out" });
-        gsap.from(sequenced, { y: 16, duration: 0.7, stagger: 0.12, ease: "power3.out", clearProps: "transform" });
-        return;
-      }
-
-      // Desktop: the pinned, scrubbed choreography. These start hidden in the
-      // markup (reveal-init) so nothing flashes before JS runs.
+      // Both phone and desktop get the same pinned, scrubbed choreography:
+      // the name + headline sit anchored at the bottom-left on load, then the
+      // subhead → CTAs → proof rail slide into place as the user scrolls/swipes.
+      // Phones get a shorter scroll length (less thumb travel) and a snappier
+      // scrub; the heavier anticipatePin is desktop-only. These items start
+      // hidden in the markup (reveal-init) so nothing flashes before JS runs.
       gsap.set(sequenced, { autoAlpha: 0, y: 28, filter: "blur(8px)" });
+
+      // On phones the hidden subhead/CTAs/proof still reserve their layout
+      // space below the headline, which floats the title up to mid-screen on
+      // load. Push the head group further down so it loads anchored in the
+      // lower third (consistent across phone heights since it's vh-based), then
+      // the timeline lifts it back up to y:0 as the sequenced items reveal.
+      if (isMobile) {
+        gsap.set(headGroup, { y: "40vh" });
+      }
 
       const tl = gsap.timeline({
         defaults: { ease: "power3.out" },
         scrollTrigger: {
           trigger: section,
           start: "top top",
-          end: "+=260%",
+          end: isMobile ? "+=180%" : "+=260%",
           pin: stage,
-          scrub: 1.1,
-          anticipatePin: 1,
+          scrub: isMobile ? 0.6 : 1.1,
+          ...(isMobile ? {} : { anticipatePin: 1 }),
         },
       });
 

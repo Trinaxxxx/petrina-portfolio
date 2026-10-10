@@ -5,8 +5,8 @@ Artist — environment art, tech-art, and the in-house tools built along the way
 
 🔗 **Live site:** https://petrina-portfolio.vercel.app
 
-The production site is the Next.js app in [`portfolio/`](portfolio/) — see its
-[README](portfolio/README.md) for the stack, setup, and run steps.
+The production site is the Next.js app in **[`portfolio/`](portfolio/)** — see
+its [README](portfolio/README.md) for the stack, setup, and run steps.
 
 **Built with** Next.js 16 · React 19 · TypeScript · Tailwind CSS v4 ·
 shadcn/ui · Motion · GSAP · deployed on Vercel.
