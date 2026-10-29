@@ -19,21 +19,36 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://petrina-portfolio.vercel.app"),
-  title: "Petrina Kinzel | Technical Environment Artist",
+  title: "Petrina Kinzel | Architectural Visualization & Real-Time Artist",
   description:
-    "Real-time environment artist: Blender automation, CAD/Revit integration, real-time VR delivery.",
+    "Architectural visualization artist turning Revit & CAD into photoreal, real-time walkthroughs — Twinmotion, Blender, Unity, Substance. VR, web, and AI-assisted pipeline tooling.",
+  keywords: [
+    "Architectural Visualization",
+    "Archviz",
+    "Real-Time Rendering",
+    "Twinmotion",
+    "Blender",
+    "Unity",
+    "Substance Painter",
+    "SketchUp",
+    "Revit",
+    "CAD",
+    "VR Walkthrough",
+    "Technical Artist",
+    "Environment Art",
+  ],
   openGraph: {
-    title: "Petrina Kinzel | Technical Environment Artist",
+    title: "Petrina Kinzel | Architectural Visualization & Real-Time Artist",
     description:
-      "Real-time environment artist: Blender automation, CAD/Revit integration, real-time VR delivery.",
+      "Architectural visualization artist turning Revit & CAD into photoreal, real-time walkthroughs — Twinmotion, Blender, Unity, Substance. VR, web, and AI-assisted pipeline tooling.",
     type: "website",
-    images: [{ url: "/projects/alphaplanes-hero.png", width: 1200, height: 630, alt: "Alpha Planes - Petrina Kinzel portfolio" }],
+    images: [{ url: "/projects/alphaplanes-hero.png", width: 1200, height: 630, alt: "Architectural visualization work - Petrina Kinzel portfolio" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Petrina Kinzel | Technical Environment Artist",
+    title: "Petrina Kinzel | Architectural Visualization & Real-Time Artist",
     description:
-      "Real-time environment artist: Blender automation, CAD/Revit integration, real-time VR delivery.",
+      "Architectural visualization artist turning Revit & CAD into photoreal, real-time walkthroughs — Twinmotion, Blender, Unity, Substance. VR, web, and AI-assisted pipeline tooling.",
     images: ["/projects/alphaplanes-hero.png"],
   },
 };

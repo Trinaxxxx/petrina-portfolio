@@ -14,8 +14,8 @@ const stats: Stat[] = [
 
 const skills = [
   {
-    title: "Environment Art",
-    items: ["Modular environment design", "LOD generation & management", "Real-time scene optimisation", "Terrain & vegetation systems"],
+    title: "Architectural Visualization",
+    items: ["Twinmotion real-time rendering", "Lighting & lookdev", "Revit / CAD to real-time scenes", "LOD generation & management"],
   },
   {
     title: "Pipeline & Automation",
@@ -23,15 +23,15 @@ const skills = [
   },
   {
     title: "Materials & Textures",
-    items: ["PBR material authoring", "UV mapping & atlasing", "Substance Designer / Painter", "Texture scaling & consolidation"],
+    items: ["PBR material authoring", "Substance Painter / Designer", "UV mapping & atlasing", "Texture scaling & consolidation"],
   },
   {
-    title: "Real-Time & VR",
-    items: ["Unity (VR delivery)", "Blender EEVEE real-time", "VR performance budgeting", "Unreal Engine 5 (R&D)"],
+    title: "Real-Time & Delivery",
+    items: ["Unity (VR delivery)", "Enscape", "VR performance budgeting", "Unreal Engine 5 (R&D)"],
   },
   {
-    title: "DCC Tools",
-    items: ["Blender (primary)", "Maya", "Unity", "Photoshop / Illustrator"],
+    title: "DCC & Post",
+    items: ["Blender (primary)", "Maya", "SketchUp", "Photoshop", "DaVinci / After Effects"],
   },
   {
     title: "Technical",
@@ -52,7 +52,7 @@ export default function About() {
       {/* Bio — condensed */}
       <FadeContent blur duration={900} threshold={0.1}>
         <p style={{ color: "var(--pk-muted)", fontSize: "15px", lineHeight: 1.7, maxWidth: "680px", marginBottom: "2rem" }}>
-          <strong style={{ color: "var(--pk-text)", fontWeight: 500 }}>Technical Environment Artist</strong> with three years of experience across APAC, based in the Design, Architecture and Innovation team at TMX Transform (a supply chain consultancy). My work takes Revit and CAD data into shippable Unity environments, backed by AI tooling I write to automate repetitive processes. Now in{" "}
+          <strong style={{ color: "var(--pk-text)", fontWeight: 500 }}>Architectural visualization &amp; real-time artist</strong> with three years of experience across APAC, based in the Design, Architecture and Innovation team at TMX Transform (a supply chain consultancy). I turn Revit and CAD data into photoreal, real-time environments people can walk through — in VR and on the web — backed by AI tooling I write to automate the repetitive pipeline work. Now in{" "}
           <strong style={{ color: "var(--pk-text)", fontWeight: 500 }}>Brisbane</strong> and open to remote or relocation.
         </p>
       </FadeContent>

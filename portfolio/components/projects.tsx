@@ -26,6 +26,33 @@ type Project = {
 const projects: Project[] = [
   {
     num: "01",
+    title: "TMX Metaverse — VR Sandbox Environments",
+    tags: ["VR", "Blender", "Real-Time", "Live Event"],
+    featured: false,
+    goal: "Two distinct VR sandbox environments for an international launch — two-month build, live audience in Bangkok.",
+    role: "Technical lead on build, optimisation, and on-site delivery.",
+    results: [
+      ["Platform", "VR / Real-time"],
+      ["Timeline", "2 months"],
+      ["Audience", "200+ stakeholders"],
+      ["Event", "5 days, live"],
+    ],
+    decisions: [
+      "Performance budget locked first, art built to fit it",
+      "Demo-proofed every scene so exec-driven walkthroughs couldn't fail",
+      "Coached the executive presenters through live VR delivery",
+    ],
+    outcome: "Five days of live demos, zero technical failures.",
+    media: [
+      { src: "/projects/tmx-p1-1.png", alt: "TMX VR Environment — Project 1, shot 1" },
+      { src: "/projects/tmx-p1-3.png", alt: "TMX VR Environment — Project 1, shot 3" },
+      { src: "/projects/tmx-p2-1.png", alt: "TMX VR Environment — Project 2, shot 1" },
+      { src: "/projects/tmx-p2-3.png", alt: "TMX VR Environment — Project 2, shot 3" },
+    ],
+    caseStudy: "/technical-breakdowns#tmx",
+  },
+  {
+    num: "02",
     title: "Blender Automation Pipeline — Asset Processing",
     tags: ["CAD/Revit", "Pipeline", "Python"],
     featured: false,
@@ -57,7 +84,7 @@ const projects: Project[] = [
     link: { label: "View on GitHub ↗", href: "https://github.com/Trinaxxxx" },
   },
   {
-    num: "02",
+    num: "03",
     title: "Alpha Planes — Real-Time Optimisation",
     tags: ["Case Study", "Optimisation", "VR Profiling"],
     featured: false,
@@ -82,33 +109,6 @@ const projects: Project[] = [
       { src: "",  alt: "Revit vs Alpha Planes — VR before/after comparison (placeholder)", type: "placeholder" },
     ],
     caseStudy: "/technical-breakdowns#alpha-planes",
-  },
-  {
-    num: "03",
-    title: "TMX Metaverse — VR Sandbox Environments",
-    tags: ["VR", "Blender", "Real-Time", "Live Event"],
-    featured: false,
-    goal: "Two distinct VR sandbox environments for an international launch — two-month build, live audience in Bangkok.",
-    role: "Technical lead on build, optimisation, and on-site delivery.",
-    results: [
-      ["Platform", "VR / Real-time"],
-      ["Timeline", "2 months"],
-      ["Audience", "200+ stakeholders"],
-      ["Event", "5 days, live"],
-    ],
-    decisions: [
-      "Performance budget locked first, art built to fit it",
-      "Demo-proofed every scene so exec-driven walkthroughs couldn't fail",
-      "Coached the executive presenters through live VR delivery",
-    ],
-    outcome: "Five days of live demos, zero technical failures.",
-    media: [
-      { src: "/projects/tmx-p1-1.png", alt: "TMX VR Environment — Project 1, shot 1" },
-      { src: "/projects/tmx-p1-3.png", alt: "TMX VR Environment — Project 1, shot 3" },
-      { src: "/projects/tmx-p2-1.png", alt: "TMX VR Environment — Project 2, shot 1" },
-      { src: "/projects/tmx-p2-3.png", alt: "TMX VR Environment — Project 2, shot 3" },
-    ],
-    caseStudy: "/technical-breakdowns#tmx",
   },
 ];
 
@@ -245,12 +245,13 @@ function TallRightMedia({ media }: { media: MediaItem[] }) {
 
       {/* Right — tall hero image at natural ratio (defines the row height) */}
       {heroIsPlaceholder ? (
-        <div style={{ ...fillerStyle, minHeight: "420px" }}>
+        <div className="mtr-hero" style={{ ...fillerStyle, minHeight: "420px" }}>
           <span style={fillerLabel}>{hero?.alt}</span>
         </div>
       ) : (
         <>
           <figure
+            className="mtr-hero"
             style={{
               margin: 0,
               cursor: "zoom-in",
@@ -270,7 +271,7 @@ function TallRightMedia({ media }: { media: MediaItem[] }) {
               alt={hero.alt}
               width={1600}
               height={900}
-              sizes="(max-width: 900px) 30vw, 170px"
+              sizes="(max-width: 760px) 45vw, 170px"
               onError={() => setFailed(true)}
               style={{ width: "100%", height: "auto", display: "block" }}
               {...protectMedia}
@@ -573,6 +574,25 @@ export default function Projects() {
           .project-card {
             grid-template-columns: 1fr !important;
             direction: ltr !important;
+          }
+        }
+        /* Phones: mirror the desktop composition — the tall UI panel moves to
+           the LEFT column and the small tiles stack in the RIGHT column,
+           stretched to match the image's height (bento). The image is a very
+           tall, narrow panel, so the tiles sit alongside it rather than
+           overflowing; if the tile count ever exceeds the image height they
+           flow into the remaining right-column rows. */
+        @media (max-width: 760px) {
+          .media-tall-right {
+            grid-template-columns: minmax(130px, 42%) 1fr !important;
+          }
+          /* tall image → left column. min-width:0 lets it honour the 42% track
+             instead of blowing out to the served image's intrinsic width
+             (grid items default to min-width:auto = min-content). */
+          .media-tall-right > .mtr-hero { order: -1; min-width: 0; }
+          .media-tall-right > div:not(.mtr-hero) {
+            grid-template-columns: 1fr !important;       /* tiles → single stack */
+            min-width: 0;
           }
         }
         @media (max-width: 560px) {

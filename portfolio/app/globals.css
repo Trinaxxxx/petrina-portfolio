@@ -97,7 +97,9 @@
 @layer base {
   * { @apply border-border outline-ring/50; }
   body { @apply bg-background text-foreground; }
-  html { scroll-behavior: smooth; }
+  /* Offset anchor jumps by the fixed 60px nav so section headings aren't
+     scrolled underneath it. */
+  html { scroll-behavior: smooth; scroll-padding-top: 72px; }
   h1, h2, h3 { color: var(--pk-heading); }
 }
 

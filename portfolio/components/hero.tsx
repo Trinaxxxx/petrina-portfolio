@@ -261,7 +261,7 @@ export default function Hero() {
                 marginBottom: "1.25rem",
               }}
             >
-              Petrina Kinzel · Real-Time Environment &amp; VR Artist
+              Petrina Kinzel · Architectural Visualization &amp; Real-Time Artist
             </p>
 
             <h1
