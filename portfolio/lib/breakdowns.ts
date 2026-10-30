@@ -20,6 +20,29 @@ export type Breakdown = {
 
 export const breakdowns: Breakdown[] = [
   {
+    slug: "tmx",
+    title: "TMX Metaverse — VR Sandbox Environments",
+    subtitle: "Technical lead on the international TMX Metaverse launch, Bangkok",
+    tags: ["VR", "Blender", "Real-Time", "Live Event"],
+    stats: [
+      { label: "Platform", value: "VR / Real-time" },
+      { label: "Location", value: "Bangkok, TH" },
+      { label: "Role", value: "Technical Lead" },
+      { label: "Environments", value: "2 projects" },
+    ],
+    summary: [
+      "Led the 2-month technical build for the international TMX Metaverse launch in Bangkok. Responsible for the full production pipeline from asset creation through to live VR deployment.",
+      "Delivered two distinct VR sandbox environments for 200+ high-level stakeholders across a 5-day live event. Both environments required real-time performance on standalone VR hardware with no room for frame drops during live demos.",
+      "Also prepared and coached Executive Heads on VR presentation delivery — ensuring the technology worked flawlessly in front of an audience seeing VR for the first time.",
+    ],
+    media: [
+      { src: "/projects/tmx-p1-1.png", alt: "TMX VR Environment — Project 1, shot 1" },
+      { src: "/projects/tmx-p1-3.png", alt: "TMX VR Environment — Project 1, shot 3" },
+      { src: "/projects/tmx-p2-1.png", alt: "TMX VR Environment — Project 2, shot 1" },
+      { src: "/projects/tmx-p2-3.png", alt: "TMX VR Environment — Project 2, shot 3" },
+    ],
+  },
+  {
     slug: "blender-automation",
     title: "Blender Automation Pipeline",
     subtitle: "Python toolset for automated asset processing at studio scale",
@@ -67,29 +90,6 @@ export const breakdowns: Breakdown[] = [
       { src: "", alt: "Revit vs Alpha Planes — VR before/after comparison (placeholder)", type: "placeholder" as const },
     ],
     caseStudyHref: "/case-study/alpha-planes",
-  },
-  {
-    slug: "tmx",
-    title: "TMX Metaverse — VR Sandbox Environments",
-    subtitle: "Technical lead on the international TMX Metaverse launch, Bangkok",
-    tags: ["VR", "Blender", "Real-Time", "Live Event"],
-    stats: [
-      { label: "Platform", value: "VR / Real-time" },
-      { label: "Location", value: "Bangkok, TH" },
-      { label: "Role", value: "Technical Lead" },
-      { label: "Environments", value: "2 projects" },
-    ],
-    summary: [
-      "Led the 2-month technical build for the international TMX Metaverse launch in Bangkok. Responsible for the full production pipeline from asset creation through to live VR deployment.",
-      "Delivered two distinct VR sandbox environments for 200+ high-level stakeholders across a 5-day live event. Both environments required real-time performance on standalone VR hardware with no room for frame drops during live demos.",
-      "Also prepared and coached Executive Heads on VR presentation delivery — ensuring the technology worked flawlessly in front of an audience seeing VR for the first time.",
-    ],
-    media: [
-      { src: "/projects/tmx-p1-1.png", alt: "TMX VR Environment — Project 1, shot 1" },
-      { src: "/projects/tmx-p1-3.png", alt: "TMX VR Environment — Project 1, shot 3" },
-      { src: "/projects/tmx-p2-1.png", alt: "TMX VR Environment — Project 2, shot 1" },
-      { src: "/projects/tmx-p2-3.png", alt: "TMX VR Environment — Project 2, shot 3" },
-    ],
   },
 ];
 

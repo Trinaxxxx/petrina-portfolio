@@ -26,6 +26,33 @@ type Project = {
 const projects: Project[] = [
   {
     num: "01",
+    title: "TMX Metaverse — VR Sandbox Environments",
+    tags: ["VR", "Blender", "Real-Time", "Live Event"],
+    featured: false,
+    goal: "Two distinct VR sandbox environments for an international launch — two-month build, live audience in Bangkok.",
+    role: "Technical lead on build, optimisation, and on-site delivery.",
+    results: [
+      ["Platform", "VR / Real-time"],
+      ["Timeline", "2 months"],
+      ["Audience", "200+ stakeholders"],
+      ["Event", "5 days, live"],
+    ],
+    decisions: [
+      "Performance budget locked first, art built to fit it",
+      "Demo-proofed every scene so exec-driven walkthroughs couldn't fail",
+      "Coached the executive presenters through live VR delivery",
+    ],
+    outcome: "Five days of live demos, zero technical failures.",
+    media: [
+      { src: "/projects/tmx-p1-1.png", alt: "TMX VR Environment — Project 1, shot 1" },
+      { src: "/projects/tmx-p1-3.png", alt: "TMX VR Environment — Project 1, shot 3" },
+      { src: "/projects/tmx-p2-1.png", alt: "TMX VR Environment — Project 2, shot 1" },
+      { src: "/projects/tmx-p2-3.png", alt: "TMX VR Environment — Project 2, shot 3" },
+    ],
+    caseStudy: "/technical-breakdowns#tmx",
+  },
+  {
+    num: "02",
     title: "Blender Automation Pipeline — Asset Processing",
     tags: ["CAD/Revit", "Pipeline", "Python"],
     featured: false,
@@ -57,7 +84,7 @@ const projects: Project[] = [
     link: { label: "View on GitHub ↗", href: "https://github.com/Trinaxxxx" },
   },
   {
-    num: "02",
+    num: "03",
     title: "Alpha Planes — Real-Time Optimisation",
     tags: ["Case Study", "Optimisation", "VR Profiling"],
     featured: false,
@@ -82,33 +109,6 @@ const projects: Project[] = [
       { src: "",  alt: "Revit vs Alpha Planes — VR before/after comparison (placeholder)", type: "placeholder" },
     ],
     caseStudy: "/technical-breakdowns#alpha-planes",
-  },
-  {
-    num: "03",
-    title: "TMX Metaverse — VR Sandbox Environments",
-    tags: ["VR", "Blender", "Real-Time", "Live Event"],
-    featured: false,
-    goal: "Two distinct VR sandbox environments for an international launch — two-month build, live audience in Bangkok.",
-    role: "Technical lead on build, optimisation, and on-site delivery.",
-    results: [
-      ["Platform", "VR / Real-time"],
-      ["Timeline", "2 months"],
-      ["Audience", "200+ stakeholders"],
-      ["Event", "5 days, live"],
-    ],
-    decisions: [
-      "Performance budget locked first, art built to fit it",
-      "Demo-proofed every scene so exec-driven walkthroughs couldn't fail",
-      "Coached the executive presenters through live VR delivery",
-    ],
-    outcome: "Five days of live demos, zero technical failures.",
-    media: [
-      { src: "/projects/tmx-p1-1.png", alt: "TMX VR Environment — Project 1, shot 1" },
-      { src: "/projects/tmx-p1-3.png", alt: "TMX VR Environment — Project 1, shot 3" },
-      { src: "/projects/tmx-p2-1.png", alt: "TMX VR Environment — Project 2, shot 1" },
-      { src: "/projects/tmx-p2-3.png", alt: "TMX VR Environment — Project 2, shot 3" },
-    ],
-    caseStudy: "/technical-breakdowns#tmx",
   },
 ];
 
