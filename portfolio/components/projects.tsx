@@ -103,6 +103,7 @@ const projects: Project[] = [
     ],
     outcome: "Five days of live demos, zero technical failures.",
     media: [
+      { src: "/projects/tmx-sandbox-overview.png", alt: "TMX VR Sandbox Environment — full facility overview, real-time render" },
       { src: "/projects/tmx-p1-1.png", alt: "TMX VR Environment — Project 1, shot 1" },
       { src: "/projects/tmx-p1-3.png", alt: "TMX VR Environment — Project 1, shot 3" },
       { src: "/projects/tmx-p2-1.png", alt: "TMX VR Environment — Project 2, shot 1" },
