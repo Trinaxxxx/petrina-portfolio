@@ -1,6 +1,6 @@
 import Nav from "@/components/nav";
 import Hero from "@/components/hero";
-import Walkthrough from "@/components/walkthrough";
+import Showcase from "@/components/Showcase";
 import About from "@/components/about";
 import Projects from "@/components/projects";
 import AiWork from "@/components/ai-work";
@@ -15,7 +15,7 @@ export default function Home() {
       <Nav />
       <main>
         <Hero />
-        <Walkthrough />
+        <Showcase />
         <About />
         <Projects />
         <AiWork />
