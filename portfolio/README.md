@@ -1,6 +1,6 @@
 # Petrina Kinzel — Portfolio
 
-Personal portfolio for **Petrina Kinzel**, Technical Environment Artist. Showcases
+Personal portfolio for **Petrina Kinzel**, 3D Visualisation Artist. Showcases
 environment art and tech-art work: case studies, technical breakdowns, a showreel,
 and the in-house tools built along the pipeline.
 

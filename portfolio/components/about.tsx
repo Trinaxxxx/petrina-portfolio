@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import CountUp from "@/components/CountUp";
 import FadeContent from "@/components/FadeContent";
 
@@ -49,12 +50,24 @@ export default function About() {
           so this keeps the heading outline complete for screen readers / SEO. */}
       <h2 className="sr-only">About Petrina Kinzel</h2>
 
-      {/* Bio — condensed */}
+      {/* Bio — profile portrait beside the condensed statement */}
       <FadeContent blur duration={900} threshold={0.1}>
-        <p style={{ color: "var(--pk-muted)", fontSize: "15px", lineHeight: 1.7, maxWidth: "680px", marginBottom: "2rem" }}>
-          <strong style={{ color: "var(--pk-text)", fontWeight: 500 }}>Technical Environment Artist</strong> with three years of experience across APAC, based in the Design, Architecture and Innovation team at TMX Transform (a supply chain consultancy). My work takes Revit and CAD data into shippable Unity environments, backed by AI tooling I write to automate repetitive processes. Now in{" "}
-          <strong style={{ color: "var(--pk-text)", fontWeight: 500 }}>Brisbane</strong> and open to remote or relocation.
-        </p>
+        <div className="about-intro" style={{ marginBottom: "2rem" }}>
+          <div className="about-portrait">
+            <Image
+              src="/projects/profile-picture.png"
+              alt="Petrina Kinzel"
+              fill
+              sizes="(max-width: 700px) 120px, 200px"
+              style={{ objectFit: "cover" }}
+              priority
+            />
+          </div>
+          <p style={{ color: "var(--pk-muted)", fontSize: "15px", lineHeight: 1.7, maxWidth: "680px", margin: 0 }}>
+            <strong style={{ color: "var(--pk-text)", fontWeight: 500 }}>3D Visualisation Artist</strong> with three years of experience across APAC, based in the Design, Architecture and Innovation team at TMX Transform (a supply chain consultancy). My work takes Revit and CAD data into shippable Unity environments, backed by AI tooling I write to automate repetitive processes. Now in{" "}
+            <strong style={{ color: "var(--pk-text)", fontWeight: 500 }}>Brisbane</strong> and open to remote or relocation.
+          </p>
+        </div>
       </FadeContent>
 
       {/* Stats — single horizontal row */}
@@ -134,6 +147,22 @@ export default function About() {
       </FadeContent>
 
       <style>{`
+        .about-intro {
+          display: flex;
+          align-items: center;
+          gap: clamp(1.25rem, 3vw, 2rem);
+        }
+        .about-portrait {
+          position: relative;
+          flex: 0 0 auto;
+          width: clamp(120px, 16vw, 200px);
+          aspect-ratio: 1 / 1;
+          border-radius: 50%;
+          overflow: hidden;
+        }
+        @media (max-width: 560px) {
+          .about-intro { flex-direction: column; align-items: flex-start; }
+        }
         @media (max-width: 900px) {
           .stats-row { grid-template-columns: repeat(2, 1fr) !important; }
         }

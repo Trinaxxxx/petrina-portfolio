@@ -6,7 +6,7 @@ const links: { label: string; href: string; target?: string }[] = [
   { label: "GitHub ↗", href: "https://github.com/Trinaxxxx", target: "_blank" },
 ];
 
-const location = "Kuala Lumpur, Malaysia";
+const location = "Brisbane, Australia";
 
 export default function Contact() {
   return (
@@ -33,10 +33,10 @@ export default function Contact() {
               textWrap: "balance",
             } as React.CSSProperties}
           >
-            Available for environment art and pipeline work.
+            Let&rsquo;s connect.
           </h2>
           <p style={{ color: "var(--pk-muted)", fontSize: "15px", maxWidth: "420px", margin: "0 auto 2.5rem" }}>
-            Open to environment artist and technical/pipeline roles across games, VR, and arch-viz. Happy to chat about a project or a role.
+            Open to 3D Visualisation Artist roles across the 3D environment space. Happy to chat about a project or a role.
           </p>
 
           <div style={{ display: "flex", justifyContent: "center", gap: "1rem", flexWrap: "wrap" }}>
@@ -46,7 +46,7 @@ export default function Contact() {
                 href={l.href}
                 target={l.target}
                 rel={l.target ? "noopener noreferrer" : undefined}
-                className="tap-target"
+                className="tap-target pk-sweep"
                 style={{
                   fontFamily: "var(--pk-mono)",
                   fontSize: "12px",
@@ -56,13 +56,22 @@ export default function Contact() {
                   padding: "0.6rem 1.2rem",
                   border: "0.5px solid var(--pk-border-accent)",
                   borderRadius: "1px",
-                  transition: "all 0.2s",
+                  transition: "color var(--dur-mid) var(--ease-out-quart), border-color var(--dur-mid) var(--ease-out-quart)",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.color = "var(--pk-accent)";
+                  // Sweep fills ash, so the label flips to ink-black (AA-safe).
+                  e.currentTarget.style.color = "var(--pk-bg)";
                   e.currentTarget.style.borderColor = "var(--pk-accent)";
                 }}
                 onMouseLeave={(e) => {
+                  e.currentTarget.style.color = "var(--pk-muted)";
+                  e.currentTarget.style.borderColor = "var(--pk-border-accent)";
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.color = "var(--pk-bg)";
+                  e.currentTarget.style.borderColor = "var(--pk-accent)";
+                }}
+                onBlur={(e) => {
                   e.currentTarget.style.color = "var(--pk-muted)";
                   e.currentTarget.style.borderColor = "var(--pk-border-accent)";
                 }}
@@ -103,7 +112,7 @@ export default function Contact() {
           gap: "0.5rem",
         }}
       >
-        <span>Petrina Kinzel — Technical Environment Artist</span>
+        <span>Petrina Kinzel — 3D Visualisation Artist</span>
         <span>© 2026 · Built for real-time</span>
       </footer>
     </>
