@@ -70,14 +70,14 @@ export const breakdowns: Breakdown[] = [
   },
   {
     slug: "tmx",
-    title: "TMX Metaverse — VR Sandbox Environments",
+    title: "Multi-Platform Spatial Environments (VR, Web & Render)",
     subtitle: "Technical lead on the international TMX Metaverse launch, Bangkok",
     tags: ["VR", "Blender", "Real-Time", "Live Event"],
     stats: [
       { label: "Platform", value: "VR / Real-time" },
       { label: "Location", value: "Bangkok, TH" },
       { label: "Role", value: "Technical Lead" },
-      { label: "Environments", value: "2 projects" },
+      { label: "Environments", value: "40+ projects" },
     ],
     summary: [
       "Led the 2-month technical build for the international TMX Metaverse launch in Bangkok. Responsible for the full production pipeline from asset creation through to live VR deployment.",
@@ -85,6 +85,12 @@ export const breakdowns: Breakdown[] = [
       "Also prepared and coached Executive Heads on VR presentation delivery — ensuring the technology worked flawlessly in front of an audience seeing VR for the first time.",
     ],
     media: [
+      { src: "/projects/tmx-meta-1.webp", alt: "TMX automated facility — exterior aerial with exposed high-bay racking" },
+      { src: "/projects/tmx-meta-3.webp", alt: "TMX facility — aerial view with multi-storey car park" },
+      { src: "/projects/tmx-meta-2.webp", alt: "TMX facility — top-down site plan" },
+      { src: "/projects/tmx-meta-4.webp", alt: "TMX workshop interior — vehicle alignment-hoist bays" },
+      { src: "/projects/tmx-meta-5.webp", alt: "TMX workshop interior — service vehicle line-up" },
+      { src: "/projects/tmx-p2-2.png", alt: "TMX VR environment — real-time environment detail" },
       { src: "/projects/tmx-p1-1.png", alt: "TMX VR Environment — Project 1, shot 1" },
       { src: "/projects/tmx-p1-3.png", alt: "TMX VR Environment — Project 1, shot 3" },
       { src: "/projects/tmx-p2-1.png", alt: "TMX VR Environment — Project 2, shot 1" },
