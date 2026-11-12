@@ -216,6 +216,7 @@ export default function HeroCinematic() {
   const vrVideoEl = (
     <video
       ref={vrVideoRef}
+      className="vr-clip"
       muted
       loop
       playsInline
@@ -302,8 +303,8 @@ export default function HeroCinematic() {
         </div>
 
         {/* VR footage stage — poster underlay + cross-fading clip + scrim. zIndex 1. */}
-        <div ref={vrVidWrapRef} style={{ position: "absolute", top: NAV_H, left: 0, right: 0, bottom: 0, zIndex: 1 }}>
-          <div style={{ position: "absolute", inset: 0, backgroundImage: "url(/projects/hero-vr-poster.jpg)", backgroundSize: "cover", backgroundPosition: "center" }} aria-hidden="true" />
+        <div ref={vrVidWrapRef} style={{ position: "absolute", top: NAV_H, left: 0, right: 0, bottom: 0, zIndex: 1, background: "var(--pk-bg)" }}>
+          <div className="vr-poster" style={{ position: "absolute", inset: 0, backgroundImage: "url(/projects/hero-vr-poster.jpg)", backgroundSize: "cover", backgroundPosition: "center" }} aria-hidden="true" />
           {vrVideoEl}
           <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(16,20,30,0.30) 0%, rgba(16,20,30,0.12) 45%, rgba(16,20,30,0.55) 100%)" }} />
         </div>
@@ -443,6 +444,11 @@ function SharedStyles() {
         .sc-feature { grid-column: span 2; grid-row: span 1; aspect-ratio: 16 / 9; }
         .sc-g { grid-column: span 2; }
         .cine-bento { height: 100% !important; }
+        /* Phone: fill the stage height (video top meets the nav) and crop the
+           landscape frame in on the right-hand subject, rather than centering
+           the whole frame. Tune the X% to move the focal point left/right. */
+        .vr-clip { object-fit: cover !important; object-position: 67% center !important; }
+        .vr-poster { background-size: cover !important; background-position: 67% center !important; }
       }
       @media (prefers-reduced-motion: reduce) {
         .sc-cell, .cine-sub, .cine-bento { opacity: 1 !important; }
