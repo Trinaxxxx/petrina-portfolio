@@ -108,6 +108,13 @@ export default function HeroCinematic() {
       gsap.set(vrVidWrap, { autoAlpha: 0, scale: 1.08 });
       gsap.set(labelEls, { opacity: 0, y: 36, filter: "blur(8px)" });
 
+      // Promote the layers that animate transform/opacity/filter under the
+      // scrub (notably the blurred bento) onto their own compositor layers for
+      // the duration of the pin. Cleared at the end of the timeline so we don't
+      // leave a dozen promoted layers sitting in memory once the hero is passed.
+      const animated = [textGroup, heroVidWrap, bentoEl, ...cells, vrVidWrap, ...labelEls, ...lines];
+      gsap.set(animated, { willChange: "transform, opacity, filter" });
+
       const HOLD = 0.5; // dwell so each beat sits placed before the next begins
 
       const tl = gsap.timeline({
@@ -115,7 +122,7 @@ export default function HeroCinematic() {
         scrollTrigger: {
           trigger: section,
           start: "top top",
-          end: isMobile ? "+=540%" : "+=760%",
+          end: isMobile ? "+=460%" : "+=620%",
           pin: stage,
           scrub: isMobile ? 0.6 : 1.1,
           ...(isMobile ? {} : { anticipatePin: 1 }),
@@ -166,6 +173,11 @@ export default function HeroCinematic() {
 
       // ── Final beat on the footage before the pin releases. ──────────────────
       tl.to({}, { duration: HOLD * 1.5 });
+
+      // Drop the compositor-layer promotions once the cinematic has fully played
+      // out, so the hero doesn't hold a dozen promoted layers for the rest of
+      // the page. (ScrollTrigger keeps the end state while scrolled past.)
+      tl.set(animated, { willChange: "auto" });
     }, section);
 
     return () => ctx.revert();
