@@ -1,9 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Badge } from "@/components/ui/badge";
 import Lightbox from "@/components/Lightbox";
+
+gsap.registerPlugin(ScrollTrigger);
 
 type MediaItem = { src: string; alt: string; type?: "image" | "gif" | "placeholder" };
 
@@ -158,7 +162,8 @@ function MediaCard({ item }: { item: MediaItem }) {
   return (
     <>
       <figure
-        style={{ ...tileStyle, margin: 0, marginBottom: "8px", cursor: "zoom-in", transition: "border-color 0.2s" }}
+        className="pk-media"
+        style={{ ...tileStyle, margin: 0, marginBottom: "8px", cursor: "zoom-in", transition: "border-color var(--dur-mid) var(--ease-out-expo)" }}
         onClick={() => setLightbox(true)}
         title="Click to enlarge"
         onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--pk-border-accent)")}
@@ -251,6 +256,7 @@ function TallRightMedia({ media }: { media: MediaItem[] }) {
       ) : (
         <>
           <figure
+            className="pk-media"
             style={{
               margin: 0,
               cursor: "zoom-in",
@@ -258,7 +264,7 @@ function TallRightMedia({ media }: { media: MediaItem[] }) {
               borderRadius: "2px",
               overflow: "hidden",
               background: "var(--pk-bg)",
-              transition: "border-color 0.2s",
+              transition: "border-color var(--dur-mid) var(--ease-out-expo)",
             }}
             onClick={() => setLightbox(true)}
             title="Click to enlarge"
@@ -315,6 +321,72 @@ function InfoLine({ label, children, strong }: { label: string; children: React.
 }
 
 export default function Projects() {
+  const listRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const list = listRef.current;
+    if (!list) return;
+    const cards = Array.from(list.querySelectorAll<HTMLElement>(".project-card"));
+    if (!cards.length) return;
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const cleanups: Array<() => void> = [];
+
+    const ctx = gsap.context(() => {
+      if (!reduced) {
+        // Each row rises and un-blurs as it enters — a reveal per row, not one
+        // uniform fade over the whole section.
+        cards.forEach((card) => {
+          gsap.set(card, { autoAlpha: 0, y: 44, filter: "blur(8px)" });
+          ScrollTrigger.create({
+            trigger: card,
+            start: "top 82%",
+            once: true,
+            onEnter: () =>
+              gsap.to(card, {
+                autoAlpha: 1,
+                y: 0,
+                filter: "blur(0px)",
+                duration: 0.9,
+                ease: "expo.out",
+              }),
+          });
+        });
+      }
+
+      // Cursor parallax — the media block drifts a few px against its frame as
+      // the pointer crosses the card, giving the flat renders a sense of depth.
+      // Pointer-driven only (never on touch / reduced motion), rAF-throttled.
+      if (!reduced && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+        cards.forEach((card) => {
+          const media = card.querySelector<HTMLElement>(".media-masonry, .media-tall-right");
+          if (!media) return;
+          const qx = gsap.quickTo(media, "x", { duration: 0.6, ease: "power3.out" });
+          const qy = gsap.quickTo(media, "y", { duration: 0.6, ease: "power3.out" });
+          const onMove = (e: PointerEvent) => {
+            const r = card.getBoundingClientRect();
+            const dx = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
+            const dy = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
+            qx(dx * 7);
+            qy(dy * 7);
+          };
+          const onLeave = () => { qx(0); qy(0); };
+          card.addEventListener("pointermove", onMove);
+          card.addEventListener("pointerleave", onLeave);
+          cleanups.push(() => {
+            card.removeEventListener("pointermove", onMove);
+            card.removeEventListener("pointerleave", onLeave);
+          });
+        });
+      }
+    }, list);
+
+    return () => {
+      cleanups.forEach((fn) => fn());
+      ctx.revert();
+    };
+  }, []);
+
   return (
     <section
       id="work"
@@ -342,6 +414,7 @@ export default function Projects() {
       </p>
 
       <div
+        ref={listRef}
         style={{
           display: "flex",
           flexDirection: "column",
@@ -358,8 +431,11 @@ export default function Projects() {
               display: "grid",
               gridTemplateColumns: "1fr 1fr",
               minHeight: "400px",
-              transition: "background 0.2s",
+              transition: "background var(--dur-mid) var(--ease-out-expo)",
               direction: idx % 2 === 1 ? "rtl" : "ltr",
+              // Clip the cursor-parallax drift so the media never pushes a
+              // horizontal scrollbar past the card edge.
+              overflow: "hidden",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = "var(--pk-bg2)";
@@ -525,18 +601,16 @@ export default function Projects() {
                 {p.caseStudy && (
                   <a
                     href={p.caseStudy}
+                    className="pk-arrow"
                     style={{
                       fontFamily: "var(--pk-mono)",
                       fontSize: "12px",
                       color: "var(--pk-copper)",
                       textDecoration: "none",
                       letterSpacing: "0.06em",
-                      transition: "opacity 0.2s",
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.7")}
-                    onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
                   >
-                    Read the breakdown →
+                    Read the breakdown <span className="pk-arrow-glyph" aria-hidden="true">→</span>
                   </a>
                 )}
                 {p.link && (
@@ -568,6 +642,15 @@ export default function Projects() {
         .media-masonry {
           column-count: 2;
           column-gap: 8px;
+        }
+        /* Media hover-zoom — the render eases up within its fixed frame. */
+        .pk-media img { transition: transform var(--dur-slow) var(--ease-out-expo); will-change: transform; }
+        @media (hover: hover) {
+          .pk-media:hover img { transform: scale(1.045); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .pk-media img { transition: none; }
+          .pk-media:hover img { transform: none; }
         }
         @media (max-width: 900px) {
           .project-card {

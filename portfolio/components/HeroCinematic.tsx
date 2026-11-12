@@ -96,13 +96,17 @@ export default function HeroCinematic() {
 
       // ── Initial states ─────────────────────────────────────────────────────
       // Eyebrow + title visible, anchored low. Subhead hidden just below it.
+      // Content-bearing layers (subhead, bento, labels) use `opacity` — NOT
+      // `autoAlpha` — so they never set visibility:hidden and stay in the
+      // accessibility tree even before the scrub reveals them. Only the
+      // decorative, aria-hidden video wrap keeps autoAlpha.
       gsap.set(textGroup, { y: "14vh" });
-      gsap.set(subheadRef.current, { autoAlpha: 0, y: 28, filter: "blur(8px)" });
+      gsap.set(subheadRef.current, { opacity: 0, y: 28, filter: "blur(8px)" });
       // Bento waits below the fold, blurred; VR stage hidden + slightly scaled.
-      gsap.set(bentoEl, { autoAlpha: 0, yPercent: 60, filter: "blur(10px)" });
-      gsap.set(cells, { autoAlpha: 0, y: 48, filter: "blur(8px)" });
+      gsap.set(bentoEl, { opacity: 0, yPercent: 60, filter: "blur(10px)" });
+      gsap.set(cells, { opacity: 0, y: 48, filter: "blur(8px)" });
       gsap.set(vrVidWrap, { autoAlpha: 0, scale: 1.08 });
-      gsap.set(labelEls, { autoAlpha: 0, y: 36, filter: "blur(8px)" });
+      gsap.set(labelEls, { opacity: 0, y: 36, filter: "blur(8px)" });
 
       const HOLD = 0.5; // dwell so each beat sits placed before the next begins
 
@@ -120,20 +124,20 @@ export default function HeroCinematic() {
 
       // ── Act 1 — subhead reveals, the text group lifts to position. ──────────
       tl.to(textGroup, { y: 0, duration: 1.3, ease: "power2.inOut" });
-      tl.to(subheadRef.current, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1 }, "<0.3");
+      tl.to(subheadRef.current, { opacity: 1, y: 0, filter: "blur(0px)", duration: 1 }, "<0.3");
       tl.to({}, { duration: HOLD });
 
       // ── Act 2 — each line lifts up and dissolves; the hero video fades out
       //    with them, so the bento arrives on the clean ink-black stage. ───────
       tl.to(textGroup, { y: "-=120", duration: 1.6, ease: "power1.in" }, ">");
-      tl.to(lines, { autoAlpha: 0, y: "-=36", filter: "blur(8px)", duration: 0.9, stagger: 0.45, ease: "power2.in" }, "<");
+      tl.to(lines, { opacity: 0, y: "-=36", filter: "blur(8px)", duration: 0.9, stagger: 0.45, ease: "power2.in" }, "<");
       tl.to(heroVidWrap, { autoAlpha: 0, duration: 1.3, ease: "power2.inOut" }, "<0.5");
       tl.to({}, { duration: HOLD });
 
       // ── Act 3 — the bento rises onto the clean stage (no video behind) and
       //    floats gently upward as one — uniform, so spacing never collapses. ──
-      tl.to(bentoEl, { autoAlpha: 1, yPercent: 0, filter: "blur(0px)", duration: 1.8, ease: "expo.out" }, ">");
-      tl.to(cells, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1.3, stagger: 0.1, ease: "power3.out" }, "<0.1");
+      tl.to(bentoEl, { opacity: 1, yPercent: 0, filter: "blur(0px)", duration: 1.8, ease: "expo.out" }, ">");
+      tl.to(cells, { opacity: 1, y: 0, filter: "blur(0px)", duration: 1.3, stagger: 0.1, ease: "power3.out" }, "<0.1");
       // One slow, shared upward glide (equal px for every cell) — alive, never
       // the broken look of cells drifting into each other.
       tl.to(cells, { y: -26, duration: 5.5, ease: "none" }, "<");
@@ -143,21 +147,21 @@ export default function HeroCinematic() {
       //    rows first, cascading to the top, clearing the way for the VR video.
       tl.to(cells, {
         y: "-=150",
-        autoAlpha: 0,
+        opacity: 0,
         filter: "blur(8px)",
         duration: 1.5,
         ease: "power2.in",
         stagger: { each: 0.14, from: "end" },
       }, ">");
-      tl.to(bentoEl, { autoAlpha: 0, duration: 1.0, ease: "power2.inOut" }, ">-0.4");
+      tl.to(bentoEl, { opacity: 0, duration: 1.0, ease: "power2.inOut" }, ">-0.4");
       tl.to(vrVidWrap, { autoAlpha: 1, scale: 1, duration: 1.4, ease: "power2.inOut" }, "<");
       tl.to({}, { duration: HOLD });
 
       // ── Act 5 — the pillars, hero-scale, reveal → hold → lift away. ──────────
       labelEls.forEach((el) => {
-        tl.to(el, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1 }, ">");
+        tl.to(el, { opacity: 1, y: 0, filter: "blur(0px)", duration: 1 }, ">");
         tl.to({}, { duration: HOLD });
-        tl.to(el, { autoAlpha: 0, y: -36, filter: "blur(8px)", duration: 0.9, ease: "power2.in" }, ">");
+        tl.to(el, { opacity: 0, y: -36, filter: "blur(8px)", duration: 0.9, ease: "power2.in" }, ">");
       });
 
       // ── Final beat on the footage before the pin releases. ──────────────────
@@ -300,13 +304,13 @@ export default function HeroCinematic() {
           }}
         >
           <div ref={textGroupRef}>
-            <p ref={eyebrowRef} style={{ fontFamily: "var(--pk-mono)", fontSize: "12px", color: "var(--pk-accent)", letterSpacing: "0.1em", marginBottom: "1.25rem" }}>
+            <p ref={eyebrowRef} style={{ fontFamily: "var(--pk-mono)", fontSize: "12px", color: "var(--pk-accent)", letterSpacing: "0.1em", marginBottom: "1.25rem", textShadow: "0 1px 6px rgba(16,20,30,0.92), 0 1px 2px rgba(16,20,30,0.9)" }}>
               Petrina Kinzel · 3D Visualisation Artist
             </p>
             <h1 ref={titleRef} style={{ fontSize: "clamp(2.75rem, 7vw, 5.5rem)", fontWeight: 400, letterSpacing: "-0.025em", lineHeight: 1.04, margin: "0 0 1.5rem", maxWidth: "820px", textWrap: "balance" } as React.CSSProperties}>
               Architecture, rendered in real time.
             </h1>
-            <p ref={subheadRef} className="cine-sub" style={{ opacity: 0, fontSize: "clamp(14px, 1.5vw, 17px)", color: "var(--pk-text)", lineHeight: 1.75, maxWidth: "560px", textWrap: "pretty" }}>
+            <p ref={subheadRef} className="cine-sub" style={{ opacity: 0, fontSize: "clamp(14px, 1.5vw, 17px)", color: "var(--pk-text)", lineHeight: 1.75, maxWidth: "560px", textWrap: "pretty", textShadow: "0 1px 10px rgba(16,20,30,0.85), 0 1px 3px rgba(16,20,30,0.8)" }}>
               Immersive VR and web walkthroughs built from CAD and Revit, designed to feel like the finished space, running live at 70fps.
             </p>
           </div>

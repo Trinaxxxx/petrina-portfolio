@@ -86,11 +86,11 @@ export default function Nav() {
             return (
               <li key={l.href}>
                 {isExternal ? (
-                  <a href={l.href} target="_blank" rel="noopener noreferrer" style={linkStyle} {...hoverHandlers}>
+                  <a href={l.href} target="_blank" rel="noopener noreferrer" className="pk-underline" style={linkStyle} {...hoverHandlers}>
                     {l.label}
                   </a>
                 ) : (
-                  <Link href={l.href} aria-current={isActive ? "page" : undefined} style={linkStyle} {...hoverHandlers}>
+                  <Link href={l.href} aria-current={isActive ? "page" : undefined} className="pk-underline" data-active={isActive ? "true" : undefined} style={linkStyle} {...hoverHandlers}>
                     {l.label}
                   </Link>
                 )}
