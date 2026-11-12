@@ -9,6 +9,10 @@ import { useCinematicVideo } from "@/lib/useCinematicVideo";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/* Fixed nav height (nav.tsx uses height: 60px). The video stage starts at this
+   offset so its top meets the nav's bottom edge — hard rule, PC and mobile. */
+const NAV_H = 60;
+
 /* Bento of TMX stills — five new TMX META facility renders lead, three existing
    TMX stills round it out. All 16:9, cropped to fit each cell via object-fit. */
 const bento = [
@@ -198,6 +202,9 @@ export default function HeroCinematic() {
         width: "100%",
         height: "100%",
         objectFit: "cover",
+        // Zoom in to crop the blank/empty edges baked into the source footage so
+        // the clip fully fills the frame (PC + mobile), matching the VR clip.
+        transform: "scale(1.3)",
         opacity: heroReady ? 1 : 0,
         transition: "opacity 1200ms ease",
       }}
@@ -284,15 +291,18 @@ export default function HeroCinematic() {
       </noscript>
 
       <div ref={stageRef} style={{ height: "100svh", overflow: "hidden", position: "relative", background: "var(--pk-bg)", display: "flex", flexDirection: "column" }}>
+        {/* Hard rule (PC + mobile): the video stage begins at the bottom edge of
+            the fixed nav, so the clip (and its HUD overlay) is never clipped or
+            hidden behind the nav bar. NAV_H must match nav.tsx height (60px). */}
         {/* Hero background video — poster underlay + cross-fading clip. zIndex 0. */}
-        <div ref={heroVidWrapRef} aria-hidden="true" style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+        <div ref={heroVidWrapRef} aria-hidden="true" style={{ position: "absolute", top: NAV_H, left: 0, right: 0, bottom: 0, zIndex: 0 }}>
           <div style={{ position: "absolute", inset: 0, backgroundImage: "url(/projects/hero-poster.jpg)", backgroundSize: "cover", backgroundPosition: "center" }} />
           {heroVideoEl}
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(105deg, rgba(16,20,30,0.68) 0%, rgba(16,20,30,0.42) 45%, rgba(16,20,30,0.14) 100%), linear-gradient(to bottom, rgba(16,20,30,0.08) 0%, rgba(16,20,30,0.30) 60%, rgba(16,20,30,0.82) 100%)" }} />
         </div>
 
         {/* VR footage stage — poster underlay + cross-fading clip + scrim. zIndex 1. */}
-        <div ref={vrVidWrapRef} style={{ position: "absolute", inset: 0, zIndex: 1 }}>
+        <div ref={vrVidWrapRef} style={{ position: "absolute", top: NAV_H, left: 0, right: 0, bottom: 0, zIndex: 1 }}>
           <div style={{ position: "absolute", inset: 0, backgroundImage: "url(/projects/hero-vr-poster.jpg)", backgroundSize: "cover", backgroundPosition: "center" }} aria-hidden="true" />
           {vrVideoEl}
           <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(16,20,30,0.30) 0%, rgba(16,20,30,0.12) 45%, rgba(16,20,30,0.55) 100%)" }} />
