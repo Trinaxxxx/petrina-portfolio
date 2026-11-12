@@ -72,16 +72,16 @@ export const breakdowns: Breakdown[] = [
     slug: "tmx",
     title: "Multi-Platform Spatial Environments (VR, Web & Render)",
     subtitle: "Technical lead on the international TMX Metaverse launch, Bangkok",
-    tags: ["VR", "Blender", "Real-Time", "Live Event"],
+    tags: ["VR", "Web", "Render", "Real-Time", "Live Event"],
     stats: [
-      { label: "Platform", value: "VR / Real-time" },
+      { label: "Platform", value: "VR · Web · Render" },
       { label: "Location", value: "Bangkok, TH" },
       { label: "Role", value: "Technical Lead" },
       { label: "Environments", value: "40+ projects" },
     ],
     summary: [
       "Led the 2-month technical build for the international TMX Metaverse launch in Bangkok. Responsible for the full production pipeline from asset creation through to live VR deployment.",
-      "Delivered two distinct VR sandbox environments for 200+ high-level stakeholders across a 5-day live event. Both environments required real-time performance on standalone VR hardware with no room for frame drops during live demos.",
+      "Built each spatial environment once and delivered it across three channels — real-time VR, in-browser web, and offline render — for 200+ high-level stakeholders across a 5-day live event. The VR builds required locked real-time performance on standalone hardware with no room for frame drops during live demos.",
       "Also prepared and coached Executive Heads on VR presentation delivery — ensuring the technology worked flawlessly in front of an audience seeing VR for the first time.",
     ],
     media: [

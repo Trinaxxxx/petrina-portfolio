@@ -22,7 +22,7 @@ type Project = {
   decisions: string[];
   outcome: string;
   media: MediaItem[];
-  mediaLayout?: "tall-right";
+  mediaLayout?: "tall-right" | "fill-grid";
   caseStudy?: string;
   link?: { label: string; href: string };
 };
@@ -30,13 +30,13 @@ type Project = {
 const projects: Project[] = [
   {
     num: "01",
-    title: "TMX Metaverse — VR Sandbox Environments",
-    tags: ["VR", "Blender", "Real-Time", "Live Event"],
+    title: "Multi-Platform Spatial Environments (VR, Web & Render)",
+    tags: ["VR", "Web", "Render", "Real-Time", "Live Event"],
     featured: false,
-    goal: "Two distinct VR sandbox environments for an international launch — two-month build, live audience in Bangkok.",
+    goal: "Two spatial environments built once and delivered across VR, web, and offline render for an international launch — two-month build, live audience in Bangkok.",
     role: "Technical lead on build, optimisation, and on-site delivery.",
     results: [
-      ["Platform", "VR / Real-time"],
+      ["Platform", "VR · Web · Render"],
       ["Timeline", "2 months"],
       ["Audience", "200+ stakeholders"],
       ["Event", "5 days, live"],
@@ -47,12 +47,20 @@ const projects: Project[] = [
       "Coached the executive presenters through live VR delivery",
     ],
     outcome: "Five days of live demos, zero technical failures.",
+    // Curated 6 for the preview wall (2×3 fill grid) — full set lives in the
+    // breakdown. Variety: two aerials, two workshop interiors, a real-time
+    // detail, and a VR sandbox shot.
     media: [
-      { src: "/projects/tmx-p1-1.png", alt: "TMX VR Environment — Project 1, shot 1" },
-      { src: "/projects/tmx-p1-3.png", alt: "TMX VR Environment — Project 1, shot 3" },
-      { src: "/projects/tmx-p2-1.png", alt: "TMX VR Environment — Project 2, shot 1" },
-      { src: "/projects/tmx-p2-3.png", alt: "TMX VR Environment — Project 2, shot 3" },
+      { src: "/projects/tmx-meta-1.webp", alt: "TMX automated facility — exterior aerial with exposed high-bay racking" },
+      { src: "/projects/tmx-meta-3.webp", alt: "TMX facility — aerial view with multi-storey car park" },
+      { src: "/projects/tmx-meta-4.webp", alt: "TMX workshop interior — vehicle alignment-hoist bays" },
+      { src: "/projects/tmx-meta-5.webp", alt: "TMX workshop interior — service vehicle line-up" },
+      { src: "/projects/tmx-meta-2.webp", alt: "TMX facility — top-down site plan" },
+      { src: "/projects/tmx-p2-2.png", alt: "TMX VR environment — real-time environment detail" },
+      { src: "/projects/tmx-p1-1.png", alt: "TMX VR environment — sandbox project 1" },
+      { src: "/projects/tmx-p2-1.png", alt: "TMX VR environment — sandbox project 2" },
     ],
+    mediaLayout: "fill-grid",
     caseStudy: "/technical-breakdowns#tmx",
   },
   {
@@ -120,6 +128,97 @@ const protectMedia = {
   draggable: false,
   onContextMenu: (e: React.SyntheticEvent) => e.preventDefault(),
 };
+
+// A uniform tile that covers its grid cell — used by the fill-grid layout so a
+// row of renders reads as one photo wall that stretches to the text column's
+// height. On desktop the cell height is driven by `grid-auto-rows: 1fr`; on
+// narrow screens the `.fill-tile` CSS swaps to a fixed aspect ratio.
+function FillTile({ item }: { item: MediaItem }) {
+  const [failed, setFailed] = useState(false);
+  const [lightbox, setLightbox] = useState(false);
+  const isPlaceholder = item.type === "placeholder" || !item.src || failed;
+
+  if (isPlaceholder) {
+    return (
+      <div
+        className="fill-tile"
+        style={{
+          position: "relative",
+          aspectRatio: "16 / 9",
+          border: "0.5px solid var(--pk-border)",
+          borderRadius: "2px",
+          overflow: "hidden",
+          background: "rgba(185,208,199,0.035)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <span style={{ fontFamily: "var(--pk-mono)", fontSize: "10px", color: "var(--pk-muted)", letterSpacing: "0.05em", lineHeight: 1.5, textAlign: "center", padding: "0.5rem" }}>
+          {item.alt}
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <figure
+        className="pk-media fill-tile"
+        style={{
+          position: "relative",
+          aspectRatio: "16 / 9",
+          margin: 0,
+          cursor: "zoom-in",
+          border: "0.5px solid var(--pk-border)",
+          borderRadius: "2px",
+          overflow: "hidden",
+          background: "var(--pk-bg)",
+          transition: "border-color var(--dur-mid) var(--ease-out-expo)",
+        }}
+        onClick={() => setLightbox(true)}
+        title="Click to enlarge"
+        onMouseEnter={(e) => (e.currentTarget.style.borderColor = "var(--pk-border-accent)")}
+        onMouseLeave={(e) => (e.currentTarget.style.borderColor = "var(--pk-border)")}
+      >
+        <Image
+          src={item.src}
+          alt={item.alt}
+          fill
+          sizes="(max-width: 560px) 50vw, (max-width: 900px) 46vw, 24vw"
+          onError={() => setFailed(true)}
+          style={{ objectFit: "contain", display: "block" }}
+          {...protectMedia}
+        />
+      </figure>
+      {lightbox && <Lightbox item={item} onClose={() => setLightbox(false)} />}
+    </>
+  );
+}
+
+// Uniform 2-column photo wall that stretches to fill the card height, aligning
+// its bottom edge to the text column instead of leaving dead space below a
+// short masonry stack.
+function FillGridMedia({ media }: { media: MediaItem[] }) {
+  return (
+    <div
+      className="media-fill-grid"
+      style={{
+        direction: "ltr",
+        padding: "clamp(1rem, 2.5vw, 1.75rem)",
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        gridAutoRows: "auto",
+        gap: "8px",
+        alignContent: "start",
+      }}
+    >
+      {media.map((item, i) => (
+        <FillTile key={item.src || `fill-${i}`} item={item} />
+      ))}
+    </div>
+  );
+}
 
 function MediaCard({ item }: { item: MediaItem }) {
   const [failed, setFailed] = useState(false);
@@ -359,7 +458,7 @@ export default function Projects() {
       // Pointer-driven only (never on touch / reduced motion), rAF-throttled.
       if (!reduced && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
         cards.forEach((card) => {
-          const media = card.querySelector<HTMLElement>(".media-masonry, .media-tall-right");
+          const media = card.querySelector<HTMLElement>(".media-masonry, .media-tall-right, .media-fill-grid");
           if (!media) return;
           const qx = gsap.quickTo(media, "x", { duration: 0.6, ease: "power3.out" });
           const qy = gsap.quickTo(media, "y", { duration: 0.6, ease: "power3.out" });
@@ -448,6 +547,8 @@ export default function Projects() {
             {/* Media — tall hero + placeholder grid, or editorial masonry */}
             {p.mediaLayout === "tall-right" ? (
               <TallRightMedia media={p.media} />
+            ) : p.mediaLayout === "fill-grid" ? (
+              <FillGridMedia media={p.media} />
             ) : (
               <div
                 className="media-masonry"
@@ -470,7 +571,7 @@ export default function Projects() {
                 padding: "clamp(1.5rem, 4vw, 3rem)",
                 display: "flex",
                 flexDirection: "column",
-                justifyContent: "center",
+                justifyContent: "flex-start",
               }}
             >
 
@@ -652,6 +753,8 @@ export default function Projects() {
           .pk-media img { transition: none; }
           .pk-media:hover img { transform: none; }
         }
+        /* Fill-grid tiles hold a fixed 16:9 frame so renders show in full
+           (contain, no crop) and all four borders line up across the grid. */
         @media (max-width: 900px) {
           .project-card {
             grid-template-columns: 1fr !important;
