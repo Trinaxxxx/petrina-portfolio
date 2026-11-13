@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -36,6 +36,15 @@ export const metadata: Metadata = {
       "3D visualisation artist: real-time environments, CAD/Revit integration, VR and web delivery.",
     images: ["/projects/alphaplanes-hero.png"],
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  // Lets content extend under the notch/home indicator; the Lightbox reads the
+  // safe-area insets. User zoom stays enabled for accessibility.
+  viewportFit: "cover",
+  themeColor: "#10141e",
 };
 
 export default function RootLayout({

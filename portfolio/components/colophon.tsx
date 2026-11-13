@@ -66,7 +66,7 @@ export default function Colophon() {
         </h2>
         <p
           style={{
-            fontSize: "14px",
+            fontSize: "var(--text-body)",
             color: "var(--pk-text)",
             lineHeight: 1.75,
             maxWidth: "640px",
@@ -95,7 +95,7 @@ export default function Colophon() {
               </h3>
               <p
                 style={{
-                  fontSize: "13px",
+                  fontSize: "var(--text-meta)",
                   color: "var(--pk-muted)",
                   lineHeight: 1.7,
                 }}
@@ -108,7 +108,7 @@ export default function Colophon() {
 
         <p
           style={{
-            fontSize: "14px",
+            fontSize: "var(--text-body)",
             color: "var(--pk-text)",
             lineHeight: 1.75,
             maxWidth: "640px",
