@@ -319,7 +319,7 @@ export default function HeroCinematic() {
             width: "100%",
             maxWidth: "1200px",
             margin: "0 auto",
-            padding: "7rem clamp(2rem, 5vw, 3rem) 3rem",
+            padding: "7rem clamp(2rem, 5vw, 3rem) clamp(4rem, 10vh, 7rem)",
             display: "flex",
             flexDirection: "column",
             justifyContent: "flex-end",
