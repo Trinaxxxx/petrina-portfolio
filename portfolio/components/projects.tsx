@@ -395,19 +395,19 @@ function InfoLine({ label, children, strong }: { label: string; children: React.
       <span
         style={{
           fontFamily: "var(--pk-mono)",
-          fontSize: "10px",
+          fontSize: "var(--text-label)",
           color: "var(--pk-accent)",
-          letterSpacing: "0.1em",
+          letterSpacing: "var(--tracking-label)",
           textTransform: "uppercase",
           display: "block",
-          marginBottom: "0.25rem",
+          marginBottom: "0.3rem",
         }}
       >
         {label}
       </span>
       <p
         style={{
-          fontSize: "13px",
+          fontSize: "var(--text-body)",
           color: strong ? "var(--pk-text)" : "var(--pk-muted)",
           lineHeight: 1.65,
           margin: 0,
@@ -494,10 +494,9 @@ export default function Projects() {
 
       <h2
         style={{
-          fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)",
+          fontSize: "var(--text-h2)",
           fontWeight: 300,
-          letterSpacing: "-0.015em",
-          marginBottom: "0.75rem",
+          marginBottom: "0.85rem",
         }}
       >
         Selected projects
@@ -505,7 +504,9 @@ export default function Projects() {
       <p
         style={{
           color: "var(--pk-muted)",
-          fontSize: "15px",
+          fontSize: "var(--text-lead)",
+          lineHeight: 1.5,
+          maxWidth: "48ch",
           marginBottom: "3rem",
         }}
       >
@@ -608,11 +609,11 @@ export default function Projects() {
 
               <h3
                 style={{
-                  fontSize: "1.35rem",
+                  fontSize: "var(--text-h3)",
                   fontWeight: 400,
                   marginBottom: "1.25rem",
                   letterSpacing: "-0.01em",
-                  lineHeight: 1.3,
+                  lineHeight: "var(--leading-snug)",
                 }}
               >
                 {p.title}
@@ -662,12 +663,12 @@ export default function Projects() {
                 <span
                   style={{
                     fontFamily: "var(--pk-mono)",
-                    fontSize: "10px",
+                    fontSize: "var(--text-label)",
                     color: "var(--pk-accent)",
-                    letterSpacing: "0.1em",
+                    letterSpacing: "var(--tracking-label)",
                     textTransform: "uppercase",
                     display: "block",
-                    marginBottom: "0.35rem",
+                    marginBottom: "0.4rem",
                   }}
                 >
                   Key decisions
@@ -677,7 +678,7 @@ export default function Projects() {
                     <li
                       key={d}
                       style={{
-                        fontSize: "13px",
+                        fontSize: "var(--text-body)",
                         color: "var(--pk-muted)",
                         lineHeight: 1.6,
                         padding: "0.15rem 0 0.15rem 1.1rem",

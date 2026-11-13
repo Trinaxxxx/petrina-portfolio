@@ -35,7 +35,7 @@ export default function Contact() {
           >
             Let&rsquo;s connect.
           </h2>
-          <p style={{ color: "var(--pk-muted)", fontSize: "15px", maxWidth: "420px", margin: "0 auto 2.5rem" }}>
+          <p style={{ color: "var(--pk-muted)", fontSize: "var(--text-lead)", lineHeight: 1.55, maxWidth: "46ch", margin: "0 auto 2.5rem" }}>
             Open to 3D Visualisation Artist roles across the 3D environment space. Happy to chat about a project or a role.
           </p>
 

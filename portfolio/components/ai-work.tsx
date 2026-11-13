@@ -78,31 +78,30 @@ export default function AiWork() {
           <p
             style={{
               fontFamily: "var(--pk-mono)",
-              fontSize: "11px",
-              color: "var(--pk-text)",
-              letterSpacing: "0.1em",
+              fontSize: "var(--text-label)",
+              color: "var(--pk-accent)",
+              letterSpacing: "var(--tracking-label)",
               textTransform: "uppercase",
-              marginBottom: "0.75rem",
+              marginBottom: "0.9rem",
             }}
           >
             AI-assisted tooling
           </p>
           <h2
             style={{
-              fontSize: "clamp(1.4rem, 2.8vw, 2rem)",
+              fontSize: "var(--text-feature)",
               fontWeight: 400,
-              lineHeight: 1.25,
-              letterSpacing: "-0.015em",
-              marginBottom: "1rem",
+              lineHeight: "var(--leading-snug)",
+              marginBottom: "1.1rem",
             }}
           >
             A three-month bottleneck, rebuilt into a one-week pipeline.
           </h2>
           <p
             style={{
-              fontSize: "14px",
+              fontSize: "var(--text-lead)",
               color: "var(--pk-text)",
-              lineHeight: 1.75,
+              lineHeight: "var(--leading-body)",
               marginBottom: "2rem",
             }}
           >
@@ -163,7 +162,7 @@ export default function AiWork() {
                   </span>
                   <span
                     style={{
-                      fontSize: "11px",
+                      fontSize: "var(--text-label)",
                       color: "var(--pk-muted)",
                       lineHeight: 1.5,
                       whiteSpace: "nowrap",

@@ -63,9 +63,9 @@ export default function About() {
               priority
             />
           </div>
-          <p style={{ color: "var(--pk-muted)", fontSize: "15px", lineHeight: 1.7, maxWidth: "680px", margin: 0 }}>
-            <strong style={{ color: "var(--pk-text)", fontWeight: 500 }}>3D Visualisation Artist</strong> with three years of experience across APAC, based in the Design, Architecture and Innovation team at TMX Transform (a supply chain consultancy). My work takes Revit and CAD data into shippable Unity environments, backed by AI tooling I write to automate repetitive processes. Now in{" "}
-            <strong style={{ color: "var(--pk-text)", fontWeight: 500 }}>Brisbane</strong> and open to remote or relocation.
+          <p style={{ color: "var(--pk-muted)", fontSize: "var(--text-lead)", lineHeight: "var(--leading-body)", maxWidth: "62ch", margin: 0 }}>
+            <strong style={{ color: "var(--pk-heading)", fontWeight: 500 }}>3D Visualisation Artist</strong> with three years of experience across APAC, based in the Design, Architecture and Innovation team at TMX Transform (a supply chain consultancy). My work takes Revit and CAD data into shippable Unity environments, backed by AI tooling I write to automate repetitive processes. Now in{" "}
+            <strong style={{ color: "var(--pk-heading)", fontWeight: 500 }}>Brisbane</strong> and open to remote or relocation.
           </p>
         </div>
       </FadeContent>
@@ -110,7 +110,7 @@ export default function About() {
                   s.staticDisplay
                 )}
               </div>
-              <div style={{ fontSize: "11px", color: "var(--pk-muted)", letterSpacing: "0.04em" }}>
+              <div style={{ fontSize: "var(--text-label)", color: "var(--pk-muted)", letterSpacing: "0.04em", lineHeight: 1.4 }}>
                 {s.label}
               </div>
             </div>
@@ -130,12 +130,12 @@ export default function About() {
                 padding: "1.25rem",
               }}
             >
-              <p style={{ fontSize: "13px", fontWeight: 500, color: "var(--pk-text)", margin: "0 0 0.75rem" }}>
+              <p style={{ fontSize: "var(--text-body)", fontWeight: 500, color: "var(--pk-heading)", margin: "0 0 0.85rem" }}>
                 {s.title}
               </p>
               <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
                 {s.items.map((item) => (
-                  <li key={item} style={{ fontFamily: "var(--pk-mono)", fontSize: "11px", color: "var(--pk-muted)", lineHeight: 1.8 }}>
+                  <li key={item} style={{ fontFamily: "var(--pk-mono)", fontSize: "var(--text-label)", color: "var(--pk-muted)", lineHeight: 1.9 }}>
                     {item}
                   </li>
                 ))}
