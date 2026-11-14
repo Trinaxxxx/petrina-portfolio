@@ -355,7 +355,7 @@ export default function HeroCinematic() {
             1200px gutter), travelling over the VR footage. zIndex 4. */}
         <div ref={labelsWrapRef} style={{ position: "absolute", inset: 0, zIndex: 4, pointerEvents: "none" }}>
           {labels.map((l) => (
-            <div key={l} style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "7rem clamp(2rem, 5vw, 3rem) clamp(6.5rem, 15vh, 10rem)" }}>
+            <div key={l} style={{ opacity: 0, position: "absolute", inset: 0, display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "7rem clamp(2rem, 5vw, 3rem) clamp(6.5rem, 15vh, 10rem)" }}>
               <div style={{ width: "100%", maxWidth: "1200px", margin: "0 auto" }}>
                 <span
                   style={{
