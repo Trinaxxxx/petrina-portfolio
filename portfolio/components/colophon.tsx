@@ -9,12 +9,12 @@ const stack = [
 
 const principles: { heading: string; body: string }[] = [
   {
-    heading: "I set the direction",
-    body: "The design system — the Ink Gallery palette, the type scale, the layout rules — was decided before a line was written. The agent built inside those constraints; it didn't invent them. I pulled in established libraries and components for the visuals, layout and animation, and directed how they fit together.",
+    heading: "Design direction",
+    body: "The design system was decided before a line of code was written: the Ink Gallery palette, the type scale, the layout rules. The agent built inside those constraints. It didn't invent them.",
   },
   {
-    heading: "I owned the result",
-    body: "I reviewed every change before it went in and sent it back when it drifted — the same loop I'd use with any collaborator whose output I'm accountable for. I can walk through and debug this codebase because I made the calls that shaped it.",
+    heading: "Technical ownership",
+    body: "I reviewed every change before it shipped and sent it back when it drifted. I can walk through the architecture and the decisions behind it.",
   },
 ];
 
@@ -62,21 +62,20 @@ export default function Colophon() {
             maxWidth: "640px",
           }}
         >
-          Designed with intention, built with Claude Code.
+          Designed with intention, developed with Claude Code.
         </h2>
         <p
           style={{
-            fontSize: "14px",
+            fontSize: "var(--text-body)",
             color: "var(--pk-text)",
             lineHeight: 1.75,
             maxWidth: "640px",
             marginBottom: "2.75rem",
           }}
         >
-          I built this portfolio the way I approach pipeline automation:
-          scope the task, direct the tool, review the output, refine. I set
-          the direction and made every call. The agent moved faster than I
-          could alone.
+          I ran this portfolio like a production job: scope the task, direct
+          the tool, review the output, refine. I set the direction and made
+          every call.
         </p>
 
         <div className="colo-grid">
@@ -96,7 +95,7 @@ export default function Colophon() {
               </h3>
               <p
                 style={{
-                  fontSize: "13px",
+                  fontSize: "var(--text-meta)",
                   color: "var(--pk-muted)",
                   lineHeight: 1.7,
                 }}
@@ -106,6 +105,20 @@ export default function Colophon() {
             </div>
           ))}
         </div>
+
+        <p
+          style={{
+            fontSize: "var(--text-body)",
+            color: "var(--pk-text)",
+            lineHeight: 1.75,
+            maxWidth: "640px",
+            marginTop: "2.75rem",
+          }}
+        >
+          Same discipline I brought to asset optimisation and production
+          workflows at TMX. I treat a site as a system, not a surface: how it's
+          built, hosted and holds up, not just how it looks.
+        </p>
 
         <div
           style={{

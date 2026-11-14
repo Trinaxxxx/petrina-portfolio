@@ -1,5 +1,10 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
+
 const timeline = [
   { span: "3 months", note: "Manual baseline", days: 90 },
   { span: "3 weeks", note: "First GPT scripts", days: 21 },
@@ -7,6 +12,47 @@ const timeline = [
 ];
 
 export default function AiWork() {
+  const timelineRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = timelineRef.current;
+    if (!el) return;
+
+    const rows = Array.from(el.querySelectorAll<HTMLElement>(".ai-tl-row"));
+    const fills = Array.from(el.querySelectorAll<HTMLElement>(".ai-tl-fill"));
+    if (!rows.length) return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      // Static end-state: rows shown, bars at full length (already their
+      // rendered width). Nothing to animate.
+      return;
+    }
+
+    const ctx = gsap.context(() => {
+      // Bars grow from zero on a left origin — the duration-collapse story told
+      // kinetically; each shorter bar also settles faster, reinforcing it.
+      gsap.set(rows, { autoAlpha: 0, y: 24 });
+      gsap.set(fills, { scaleX: 0, transformOrigin: "left center" });
+
+      ScrollTrigger.create({
+        trigger: el,
+        start: "top 80%",
+        once: true,
+        onEnter: () => {
+          const tl = gsap.timeline({ defaults: { ease: "expo.out" } });
+          tl.to(rows, { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.14 });
+          fills.forEach((f, i) => {
+            // Longer bars take longer to fill, so the eye reads months → week.
+            const span = 0.5 + (timeline[i]?.days ?? 7) / 90 * 0.9;
+            tl.to(f, { scaleX: 1, duration: span }, 0.15 + i * 0.14);
+          });
+        },
+      });
+    }, el);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section
       id="ai-work"
@@ -32,31 +78,30 @@ export default function AiWork() {
           <p
             style={{
               fontFamily: "var(--pk-mono)",
-              fontSize: "11px",
-              color: "var(--pk-text)",
-              letterSpacing: "0.1em",
+              fontSize: "var(--text-label)",
+              color: "var(--pk-accent)",
+              letterSpacing: "var(--tracking-label)",
               textTransform: "uppercase",
-              marginBottom: "0.75rem",
+              marginBottom: "0.9rem",
             }}
           >
             AI-assisted tooling
           </p>
           <h2
             style={{
-              fontSize: "clamp(1.4rem, 2.8vw, 2rem)",
+              fontSize: "var(--text-feature)",
               fontWeight: 400,
-              lineHeight: 1.25,
-              letterSpacing: "-0.015em",
-              marginBottom: "1rem",
+              lineHeight: "var(--leading-snug)",
+              marginBottom: "1.1rem",
             }}
           >
             A three-month bottleneck, rebuilt into a one-week pipeline.
           </h2>
           <p
             style={{
-              fontSize: "14px",
+              fontSize: "var(--text-lead)",
               color: "var(--pk-text)",
-              lineHeight: 1.75,
+              lineHeight: "var(--leading-body)",
               marginBottom: "2rem",
             }}
           >
@@ -69,6 +114,7 @@ export default function AiWork() {
           </p>
           <a
             href="/ai-tools"
+            className="pk-arrow"
             style={{
               fontFamily: "var(--pk-mono)",
               fontSize: "12px",
@@ -77,17 +123,14 @@ export default function AiWork() {
               letterSpacing: "0.06em",
               borderBottom: "0.5px solid var(--pk-copper)",
               paddingBottom: "2px",
-              transition: "opacity 0.2s",
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.7")}
-            onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
           >
-            View all AI tools →
+            View all AI tools <span className="pk-arrow-glyph" aria-hidden="true">→</span>
           </a>
         </div>
 
         {/* Right — shrinking-bar timeline: bar length maps to duration */}
-        <div className="ai-teaser-timeline">
+        <div className="ai-teaser-timeline" ref={timelineRef}>
           {timeline.map((t, i) => {
             // Bar width tracks the duration on a log scale (90 days = full width)
             // so the strip visibly collapses months → weeks → days.
@@ -119,7 +162,7 @@ export default function AiWork() {
                   </span>
                   <span
                     style={{
-                      fontSize: "11px",
+                      fontSize: "var(--text-label)",
                       color: "var(--pk-muted)",
                       lineHeight: 1.5,
                       whiteSpace: "nowrap",
@@ -138,11 +181,13 @@ export default function AiWork() {
                   }}
                 >
                   <div
+                    className="ai-tl-fill"
                     style={{
                       width: `${Math.max(frac * 100, 4)}%`,
                       height: "100%",
                       borderRadius: "999px",
                       background: color,
+                      transformOrigin: "left center",
                     }}
                   />
                 </div>

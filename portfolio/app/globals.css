@@ -92,13 +92,71 @@
   --pk-accent: #b9d0c7;   /* ash-grey — data / tags (ink-black text when used as fill) */
   --pk-copper: #f7efed;   /* parchment — action: CTA fills (ink-black text), links */
   --pk-mono: var(--font-mono-custom), ui-monospace, 'JetBrains Mono', 'Fira Mono', monospace;
+
+  /* ── Type scale — one ramp the whole site reads from. Six tiers with real
+     gaps between them, so heading / lead / body / meta / label never blur into
+     one another. Inter carries text; --pk-mono (JetBrains Mono) carries the
+     labels, stats and data. Sizes in rem to respect the reader's zoom. */
+  --text-display: clamp(2.75rem, 7vw, 5.5rem);   /* hero headline */
+  --text-h2:      clamp(1.95rem, 3.6vw, 2.75rem);/* section headings */
+  --text-feature: clamp(1.5rem, 2.8vw, 2.1rem);  /* feature-panel heading (AI) */
+  --text-h3:      1.35rem;                         /* card / project titles */
+  --text-lead:    1.0625rem;                       /* 17px — section dek, bio, story */
+  --text-body:    0.9375rem;                       /* 15px — descriptive body */
+  --text-meta:    0.8125rem;                       /* 13px — dense in-card copy */
+  --text-label:   0.6875rem;                       /* 11px — mono labels, eyebrows */
+  --text-micro:   0.625rem;                         /* 10px — media-frame captions */
+
+  --leading-tight:  1.08;   /* display / large headings */
+  --leading-snug:   1.25;   /* subheads, card titles */
+  --leading-body:   1.7;    /* reading paragraphs */
+  --leading-loose:  1.85;   /* dense muted lists */
+  --tracking-display: -0.025em;
+  --tracking-tight:   -0.015em;
+  --tracking-label:    0.1em;
+
+  /* ── Motion system — exponential ease-outs, no bounce (gallery-calm).
+     One shared vocabulary so every hover/reveal on the site moves alike. */
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-out-expo:  cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 180ms;
+  --dur-mid:  320ms;
+  --dur-slow: 620ms;
+}
+
+/* On phones, lift the two reading tiers so sustained prose clears a
+   comfortable mobile size (16px body / 14px in-card copy). One override on the
+   ramp, so every section's reading copy grows at once — labels, stats and
+   captions (mono UI chrome, not reading text) stay as specified. */
+@media (max-width: 560px) {
+  :root {
+    --text-body: 1rem;       /* 15px → 16px */
+    --text-meta: 0.875rem;   /* 13px → 14px */
+  }
 }
 
 @layer base {
   * { @apply border-border outline-ring/50; }
-  body { @apply bg-background text-foreground; }
+  body {
+    @apply bg-background text-foreground;
+    font-kerning: normal;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
   html { scroll-behavior: smooth; }
-  h1, h2, h3 { color: var(--pk-heading); }
+  /* Headings share one rendering baseline — tight leading, balanced line breaks
+     and optical-size selection — so every section title reads as one voice.
+     Per-section inline sizes/weights still layer on top of this. */
+  h1, h2, h3 {
+    color: var(--pk-heading);
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+    text-wrap: balance;
+    font-optical-sizing: auto;
+  }
+  /* Long reading passages lose orphans without manual <br>s. */
+  p { text-wrap: pretty; }
 }
 
 /* Visually hidden, still read by screen readers and counted in the heading
@@ -125,6 +183,70 @@
     justify-content: center;
     min-height: 44px;
   }
+}
+
+/* ── Micro-interaction utilities ─────────────────────────────────────────
+   Shared hover/focus craft so links, arrows and frames across every section
+   move with one easing and one timing. CSS-only (keyboard-accessible via
+   :focus-visible), no per-component JS handlers. */
+
+/* Arrow link — the trailing glyph slides forward on hover/focus. */
+.pk-arrow { display: inline-flex; align-items: baseline; gap: 0.4em; }
+.pk-arrow-glyph {
+  display: inline-block;
+  transition: transform var(--dur-mid) var(--ease-out-expo);
+}
+.pk-arrow:hover .pk-arrow-glyph,
+.pk-arrow:focus-visible .pk-arrow-glyph { transform: translateX(5px); }
+
+/* Animated underline — draws in from the left under nav/text links. */
+.pk-underline { position: relative; }
+.pk-underline::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -4px;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--dur-mid) var(--ease-out-expo);
+}
+.pk-underline:hover::after,
+.pk-underline:focus-visible::after,
+.pk-underline[data-active="true"]::after { transform: scaleX(1); }
+.pk-underline[data-active="true"]:hover::after { transform-origin: right center; }
+
+/* Hover lift — a small, physical rise for interactive frames. */
+.pk-lift {
+  transition: transform var(--dur-mid) var(--ease-out-expo),
+              border-color var(--dur-mid) var(--ease-out-expo),
+              box-shadow var(--dur-mid) var(--ease-out-expo);
+}
+@media (hover: hover) {
+  .pk-lift:hover { transform: translateY(-3px); }
+}
+
+/* Fill-sweep — an ash wash wipes across on hover (contact / ghost buttons).
+   The pseudo sits behind the label; label text stays ink-safe on both states. */
+.pk-sweep { position: relative; overflow: hidden; isolation: isolate; }
+.pk-sweep::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: var(--pk-accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--dur-mid) var(--ease-out-quart);
+  z-index: -1;
+}
+.pk-sweep:hover::before,
+.pk-sweep:focus-visible::before { transform: scaleX(1); }
+
+@media (prefers-reduced-motion: reduce) {
+  .pk-arrow-glyph,
+  .pk-underline::after,
+  .pk-lift,
+  .pk-sweep::before { transition: none !important; }
+  .pk-lift:hover { transform: none !important; }
 }
 
 ::-webkit-scrollbar { width: 4px; }

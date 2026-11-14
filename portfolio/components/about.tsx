@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import CountUp from "@/components/CountUp";
 import FadeContent from "@/components/FadeContent";
 
@@ -49,12 +50,24 @@ export default function About() {
           so this keeps the heading outline complete for screen readers / SEO. */}
       <h2 className="sr-only">About Petrina Kinzel</h2>
 
-      {/* Bio — condensed */}
+      {/* Bio — profile portrait beside the condensed statement */}
       <FadeContent blur duration={900} threshold={0.1}>
-        <p style={{ color: "var(--pk-muted)", fontSize: "15px", lineHeight: 1.7, maxWidth: "680px", marginBottom: "2rem" }}>
-          <strong style={{ color: "var(--pk-text)", fontWeight: 500 }}>Technical Environment Artist</strong> with three years of experience across APAC, based in the Design, Architecture and Innovation team at TMX Transform (a supply chain consultancy). My work takes Revit and CAD data into shippable Unity environments, backed by AI tooling I write to automate repetitive processes. Now in{" "}
-          <strong style={{ color: "var(--pk-text)", fontWeight: 500 }}>Brisbane</strong> and open to remote or relocation.
-        </p>
+        <div className="about-intro" style={{ marginBottom: "2rem" }}>
+          <div className="about-portrait">
+            <Image
+              src="/projects/profile-picture.png"
+              alt="Petrina Kinzel"
+              fill
+              sizes="(max-width: 700px) 120px, 200px"
+              style={{ objectFit: "cover" }}
+              priority
+            />
+          </div>
+          <p style={{ color: "var(--pk-muted)", fontSize: "var(--text-lead)", lineHeight: "var(--leading-body)", maxWidth: "62ch", margin: 0 }}>
+            <strong style={{ color: "var(--pk-heading)", fontWeight: 500 }}>3D Visualisation Artist</strong> with three years of experience across APAC, based in the Design, Architecture and Innovation team at TMX Transform (a supply chain consultancy). My work takes Revit and CAD data into shippable Unity environments, backed by AI tooling I write to automate repetitive processes. Now in{" "}
+            <strong style={{ color: "var(--pk-heading)", fontWeight: 500 }}>Brisbane</strong> and open to remote or relocation.
+          </p>
+        </div>
       </FadeContent>
 
       {/* Stats — single horizontal row */}
@@ -97,7 +110,7 @@ export default function About() {
                   s.staticDisplay
                 )}
               </div>
-              <div style={{ fontSize: "11px", color: "var(--pk-muted)", letterSpacing: "0.04em" }}>
+              <div style={{ fontSize: "var(--text-label)", color: "var(--pk-muted)", letterSpacing: "0.04em", lineHeight: 1.4 }}>
                 {s.label}
               </div>
             </div>
@@ -117,12 +130,12 @@ export default function About() {
                 padding: "1.25rem",
               }}
             >
-              <p style={{ fontSize: "13px", fontWeight: 500, color: "var(--pk-text)", margin: "0 0 0.75rem" }}>
+              <p style={{ fontSize: "var(--text-body)", fontWeight: 500, color: "var(--pk-heading)", margin: "0 0 0.85rem" }}>
                 {s.title}
               </p>
               <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
                 {s.items.map((item) => (
-                  <li key={item} style={{ fontFamily: "var(--pk-mono)", fontSize: "11px", color: "var(--pk-muted)", lineHeight: 1.8 }}>
+                  <li key={item} style={{ fontFamily: "var(--pk-mono)", fontSize: "var(--text-label)", color: "var(--pk-muted)", lineHeight: 1.9 }}>
                     {item}
                   </li>
                 ))}
@@ -134,6 +147,22 @@ export default function About() {
       </FadeContent>
 
       <style>{`
+        .about-intro {
+          display: flex;
+          align-items: center;
+          gap: clamp(1.25rem, 3vw, 2rem);
+        }
+        .about-portrait {
+          position: relative;
+          flex: 0 0 auto;
+          width: clamp(120px, 16vw, 200px);
+          aspect-ratio: 1 / 1;
+          border-radius: 50%;
+          overflow: hidden;
+        }
+        @media (max-width: 560px) {
+          .about-intro { flex-direction: column; align-items: flex-start; }
+        }
         @media (max-width: 900px) {
           .stats-row { grid-template-columns: repeat(2, 1fr) !important; }
         }

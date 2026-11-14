@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -19,23 +19,32 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://petrina-portfolio.vercel.app"),
-  title: "Petrina Kinzel | Technical Environment Artist",
+  title: "Petrina Kinzel | 3D Visualisation Artist",
   description:
-    "Real-time environment artist: Blender automation, CAD/Revit integration, real-time VR delivery.",
+    "3D visualisation artist: real-time environments, CAD/Revit integration, VR and web delivery.",
   openGraph: {
-    title: "Petrina Kinzel | Technical Environment Artist",
+    title: "Petrina Kinzel | 3D Visualisation Artist",
     description:
-      "Real-time environment artist: Blender automation, CAD/Revit integration, real-time VR delivery.",
+      "3D visualisation artist: real-time environments, CAD/Revit integration, VR and web delivery.",
     type: "website",
     images: [{ url: "/projects/alphaplanes-hero.png", width: 1200, height: 630, alt: "Alpha Planes - Petrina Kinzel portfolio" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Petrina Kinzel | Technical Environment Artist",
+    title: "Petrina Kinzel | 3D Visualisation Artist",
     description:
-      "Real-time environment artist: Blender automation, CAD/Revit integration, real-time VR delivery.",
+      "3D visualisation artist: real-time environments, CAD/Revit integration, VR and web delivery.",
     images: ["/projects/alphaplanes-hero.png"],
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  // Lets content extend under the notch/home indicator; the Lightbox reads the
+  // safe-area insets. User zoom stays enabled for accessibility.
+  viewportFit: "cover",
+  themeColor: "#10141e",
 };
 
 export default function RootLayout({
