@@ -236,9 +236,9 @@ export default function HeroCinematic() {
         transition: "opacity 1000ms ease",
       }}
     >
-      {/* Served from /public — the VR clip isn't on Blob yet. Switch back to
-          mediaUrl("projects/hero-vr.mp4") once it's uploaded to the Blob store. */}
-      <source src="/projects/hero-vr.mp4" type="video/mp4" />
+      {/* Served from Vercel Blob. hero-vr.mp4 was never uploaded (404 on the
+          store), so use vr-walkthrough.mp4, which is present on the CDN. */}
+      <source src={mediaUrl("projects/vr-walkthrough.mp4")} type="video/mp4" />
     </video>
   );
 
