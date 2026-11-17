@@ -12,24 +12,31 @@ import { useCallback, useEffect, useRef, useState } from "react";
  * so we can honor iOS Safari's autoplay rules (muted at the property level, with
  * a one-shot gesture retry when Low Power Mode refuses the programmatic play).
  *
- * Unlike the hero, loading is *deferred*: nothing is fetched until `start()` is
- * called. The Showcase calls it from a ScrollTrigger as the VR act approaches,
- * so the ~13MB clip isn't pulled while the visitor is still up in the hero.
+ * Unlike the hero, loading is *deferred*: nothing is fetched until `prime()` or
+ * `start()` is called. The Showcase `prime()`s the clip from a ScrollTrigger as
+ * the VR act approaches, so the ~13MB file buffers while the visitor is still up
+ * top — then `start()`s it (from frame 0) only when the VR stage is actually
+ * revealed, so the reveal shows the clip from its first frame rather than
+ * catching it already mid-loop.
  *
- * Returns `ready` (true once the clip is playing — cross-fade it in) and
- * `start` (idempotent; kicks off the fetch + play).
+ * Returns `ready` (true once the clip is playing — cross-fade it in), `prime`
+ * (idempotent; buffers the file without playing) and `start` (idempotent; plays
+ * from the beginning, priming first if needed).
  */
 export function useCinematicVideo(
   videoRef: React.RefObject<HTMLVideoElement | null>,
   { autoStart = false }: { autoStart?: boolean } = {}
 ) {
   const [ready, setReady] = useState(false);
+  const primedRef = useRef(false);
   const startedRef = useRef(false);
 
-  const start = useCallback(() => {
+  // Buffer the clip without playing it. Save-Data / slow connections bail here
+  // (and leave `primed` false), so `start()` later becomes a no-op and the lit
+  // poster underlay stays as the graceful fallback.
+  const prime = useCallback(() => {
     const v = videoRef.current;
-    if (!v || startedRef.current) return;
-    startedRef.current = true;
+    if (!v || primedRef.current) return;
 
     // Adaptive loading: the clip is large. On Save-Data or slow connections,
     // don't download it — the lit poster underlay is the graceful fallback.
@@ -40,10 +47,26 @@ export function useCinematicVideo(
     const et = conn?.effectiveType ?? "";
     if (conn?.saveData || et === "slow-2g" || et === "2g" || et === "3g") return;
 
+    primedRef.current = true;
+
     // iOS Safari blocks muted autoplay unless `muted` is set at the PROPERTY
     // level (the JSX attribute isn't reliably reflected), so set it imperatively.
     v.muted = true;
     v.playsInline = true;
+    // preload="none" means the fetch hasn't started — kick off buffering now,
+    // paused, so the clip sits ready at frame 0 for when the reveal starts it.
+    v.preload = "auto";
+    v.load();
+  }, [videoRef]);
+
+  const start = useCallback(() => {
+    const v = videoRef.current;
+    if (!v || startedRef.current) return;
+
+    // Ensure buffering has begun; if priming bailed (Save-Data/slow), don't play.
+    if (!primedRef.current) prime();
+    if (!primedRef.current) return;
+    startedRef.current = true;
 
     // iOS in Low Power Mode rejects the muted-autoplay play() promise but always
     // honors playback from a real gesture — so on refusal, arm one-shot
@@ -83,6 +106,8 @@ export function useCinematicVideo(
     };
 
     const onReady = () => {
+      // Start the reveal on the first frame, not wherever a prior prime left it.
+      try { v.currentTime = 0; } catch { /* not seekable yet — plays from 0 anyway */ }
       setReady(true);
       tryPlay();
     };
@@ -93,9 +118,6 @@ export function useCinematicVideo(
     }
 
     v.addEventListener("canplay", onReady);
-    // preload="none" means the fetch hasn't started — kick it off now.
-    v.preload = "auto";
-    v.load();
 
     // Stash cleanup on the element so the effect can run it on unmount.
     (v as HTMLVideoElement & { _cinematicCleanup?: () => void })._cinematicCleanup = () => {
@@ -115,5 +137,5 @@ export function useCinematicVideo(
     };
   }, [autoStart, start, videoRef]);
 
-  return { ready, start };
+  return { ready, prime, start };
 }
