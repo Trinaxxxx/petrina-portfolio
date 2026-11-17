@@ -59,7 +59,7 @@ export default function HeroCinematic() {
   const heroVideoRef = useRef<HTMLVideoElement>(null);
   const vrVideoRef = useRef<HTMLVideoElement>(null);
   const { ready: heroReady } = useCinematicVideo(heroVideoRef, { autoStart: true });
-  const { ready: vrReady, start: startVr } = useCinematicVideo(vrVideoRef);
+  const { ready: vrReady, prime: primeVr, start: startVr } = useCinematicVideo(vrVideoRef);
 
   const [reduced, setReduced] = useState(false);
 
@@ -89,13 +89,16 @@ export default function HeroCinematic() {
     const labelEls = Array.from(labelsWrapRef.current!.children) as HTMLElement[];
 
     const ctx = gsap.context(() => {
-      // Pre-warm the VR clip as the section's VR act nears, so it's decoding
-      // before the bento clears — no fetch while the visitor is still up top.
+      // Pre-warm the VR clip as the section's VR act nears, so it's decoded and
+      // buffered (paused, at frame 0) before the bento clears — no fetch while
+      // the visitor is still up top. Playback itself is held until the VR stage
+      // is revealed in Act 4 (tl.call below), so the reveal shows it from the
+      // first frame rather than catching it already mid-loop.
       ScrollTrigger.create({
         trigger: section,
         start: "top top",
         once: true,
-        onEnter: () => startVr(),
+        onEnter: () => primeVr(),
       });
 
       // ── Initial states ─────────────────────────────────────────────────────
@@ -165,6 +168,10 @@ export default function HeroCinematic() {
         stagger: { each: 0.14, from: "end" },
       }, ">");
       tl.to(bentoEl, { opacity: 0, duration: 1.0, ease: "power2.inOut" }, ">-0.4");
+      // Begin the (already-buffered) clip from frame 0 exactly as the stage
+      // reveals, so the viewer sees it from the start. Idempotent, so scrubbing
+      // back and forth across this point won't restart it.
+      tl.call(startVr, undefined, "<");
       tl.to(vrVidWrap, { autoAlpha: 1, scale: 1, duration: 1.4, ease: "power2.inOut" }, "<");
       tl.to({}, { duration: HOLD });
 
@@ -185,7 +192,7 @@ export default function HeroCinematic() {
     }, section);
 
     return () => ctx.revert();
-  }, [startVr]);
+  }, [primeVr, startVr]);
 
   const heroVideoEl = (
     <video
