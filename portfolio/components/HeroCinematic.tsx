@@ -236,9 +236,10 @@ export default function HeroCinematic() {
         transition: "opacity 1000ms ease",
       }}
     >
-      {/* Served from Vercel Blob. hero-vr.mp4 was never uploaded (404 on the
-          store), so use vr-walkthrough.mp4, which is present on the CDN. */}
-      <source src={mediaUrl("projects/vr-walkthrough.mp4")} type="video/mp4" />
+      {/* Served from Vercel Blob. Uses a fresh filename (vr-hero.mp4) rather
+          than overwriting the old path — a new cache key sidesteps Blob's
+          30-day edge cache so replacements show up immediately. */}
+      <source src={mediaUrl("projects/vr-hero.mp4")} type="video/mp4" />
     </video>
   );
 
