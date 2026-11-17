@@ -5,7 +5,6 @@ import Link from "next/link";
 
 const links = [
   { href: "/", label: "Home" },
-  { href: "/#walkthrough", label: "Walkthrough" },
   { href: "/technical-breakdowns", label: "Breakdowns" },
   { href: "/#work", label: "Work" },
   { href: "/ai-tools", label: "AI Tools" },
@@ -86,11 +85,11 @@ export default function Nav() {
             return (
               <li key={l.href}>
                 {isExternal ? (
-                  <a href={l.href} target="_blank" rel="noopener noreferrer" style={linkStyle} {...hoverHandlers}>
+                  <a href={l.href} target="_blank" rel="noopener noreferrer" className="pk-underline" style={linkStyle} {...hoverHandlers}>
                     {l.label}
                   </a>
                 ) : (
-                  <Link href={l.href} aria-current={isActive ? "page" : undefined} style={linkStyle} {...hoverHandlers}>
+                  <Link href={l.href} aria-current={isActive ? "page" : undefined} className="pk-underline" data-active={isActive ? "true" : undefined} style={linkStyle} {...hoverHandlers}>
                     {l.label}
                   </Link>
                 )}

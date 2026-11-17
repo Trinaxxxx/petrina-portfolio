@@ -48,9 +48,12 @@ function MediaCard({ item }: { item: MediaItem }) {
   );
 }
 
+// Two-column grid, one hairline-separated row per pair. Each tile holds its own
+// 16/9 frame, so the block grows cleanly with the image count (2 → one row,
+// 10 → five rows) instead of being locked to a single 2×2 block.
 function MediaGrid({ media }: { media: MediaItem[] }) {
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gridTemplateRows: "1fr 1fr", gap: "1px", background: "var(--pk-border)", aspectRatio: "16/9" }}>
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gridAutoRows: "1fr", gap: "1px", background: "var(--pk-border)" }}>
       {media.map((item, i) => (
         <MediaCard key={item.src || `placeholder-${i}`} item={item} />
       ))}

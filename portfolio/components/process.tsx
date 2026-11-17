@@ -51,15 +51,14 @@ export default function Process() {
       <div>
         <h2
           style={{
-            fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)",
+            fontSize: "var(--text-h2)",
             fontWeight: 300,
-            letterSpacing: "-0.015em",
-            marginBottom: "0.75rem",
+            marginBottom: "0.85rem",
           }}
         >
           How I build
         </h2>
-        <p style={{ color: "var(--pk-muted)", fontSize: "15px", marginBottom: "3rem" }}>
+        <p style={{ color: "var(--pk-muted)", fontSize: "var(--text-lead)", lineHeight: 1.5, maxWidth: "48ch", marginBottom: "3rem" }}>
           The pipeline behind every environment, from brief to VR delivery.
         </p>
 
@@ -82,25 +81,27 @@ export default function Process() {
               <div
                 style={{
                   fontFamily: "var(--pk-mono)",
-                  fontSize: "11px",
+                  fontSize: "var(--text-label)",
                   color: "var(--pk-accent)",
-                  marginBottom: "0.75rem",
-                  letterSpacing: "0.08em",
+                  marginBottom: "0.85rem",
+                  letterSpacing: "var(--tracking-label)",
+                  textTransform: "uppercase",
                 }}
               >
                 {s.num}
               </div>
               <div
                 style={{
-                  fontSize: "14px",
+                  fontSize: "var(--text-lead)",
                   fontWeight: 500,
-                  color: "var(--pk-text)",
-                  marginBottom: "0.5rem",
+                  color: "var(--pk-heading)",
+                  lineHeight: "var(--leading-snug)",
+                  marginBottom: "0.6rem",
                 }}
               >
                 {s.title}
               </div>
-              <div style={{ fontSize: "13px", color: "var(--pk-muted)", lineHeight: 1.8 }}>
+              <div style={{ fontSize: "var(--text-meta)", color: "var(--pk-muted)", lineHeight: 1.75 }}>
                 {s.body}
               </div>
             </div>

@@ -94,7 +94,7 @@ function MediaPanel({ item }: { item: AchievementItem }) {
           >
             {s.val}
           </div>
-          <div style={{ fontSize: "11px", color: "var(--pk-muted)", letterSpacing: "0.04em" }}>
+          <div style={{ fontSize: "var(--text-label)", color: "var(--pk-muted)", letterSpacing: "0.04em" }}>
             {s.label}
           </div>
         </div>
@@ -111,14 +111,16 @@ export default function Achievements() {
     >
       <h2
         style={{
-          fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)",
+          fontSize: "var(--text-h2)",
           fontWeight: 300,
-          letterSpacing: "-0.015em",
-          marginBottom: "3rem",
+          marginBottom: "0.85rem",
         }}
       >
         Key achievements
       </h2>
+      <p style={{ color: "var(--pk-muted)", fontSize: "var(--text-lead)", lineHeight: 1.5, maxWidth: "48ch", marginBottom: "3rem" }}>
+        Shipped work, industry partnerships, and the numbers behind them.
+      </p>
 
       <div
         style={{
@@ -156,24 +158,26 @@ export default function Achievements() {
               <div
                 style={{
                   fontFamily: "var(--pk-mono)",
-                  fontSize: "11px",
+                  fontSize: "var(--text-label)",
                   color: "var(--pk-accent)",
-                  letterSpacing: "0.08em",
+                  letterSpacing: "var(--tracking-label)",
+                  textTransform: "uppercase",
                 }}
               >
                 {item.loc}
               </div>
               <div
                 style={{
-                  fontSize: "15px",
+                  fontSize: "var(--text-h3)",
                   fontWeight: 500,
-                  color: "var(--pk-text)",
-                  lineHeight: 1.4,
+                  color: "var(--pk-heading)",
+                  lineHeight: "var(--leading-snug)",
+                  letterSpacing: "-0.01em",
                 }}
               >
                 {item.title}
               </div>
-              <div style={{ fontSize: "13px", color: "var(--pk-muted)", lineHeight: 1.85 }}>
+              <div style={{ fontSize: "var(--text-body)", color: "var(--pk-muted)", lineHeight: "var(--leading-body)" }}>
                 {item.body}
               </div>
             </div>

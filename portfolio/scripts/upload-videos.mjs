@@ -22,6 +22,7 @@ if (!token) {
 const files = [
   "projects/hero-bg.mp4",
   "projects/vr-walkthrough.mp4",
+  "projects/hero-vr.mp4",
 ];
 
 let base = null;
