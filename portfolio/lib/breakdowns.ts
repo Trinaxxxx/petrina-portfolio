@@ -20,31 +20,6 @@ export type Breakdown = {
 
 export const breakdowns: Breakdown[] = [
   {
-    slug: "blender-automation",
-    title: "Blender Automation Pipeline",
-    subtitle: "Python toolset for automated asset processing at studio scale",
-    tags: ["Python", "Blender", "Pipeline", "Tool Dev"],
-    stats: [
-      { label: "Time Saved", value: "40–60%" },
-      { label: "Scale", value: "100s of assets" },
-      { label: "Tools", value: "Blender + Python" },
-      { label: "Role", value: "Tool Developer" },
-    ],
-    summary: [
-      "Designed and implemented a suite of Blender Python addons automating asset replacement, material assignment, scene cleanup, and collection organisation across studio production.",
-      "The tools reduced manual environment setup time by 40–60% across hundreds of project assets — turning hour-long prep tasks into single button presses.",
-      "Built for real production pipelines: each tool handles edge cases like missing materials, mismatched naming conventions, and Revit import artefacts that would otherwise require manual intervention on every asset.",
-    ],
-    media: [
-      { src: "/projects/pipeline-ui.png", alt: "PipelineX Blender plugin — full UI panel" },
-      { src: "", alt: "Tool demo — Collection Organizer walkthrough", type: "placeholder" as const },
-      { src: "", alt: "Script walkthrough — Revit Asset Replacer", type: "placeholder" as const },
-      { src: "", alt: "Before / After — scene cleanup automation", type: "placeholder" as const },
-    ],
-    caseStudyHref: "/case-study/blender-automation",
-    externalLink: { label: "View on GitHub ↗", href: "https://github.com/Trinaxxxx" },
-  },
-  {
     slug: "alpha-planes",
     title: "Alpha Planes — Real-Time Optimisation",
     subtitle: "Baking Revit geometry into alpha-mapped planes to hit standalone VR frame budgets",

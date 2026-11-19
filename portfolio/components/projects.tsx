@@ -150,7 +150,7 @@ const projects: Project[] = [
       { src: "/projects/polymind-ai-chat.jpg",  alt: "Grounded AI chat — answers citing the geometry score and open-edge count" },
     ],
     mediaLayout: "fill-grid",
-    caseStudy: "/ai-tools#polymind",
+    caseStudy: "/case-study/polymind",
     link: { label: "Open the live app ↗", href: "https://poly-mind-two.vercel.app/" },
   },
 ];
