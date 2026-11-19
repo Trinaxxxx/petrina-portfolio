@@ -106,6 +106,12 @@ export function useCinematicVideo(
     };
 
     const onReady = () => {
+      // One-shot: detach immediately so this handler can never run twice. Without
+      // this, the `v.currentTime = 0` below re-buffers the clip (seeking → waiting
+      // → canplay), which re-fires this very listener, resets to 0 again, and
+      // loops forever — the clip stays frozen on frame 0 (a black stage) and never
+      // actually plays. Removing the listener first breaks that feedback loop.
+      v.removeEventListener("canplay", onReady);
       // Start the reveal on the first frame, not wherever a prior prime left it.
       try { v.currentTime = 0; } catch { /* not seekable yet — plays from 0 anyway */ }
       setReady(true);
