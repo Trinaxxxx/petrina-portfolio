@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
@@ -15,17 +15,35 @@ const links = [
 export default function Nav() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
-  const [scrollPct, setScrollPct] = useState(0);
   const visibleLinks = links.filter((l) => !(l.href === "/" && pathname === "/"));
 
+  // Scroll progress is written straight to the DOM inside a rAF, not through
+  // React state — a stateful setter here would reconcile the whole Nav tree on
+  // every scroll frame. The fill height and dot position are the only things
+  // that change, so we mutate those two nodes directly.
+  const fillRef = useRef<HTMLDivElement>(null);
+  const dotRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    const onScroll = () => {
+    let frame = 0;
+    const update = () => {
+      frame = 0;
       const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
       const max = scrollHeight - clientHeight;
-      setScrollPct(max > 0 ? scrollTop / max : 0);
+      const pct = max > 0 ? scrollTop / max : 0;
+      if (fillRef.current) fillRef.current.style.height = `${pct * 100}%`;
+      if (dotRef.current) dotRef.current.style.top = `${pct * 100}%`;
     };
+    const onScroll = () => {
+      if (frame) return; // coalesce multiple scroll events into one paint
+      frame = requestAnimationFrame(update);
+    };
+    update(); // set initial position (e.g. restored scroll)
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
   }, []);
 
   return (
@@ -143,22 +161,23 @@ export default function Nav() {
           }}
         >
           <div
+            ref={fillRef}
             style={{
               position: "absolute",
               top: 0,
               left: 0,
               width: "100%",
-              height: `${scrollPct * 100}%`,
+              height: "0%",
               background: "var(--pk-accent)",
               borderRadius: "2px",
-              transition: "opacity 0.08s linear",
             }}
           />
           <div
+            ref={dotRef}
             style={{
               position: "absolute",
               left: "50%",
-              top: `${scrollPct * 100}%`,
+              top: "0%",
               transform: "translate(-50%, -50%)",
               width: "6px",
               height: "6px",

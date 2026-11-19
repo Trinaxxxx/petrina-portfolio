@@ -28,6 +28,13 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Pin the workspace root to THIS folder. Stray lockfiles in parent
+  // directories (../package-lock.json, ~/pnpm-lock.yaml) made Turbopack infer
+  // the wrong root, which broke next/font/google resolution and failed every
+  // production build. An absolute root keeps module + font resolution local.
+  turbopack: {
+    root: import.meta.dirname,
+  },
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];
   },
