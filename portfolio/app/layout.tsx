@@ -27,14 +27,14 @@ export const metadata: Metadata = {
     description:
       "3D visualisation artist: real-time environments, CAD/Revit integration, VR and web delivery.",
     type: "website",
-    images: [{ url: "/projects/tmx-showreel-thumb.png", width: 1920, height: 1080, alt: "Petrina Kinzel — VR Environment Art Showreel 2025" }],
+    images: [{ url: "/projects/og-cover.jpg", width: 1200, height: 630, alt: "Petrina Kinzel — VR Environment Art Showreel 2025" }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Petrina Kinzel | 3D Visualisation Artist",
     description:
       "3D visualisation artist: real-time environments, CAD/Revit integration, VR and web delivery.",
-    images: ["/projects/tmx-showreel-thumb.png"],
+    images: ["/projects/og-cover.jpg"],
   },
 };
 
