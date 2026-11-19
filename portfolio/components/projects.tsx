@@ -25,6 +25,7 @@ type Project = {
   mediaLayout?: "tall-right" | "fill-grid";
   caseStudy?: string;
   link?: { label: string; href: string };
+  hidden?: boolean;
 };
 
 const projects: Project[] = [
@@ -68,6 +69,7 @@ const projects: Project[] = [
     title: "Blender Automation Pipeline — Asset Processing",
     tags: ["CAD/Revit", "Pipeline", "Python"],
     featured: false,
+    hidden: true,
     goal: "Take the repetition out of CAD-to-environment conversion — asset replacement, materials, cleanup, and organisation, all in one pass.",
     role: "Sole tool developer — designed, built, and shipped the addon suite.",
     results: [
@@ -121,6 +123,35 @@ const projects: Project[] = [
       { src: "",  alt: "Revit vs Alpha Planes — VR before/after comparison (placeholder)", type: "placeholder" },
     ],
     caseStudy: "/technical-breakdowns#alpha-planes",
+  },
+  {
+    num: "04",
+    title: "PolyMind — Readiness Checks for 3D & BIM Models",
+    tags: ["Flagship", "Grounded AI", "React / R3F", "Solo Build"],
+    featured: false,
+    goal: "Readying a model for web, VR, or a client meant opening the scene by hand to hunt expensive geometry, platform blockers, and missing data. PolyMind runs that whole check in seconds and gives the same answer every time.",
+    role: "Sole designer and developer — parsing, scoring, grounded AI, and UI, all shipped solo.",
+    results: [
+      ["Formats read", "IFC → USD"],
+      ["File upload", "None — client-side"],
+      ["Targets", "Desktop · Mobile · VR"],
+      ["Status", "Live app"],
+    ],
+    decisions: [
+      "Parsing, analysis, and scoring run fully in the browser — the source file never leaves the client",
+      "Every flag traces to a published rule ID with a point cost, so scoring is reproducible and unit-tested",
+      "AI answers only from the model's own report — cites the rule and exact number, treats file data as data, not instructions",
+    ],
+    outcome: "A shipped app that gives a per-platform verdict, names the one fix that unlocks the next target, and exports to a PDF or read-only link.",
+    media: [
+      { src: "/projects/polymind-bim-data.jpg", alt: "BIM data panel — schema, element counts, disciplines, storeys" },
+      { src: "/projects/polymind-verdict.jpg",  alt: "Platform fit — readiness verdict for desktop, mobile and VR" },
+      { src: "/projects/polymind-heatmap.jpg",  alt: "Heatmap — model coloured cheap-to-expensive, dense geometry in orange" },
+      { src: "/projects/polymind-ai-chat.jpg",  alt: "Grounded AI chat — answers citing the geometry score and open-edge count" },
+    ],
+    mediaLayout: "fill-grid",
+    caseStudy: "/ai-tools#polymind",
+    link: { label: "Open the live app ↗", href: "https://poly-mind-two.vercel.app/" },
   },
 ];
 
@@ -523,7 +554,7 @@ export default function Projects() {
           border: "0.5px solid var(--pk-border)",
         }}
       >
-        {projects.map((p, idx) => (
+        {projects.filter((p) => !p.hidden).map((p, idx) => (
           <div
             key={p.num}
             style={{

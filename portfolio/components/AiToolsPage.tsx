@@ -19,19 +19,29 @@ function MediaCard({ item }: { item: MediaItem }) {
 
   return (
     <div style={base}>
-      <span
-        style={{
-          fontFamily: "var(--pk-mono)",
-          fontSize: "9px",
-          color: "var(--pk-muted)",
-          opacity: isPlaceholder ? 0.45 : 1,
-          letterSpacing: "0.05em",
-          textAlign: "center",
-          padding: "0.5rem",
-        }}
-      >
-        {item.alt}
-      </span>
+      {isPlaceholder ? (
+        <span
+          style={{
+            fontFamily: "var(--pk-mono)",
+            fontSize: "9px",
+            color: "var(--pk-muted)",
+            opacity: 0.45,
+            letterSpacing: "0.05em",
+            textAlign: "center",
+            padding: "0.5rem",
+          }}
+        >
+          {item.alt}
+        </span>
+      ) : (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={item.src}
+          alt={item.alt}
+          loading="lazy"
+          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+        />
+      )}
     </div>
   );
 }
