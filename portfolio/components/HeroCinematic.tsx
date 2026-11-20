@@ -298,25 +298,44 @@ export default function HeroCinematic() {
               ))}
             </div>
 
-            <SectionLabel index="02" title="VR walkthrough" note="Revit → lit, walkable real-time · scroll to play" />
-            {/* Full-bleed VR stage: breaks out of the 1200px gutter to the full
-                viewport width (no side panels) and runs 20% taller than 16:9
-                (16 / 10.8) so the walkthrough fills the view and holds the scroll
-                longer. overflowX stays clipped on <body> elsewhere. */}
-            <div style={{ position: "relative", width: "100vw", marginLeft: "calc(50% - 50vw)", aspectRatio: "16 / 10.8", overflow: "hidden", borderTop: "1px solid var(--pk-border-accent)", borderBottom: "1px solid var(--pk-border-accent)", background: "var(--pk-bg2)", marginBottom: "1rem" }}>
-              <ScrollScrubSequence
-                frameCount={VR_FRAMES}
-                basePath="/projects/vr-frames/f-"
-                poster="/projects/hero-vr-poster.jpg"
-                focalX={0.85}
-                ariaLabel="VR walkthrough of a TMX automated logistics facility, from Revit data to a lit, walkable real-time environment"
-                style={{ position: "absolute", inset: 0 }}
-              />
-              <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", background: "linear-gradient(to bottom, rgba(16,20,30,0.18) 0%, rgba(16,20,30,0) 40%, rgba(16,20,30,0.45) 100%)" }} />
+            <SectionLabel index="02" title="VR walkthrough" note="Revit → lit, walkable real-time · plays automatically" />
+            {/* Sticky dwell: the track is the video height plus ~60vh of extra
+                scroll. The inner stage is one viewport tall and sticks at the top,
+                centring the video — so it scrolls up to fit the screen, holds for
+                roughly one more screen of scrolling, then releases to normal flow.
+                The video is full-bleed (100vw, no side panels), capped to the
+                viewport (minus nav clearance) so it always fits, and the canvas
+                cover-crops to fill. overflowX stays clipped on <body> elsewhere. */}
+            <div style={{ position: "relative", height: "calc(min(67.5vw, 100svh - 140px) + 60vh)", marginBottom: "3.5rem" }}>
+              <div style={{ position: "sticky", top: 0, height: "100svh" }}>
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "calc(50% - 50vw)",
+                    transform: "translateY(-50%)",
+                    width: "100vw",
+                    height: "min(67.5vw, 100svh - 140px)",
+                    overflow: "hidden",
+                    borderTop: "1px solid var(--pk-border-accent)",
+                    borderBottom: "1px solid var(--pk-border-accent)",
+                    background: "var(--pk-bg2)",
+                  }}
+                >
+                  <ScrollScrubSequence
+                    frameCount={VR_FRAMES}
+                    basePath="/projects/vr-frames/f-"
+                    poster="/projects/hero-vr-poster.jpg"
+                    focalX={0.85}
+                    frameDurationMs={100}
+                    hintText="Auto-plays · pause anytime"
+                    ariaLabel="VR walkthrough of a TMX automated logistics facility, from Revit data to a lit, walkable real-time environment"
+                    style={{ position: "absolute", inset: 0 }}
+                  />
+                  <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", background: "linear-gradient(to bottom, rgba(16,20,30,0.18) 0%, rgba(16,20,30,0) 40%, rgba(16,20,30,0.45) 100%)" }} />
+                </div>
+              </div>
             </div>
-            <p style={{ fontFamily: "var(--pk-mono)", fontSize: "11px", color: "var(--pk-muted)", letterSpacing: "0.08em", marginBottom: "3.5rem" }}>
-              ↕ Scroll to scrub the walkthrough
-            </p>
 
             <SectionLabel index="03" title="Capabilities" />
             <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
