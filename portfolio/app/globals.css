@@ -143,6 +143,9 @@
     font-kerning: normal;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    /* Full-bleed sections use width:100vw; clip the resulting scrollbar-width
+       sliver so no horizontal scroll appears. The layout is single-column. */
+    overflow-x: hidden;
   }
   html { scroll-behavior: smooth; }
   /* Headings share one rendering baseline — tight leading, balanced line breaks
@@ -249,9 +252,20 @@
   .pk-lift:hover { transform: none !important; }
 }
 
-::-webkit-scrollbar { width: 4px; }
+/* Text selection — the gallery's own ash wash, not the OS blue. Ash fill pairs
+   with ink-black text per the palette's pairing rule, so selected copy stays
+   AA-legible. ::selection must be declared on its own (no grouping with a
+   pseudo the browser doesn't recognise, or the whole rule is dropped). */
+::selection { background: var(--pk-accent); color: var(--pk-bg); }
+::-moz-selection { background: var(--pk-accent); color: var(--pk-bg); }
+
+/* Scrollbar — WebKit/Blink get the thin ash thumb; Firefox reads the standard
+   properties (it ignores ::-webkit-scrollbar entirely). */
+html { scrollbar-width: thin; scrollbar-color: var(--pk-border-accent) var(--pk-bg); }
+::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: var(--pk-bg); }
 ::-webkit-scrollbar-thumb { background: var(--pk-border-accent); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--pk-accent); }
 
 :focus-visible {
   outline: 2px solid var(--pk-accent);

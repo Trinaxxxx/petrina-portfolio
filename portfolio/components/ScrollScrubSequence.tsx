@@ -46,25 +46,40 @@ export default function ScrollScrubSequence({
 
     const seq = createFrameSequence(canvas, { frameCount, basePath, ext, pad, poster, focalX });
 
-    const progressForScroll = () => {
-      const rect = wrap.getBoundingClientRect();
+    // The walkthrough always plays FORWARD regardless of scroll direction: the
+    // playhead is advanced by the *absolute* distance scrolled, and loops. So
+    // scrolling up or down both keep the clip running forward (and it dissolves
+    // from the last frame back to the first via paintBlend). One full loop takes
+    // ~1400px of scrolling — enough per flick to read as motion, not a slideshow.
+    const SPEED = frameCount / 1400; // frames advanced per px scrolled
+    let playhead = 0; // fractional frame position, always increasing (mod frameCount)
+    let lastY = window.scrollY;
+
+    const inView = () => {
+      const r = wrap.getBoundingClientRect();
       const vh = window.innerHeight || 1;
-      // 0 as the top edge reaches the viewport bottom → 1 as the bottom edge
-      // leaves the top. The element scrubs across its whole pass through view.
-      return (vh - rect.top) / (vh + rect.height);
+      return r.top < vh && r.bottom > 0;
     };
 
     let raf = 0;
-    const onScroll = () => {
+    const schedule = () => {
       if (raf) return;
       raf = requestAnimationFrame(() => {
         raf = 0;
-        seq.paintProgress(progressForScroll());
+        seq.paintBlend(playhead);
       });
+    };
+    const onScroll = () => {
+      const y = window.scrollY;
+      const dy = Math.abs(y - lastY);
+      lastY = y;
+      if (dy === 0 || !inView()) return; // only advance while the clip is on screen
+      playhead = (playhead + dy * SPEED) % frameCount;
+      schedule();
     };
     const onResize = () => {
       seq.resize();
-      seq.paintProgress(progressForScroll());
+      schedule();
     };
 
     onResize();

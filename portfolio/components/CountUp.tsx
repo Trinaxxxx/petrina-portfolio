@@ -134,5 +134,7 @@ export default function CountUp({
     };
   }, [start, end, delay, duration, startWhen, maxDecimals, separator, onStart, onEnd]);
 
-  return <span className={className} ref={ref} />;
+  // Tabular figures: every digit shares one advance width, so the number holds
+  // a steady width as it ticks instead of shuddering frame to frame mid-count.
+  return <span className={className} ref={ref} style={{ fontVariantNumeric: "tabular-nums" }} />;
 }

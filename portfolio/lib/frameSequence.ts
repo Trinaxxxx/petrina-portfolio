@@ -30,6 +30,13 @@ export interface FrameSequence {
   paint(frame: number): void;
   /** Paint by progress 0..1 across the sequence. */
   paintProgress(p: number): void;
+  /**
+   * Paint a fractional, looping playhead with an opacity cross-fade between the
+   * two frames it sits between: the lower frame is drawn opaque, then the next
+   * frame (wrapping past the last back to the first) is dissolved over it by the
+   * fractional part. No hard cut between stills.
+   */
+  paintBlend(frameFloat: number): void;
   /** Re-measure the backing store for the element's current size, then repaint. */
   resize(): void;
   destroy(): void;
@@ -49,7 +56,7 @@ export function createFrameSequence(
   let want = 0; // last requested frame (so loads/resizes can repaint it)
   let started = false;
 
-  const drawCover = (img: HTMLImageElement) => {
+  const drawCover = (img: HTMLImageElement, clear = true) => {
     if (!ctx) return;
     const cw = canvas.clientWidth;
     const ch = canvas.clientHeight;
@@ -67,7 +74,7 @@ export function createFrameSequence(
     }
     const dx = (cw - dw) * focalX;
     const dy = (ch - dh) * 0.5;
-    ctx.clearRect(0, 0, cw, ch);
+    if (clear) ctx.clearRect(0, 0, cw, ch);
     ctx.drawImage(img, dx, dy, dw, dh);
   };
 
@@ -86,6 +93,37 @@ export function createFrameSequence(
   const paintProgress = (p: number) => {
     const clamped = Math.max(0, Math.min(1, p));
     paint(clamped * (frameCount - 1));
+  };
+
+  const paintBlend = (frameFloat: number) => {
+    if (!ctx) return;
+    const floor = Math.floor(frameFloat);
+    const lo = ((floor % frameCount) + frameCount) % frameCount; // wrap, non-negative
+    const hi = (lo + 1) % frameCount; // loops: last → first
+    const frac = frameFloat - floor;
+    const imgLo = loaded[lo] ? images[lo] : null;
+    const imgHi = loaded[hi] ? images[hi] : null;
+    // Track the nearer frame so a later resize repaints something sensible.
+    want = frac < 0.5 ? lo : hi;
+    if (imgLo && imgHi) {
+      ctx.globalAlpha = 1;
+      drawCover(imgLo, true);
+      ctx.globalAlpha = frac; // dissolve the next frame over the current one
+      drawCover(imgHi, false);
+      ctx.globalAlpha = 1;
+      current = want;
+    } else if (imgLo) {
+      ctx.globalAlpha = 1;
+      drawCover(imgLo, true);
+      current = lo;
+    } else if (imgHi) {
+      ctx.globalAlpha = 1;
+      drawCover(imgHi, true);
+      current = hi;
+    } else if (posterImg) {
+      ctx.globalAlpha = 1;
+      drawCover(posterImg, true);
+    }
   };
 
   const resize = () => {
@@ -133,6 +171,7 @@ export function createFrameSequence(
     load,
     paint,
     paintProgress,
+    paintBlend,
     resize,
     destroy: () => {
       images.forEach((img) => {

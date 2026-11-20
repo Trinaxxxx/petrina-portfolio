@@ -299,7 +299,11 @@ export default function HeroCinematic() {
             </div>
 
             <SectionLabel index="02" title="VR walkthrough" note="Revit → lit, walkable real-time · scroll to play" />
-            <div style={{ position: "relative", aspectRatio: "16 / 9", borderRadius: "4px", overflow: "hidden", border: "1px solid var(--pk-border-accent)", background: "var(--pk-bg2)", marginBottom: "1rem" }}>
+            {/* Full-bleed VR stage: breaks out of the 1200px gutter to the full
+                viewport width (no side panels) and runs 20% taller than 16:9
+                (16 / 10.8) so the walkthrough fills the view and holds the scroll
+                longer. overflowX stays clipped on <body> elsewhere. */}
+            <div style={{ position: "relative", width: "100vw", marginLeft: "calc(50% - 50vw)", aspectRatio: "16 / 10.8", overflow: "hidden", borderTop: "1px solid var(--pk-border-accent)", borderBottom: "1px solid var(--pk-border-accent)", background: "var(--pk-bg2)", marginBottom: "1rem" }}>
               <ScrollScrubSequence
                 frameCount={VR_FRAMES}
                 basePath="/projects/vr-frames/f-"
@@ -494,6 +498,14 @@ function SharedStyles() {
       .sc-cell { aspect-ratio: 16 / 9; }
       .sc-feature { grid-column: span 2; grid-row: span 2; aspect-ratio: auto; }
       .sc-g { grid-column: span 2; }
+      /* Stacked (reduced-motion) bento: with no parent forcing a height, the
+         grid's 1fr rows collapse and each cell falls back to its own
+         aspect-ratio — the double-wide .sc-g and 2-row .sc-feature then tower
+         over the 16/9 tiles beside them, leaving empty bands. Give the grid a
+         definite height via aspect-ratio so the 1fr rows resolve, then let every
+         cell fill its track (same approach as .cine-bento). */
+      .sc-bento:not(.cine-bento) { aspect-ratio: 64 / 27; }
+      .sc-bento:not(.cine-bento) .sc-cell { aspect-ratio: auto; height: 100%; }
       /* Cinematic bento fills the nav-cleared stage exactly — fixed-height rows,
          no aspect-ratio overflow, so the grid never runs under the fixed nav. */
       .cine-bento { grid-auto-rows: 1fr; align-content: stretch; }
@@ -503,6 +515,11 @@ function SharedStyles() {
         .sc-bento { grid-template-columns: repeat(2, 1fr); }
         .sc-feature { grid-column: span 2; grid-row: span 1; aspect-ratio: 16 / 9; }
         .sc-g { grid-column: span 2; }
+        /* Two-column stack: rows are content-sized, so clear the desktop aspect
+           lock, drop the 1fr row stretch (it would pad short tiles up to the
+           feature's height) and give every tile its own 16/9 ratio again. */
+        .sc-bento:not(.cine-bento) { aspect-ratio: auto; grid-auto-rows: auto; }
+        .sc-bento:not(.cine-bento) .sc-cell { aspect-ratio: 16 / 9; height: auto; }
         .cine-bento { height: 100% !important; }
         /* Phone: fill the stage height (video top meets the nav) and crop the
            landscape frame in on the right-hand subject, rather than centering
