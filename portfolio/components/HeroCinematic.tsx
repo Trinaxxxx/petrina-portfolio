@@ -6,13 +6,18 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { mediaUrl } from "@/lib/utils";
 import { useCinematicVideo } from "@/lib/useCinematicVideo";
-import ScrollScrubSequence from "@/components/ScrollScrubSequence";
+import VrFlipDeck from "@/components/VrFlipDeck";
 import { createFrameSequence } from "@/lib/frameSequence";
 
 /* VR walkthrough frame sequence (extracted from vr-hero.mp4): scrubbed by scroll
    so it reads as "playing" without a <video>'s autoplay fragility, and stays
    reduced-motion-safe since the motion is user-driven. */
 const VR_FRAMES = 83;
+
+/* The key moments the reduced-motion layout flips through — seven beats spread
+   across the 83-frame walkthrough (entry → reveal → interior → final). Tune these
+   indices to land on the strongest stills rather than even spacing. */
+const VR_KEYS = [1, 14, 28, 42, 56, 70, 83];
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -298,14 +303,12 @@ export default function HeroCinematic() {
               ))}
             </div>
 
-            <SectionLabel index="02" title="VR walkthrough" note="Revit → lit, walkable real-time · plays automatically" />
-            {/* Sticky dwell: the track is the video height plus ~60vh of extra
-                scroll. The inner stage is one viewport tall and sticks at the top,
-                centring the video — so it scrolls up to fit the screen, holds for
-                roughly one more screen of scrolling, then releases to normal flow.
-                The video is full-bleed (100vw, no side panels), capped to the
-                viewport (minus nav clearance) so it always fits, and the canvas
-                cover-crops to fill. overflowX stays clipped on <body> elsewhere. */}
+            <SectionLabel index="02" title="VR walkthrough" note="Revit → lit, walkable real-time · flip through the moments" />
+            {/* Sticky dwell holds the flip-deck centred and fitting the screen while
+                the visitor flips through it (move the cursor / drag / arrow keys),
+                then releases to normal flow. The deck is full-bleed (100vw, no side
+                panels), capped to the viewport minus nav clearance so it always
+                fits. overflowX stays clipped on <body> elsewhere. */}
             <div style={{ position: "relative", height: "calc(min(67.5vw, 100svh - 140px) + 60vh)", marginBottom: "3.5rem" }}>
               <div style={{ position: "sticky", top: 0, height: "100svh" }}>
                 <div
@@ -316,23 +319,16 @@ export default function HeroCinematic() {
                     transform: "translateY(-50%)",
                     width: "100vw",
                     height: "min(67.5vw, 100svh - 140px)",
-                    overflow: "hidden",
-                    borderTop: "1px solid var(--pk-border-accent)",
-                    borderBottom: "1px solid var(--pk-border-accent)",
-                    background: "var(--pk-bg2)",
                   }}
                 >
-                  <ScrollScrubSequence
-                    frameCount={VR_FRAMES}
+                  <VrFlipDeck
                     basePath="/projects/vr-frames/f-"
-                    poster="/projects/hero-vr-poster.jpg"
+                    keys={VR_KEYS}
                     focalX={0.85}
-                    frameDurationMs={100}
-                    hintText="Auto-plays · pause anytime"
-                    ariaLabel="VR walkthrough of a TMX automated logistics facility, from Revit data to a lit, walkable real-time environment"
+                    hintText="Move or drag to flip through"
+                    ariaLabel="VR walkthrough of a TMX automated logistics facility, from Revit data to a lit, walkable real-time environment — flip through its key moments"
                     style={{ position: "absolute", inset: 0 }}
                   />
-                  <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", background: "linear-gradient(to bottom, rgba(16,20,30,0.18) 0%, rgba(16,20,30,0) 40%, rgba(16,20,30,0.45) 100%)" }} />
                 </div>
               </div>
             </div>
