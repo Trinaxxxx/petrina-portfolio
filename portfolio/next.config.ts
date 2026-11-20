@@ -35,6 +35,12 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: import.meta.dirname,
   },
+  // Must equal turbopack.root. On Vercel, a stray repo-root lockfile makes the
+  // platform set outputFileTracingRoot to the repo root while turbopack.root
+  // stays here — that mismatch re-breaks next/font/google resolution (the Inter
+  // loader in layout.tsx) on the build server, though local builds pass. Pinning
+  // both to this folder keeps them aligned regardless of parent-dir lockfiles.
+  outputFileTracingRoot: import.meta.dirname,
   async headers() {
     return [{ source: "/(.*)", headers: securityHeaders }];
   },

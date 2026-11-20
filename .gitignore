@@ -1,6 +1,11 @@
 # dependencies
 node_modules/
 
+# stray repo-root lockfile (there is no root package.json; the app lives in
+# portfolio/). A lockfile here makes Vercel infer the wrong workspace root and
+# breaks next/font/google. Root-anchored so portfolio/package-lock.json stays.
+/package-lock.json
+
 # builds / derived artifacts
 dist/
 build/
