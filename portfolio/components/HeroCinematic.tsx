@@ -6,6 +6,13 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { mediaUrl } from "@/lib/utils";
 import { useCinematicVideo } from "@/lib/useCinematicVideo";
+import ScrollScrubSequence from "@/components/ScrollScrubSequence";
+import { createFrameSequence } from "@/lib/frameSequence";
+
+/* VR walkthrough frame sequence (extracted from vr-hero.mp4): scrubbed by scroll
+   so it reads as "playing" without a <video>'s autoplay fragility, and stays
+   reduced-motion-safe since the motion is user-driven. */
+const VR_FRAMES = 83;
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -54,12 +61,15 @@ export default function HeroCinematic() {
   const bentoRef = useRef<HTMLDivElement>(null);
   const labelsWrapRef = useRef<HTMLDivElement>(null);
 
-  // Hero background clip — plays immediately (above the fold). VR clip —
-  // deferred fetch, started as the cinematic's VR act approaches.
+  // Hero background clip — plays immediately (above the fold).
   const heroVideoRef = useRef<HTMLVideoElement>(null);
-  const vrVideoRef = useRef<HTMLVideoElement>(null);
   const { ready: heroReady } = useCinematicVideo(heroVideoRef, { autoStart: true });
-  const { ready: vrReady, prime: primeVr, start: startVr } = useCinematicVideo(vrVideoRef);
+
+  // VR act — a scroll-scrubbed frame sequence (not a <video>): the GSAP timeline
+  // paints frames onto this canvas as the pinned stage scrubs through the VR act,
+  // so it reads as playing and can never freeze. Shares its core with the
+  // reduced-motion layout's ScrollScrubSequence via lib/frameSequence.
+  const vrCanvasRef = useRef<HTMLCanvasElement>(null);
 
   const [reduced, setReduced] = useState(false);
 
@@ -74,7 +84,8 @@ export default function HeroCinematic() {
       // initializer would cause a hydration mismatch for reduced-motion visitors).
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setReduced(true);
-      startVr(); // no scrub to trigger it — just play the clip in the static layout
+      // The VR hero becomes a scroll-scrubbed frame sequence here (not the
+      // <video>, which froze with no scrub to drive it) — see the reduced branch.
       return;
     }
 
@@ -88,17 +99,31 @@ export default function HeroCinematic() {
     const cells = Array.from(bentoEl.children) as HTMLElement[];
     const labelEls = Array.from(labelsWrapRef.current!.children) as HTMLElement[];
 
+    // VR frame sequence, painted onto the canvas and scrubbed by the timeline.
+    // Hoisted so the effect cleanup can destroy it alongside ctx.revert().
+    const vrSeq = createFrameSequence(vrCanvasRef.current!, {
+      frameCount: VR_FRAMES,
+      basePath: "/projects/vr-frames/f-",
+      poster: "/projects/hero-vr-poster.jpg",
+      focalX: isMobile ? 0.67 : 0.85,
+      autoload: false, // deferred — loaded as the VR act nears (prime trigger)
+    });
+    const vrProxy = { f: 0 };
+    const onVrResize = () => vrSeq.resize();
+    window.addEventListener("resize", onVrResize);
+
     const ctx = gsap.context(() => {
-      // Pre-warm the VR clip as the section's VR act nears, so it's decoded and
-      // buffered (paused, at frame 0) before the bento clears — no fetch while
-      // the visitor is still up top. Playback itself is held until the VR stage
-      // is revealed in Act 4 (tl.call below), so the reveal shows it from the
-      // first frame rather than catching it already mid-loop.
+      // Pre-warm the frame sequence as the section's VR act nears, so frames are
+      // decoded before the bento clears — no fetch while the visitor is still up
+      // top. The timeline scrub itself (added below) drives which frame shows.
       ScrollTrigger.create({
         trigger: section,
         start: "top top",
         once: true,
-        onEnter: () => primeVr(),
+        onEnter: () => {
+          vrSeq.load();
+          vrSeq.resize();
+        },
       });
 
       // ── Initial states ─────────────────────────────────────────────────────
@@ -168,10 +193,10 @@ export default function HeroCinematic() {
         stagger: { each: 0.14, from: "end" },
       }, ">");
       tl.to(bentoEl, { opacity: 0, duration: 1.0, ease: "power2.inOut" }, ">-0.4");
-      // Begin the (already-buffered) clip from frame 0 exactly as the stage
-      // reveals, so the viewer sees it from the start. Idempotent, so scrubbing
-      // back and forth across this point won't restart it.
-      tl.call(startVr, undefined, "<");
+      // Mark where the VR stage reveals — the frame-scrub tween (added after the
+      // timeline is built) runs from here to the end, so the walkthrough plays
+      // forward under the scrub and rewinds cleanly when you scroll back.
+      tl.addLabel("vrReveal", "<");
       tl.to(vrVidWrap, { autoAlpha: 1, scale: 1, duration: 1.4, ease: "power2.inOut" }, "<");
       tl.to({}, { duration: HOLD });
 
@@ -189,10 +214,26 @@ export default function HeroCinematic() {
       // out, so the hero doesn't hold a dozen promoted layers for the rest of
       // the page. (ScrollTrigger keeps the end state while scrolled past.)
       tl.set(animated, { willChange: "auto" });
+
+      // ── VR frame scrub ──────────────────────────────────────────────────────
+      // Added last, spanning the reveal → end of the already-built timeline, so
+      // it advances the walkthrough frames without extending the timeline. Before
+      // the reveal the canvas is autoAlpha 0, so the pre-reveal frame is unseen.
+      const vrRevealAt = tl.labels.vrReveal ?? 0;
+      tl.to(vrProxy, {
+        f: VR_FRAMES - 1,
+        ease: "none",
+        duration: Math.max(0.001, tl.duration() - vrRevealAt),
+        onUpdate: () => vrSeq.paint(vrProxy.f),
+      }, vrRevealAt);
     }, section);
 
-    return () => ctx.revert();
-  }, [primeVr, startVr]);
+    return () => {
+      window.removeEventListener("resize", onVrResize);
+      vrSeq.destroy();
+      ctx.revert();
+    };
+  }, []);
 
   const heroVideoEl = (
     <video
@@ -220,34 +261,16 @@ export default function HeroCinematic() {
     </video>
   );
 
-  const vrVideoEl = (
-    <video
-      ref={vrVideoRef}
-      className="vr-clip"
-      muted
-      loop
-      playsInline
-      preload="none"
-      poster="/projects/hero-vr-poster.jpg"
+  // VR walkthrough canvas — the timeline (full motion) paints frames onto it as
+  // the pinned stage scrubs through the VR act. The poster underlay behind it
+  // (in the wrap below) covers the moment before the first frame decodes.
+  const vrCanvasEl = (
+    <canvas
+      ref={vrCanvasRef}
       aria-label="VR walkthrough of a TMX automated logistics facility, from Revit data to a lit, walkable real-time environment"
-      style={{
-        position: "absolute",
-        inset: 0,
-        width: "100%",
-        height: "100%",
-        objectFit: "cover",
-        // Favour the right edge so the Autodesk lock-up in the bottom-right of
-        // the clip is never cropped out of the web view.
-        objectPosition: "right center",
-        opacity: vrReady ? 1 : 0,
-        transition: "opacity 1000ms ease",
-      }}
-    >
-      {/* Served from Vercel Blob. Uses a fresh filename (vr-hero.mp4) rather
-          than overwriting the old path — a new cache key sidesteps Blob's
-          30-day edge cache so replacements show up immediately. */}
-      <source src={mediaUrl("projects/vr-hero.mp4")} type="video/mp4" />
-    </video>
+      role="img"
+      style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }}
+    />
   );
 
   // ── Reduced motion: no pin, no scrub — a calm stacked layout. ──────────────
@@ -266,17 +289,32 @@ export default function HeroCinematic() {
               Immersive VR and web walkthroughs built from CAD and Revit, designed to feel like the finished space, running live at 70fps.
             </p>
 
-            <div className="sc-bento" ref={bentoRef} style={{ marginBottom: "2.5rem" }}>
+            <SectionLabel index="01" title="Selected environments" note="Real-time facility renders · TMX META" />
+            <div className="sc-bento" ref={bentoRef} style={{ marginBottom: "3.5rem" }}>
               {bento.map((b) => (
-                <div key={b.src} className={`sc-cell sc-${b.area}`} style={{ position: "relative", overflow: "hidden", borderRadius: "4px", border: "1px solid var(--pk-border-accent)", aspectRatio: "16 / 9" }}>
+                <div key={b.src} className={`sc-cell sc-${b.area}`} style={{ position: "relative", overflow: "hidden", borderRadius: "4px", border: "1px solid var(--pk-border-accent)", aspectRatio: "16 / 9", background: "var(--pk-bg2)" }}>
                   <Image src={b.src} alt={b.alt} fill sizes="(max-width: 767px) 100vw, 50vw" style={{ objectFit: "cover" }} />
                 </div>
               ))}
             </div>
 
-            <div style={{ position: "relative", aspectRatio: "16 / 9", borderRadius: "4px", overflow: "hidden", border: "1px solid var(--pk-border-accent)", background: "var(--pk-bg2)", marginBottom: "1.75rem" }}>
-              {vrVideoEl}
+            <SectionLabel index="02" title="VR walkthrough" note="Revit → lit, walkable real-time · scroll to play" />
+            <div style={{ position: "relative", aspectRatio: "16 / 9", borderRadius: "4px", overflow: "hidden", border: "1px solid var(--pk-border-accent)", background: "var(--pk-bg2)", marginBottom: "1rem" }}>
+              <ScrollScrubSequence
+                frameCount={VR_FRAMES}
+                basePath="/projects/vr-frames/f-"
+                poster="/projects/hero-vr-poster.jpg"
+                focalX={0.85}
+                ariaLabel="VR walkthrough of a TMX automated logistics facility, from Revit data to a lit, walkable real-time environment"
+                style={{ position: "absolute", inset: 0 }}
+              />
+              <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", background: "linear-gradient(to bottom, rgba(16,20,30,0.18) 0%, rgba(16,20,30,0) 40%, rgba(16,20,30,0.45) 100%)" }} />
             </div>
+            <p style={{ fontFamily: "var(--pk-mono)", fontSize: "11px", color: "var(--pk-muted)", letterSpacing: "0.08em", marginBottom: "3.5rem" }}>
+              ↕ Scroll to scrub the walkthrough
+            </p>
+
+            <SectionLabel index="03" title="Capabilities" />
             <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
               {skillChips.map((l) => (
                 <span key={l} style={{ fontFamily: "var(--pk-mono)", textTransform: "uppercase", letterSpacing: "0.12em", fontSize: "13px", color: "var(--pk-accent)", border: "1px solid var(--pk-border-accent)", padding: "0.5rem 0.9rem", borderRadius: "2px" }}>
@@ -313,7 +351,7 @@ export default function HeroCinematic() {
         {/* VR footage stage — poster underlay + cross-fading clip + scrim. zIndex 1. */}
         <div ref={vrVidWrapRef} style={{ position: "absolute", top: NAV_H, left: 0, right: 0, bottom: 0, zIndex: 1, background: "var(--pk-bg)" }}>
           <div className="vr-poster" style={{ position: "absolute", inset: 0, backgroundImage: "url(/projects/hero-vr-poster.jpg)", backgroundSize: "cover", backgroundPosition: "center" }} aria-hidden="true" />
-          {vrVideoEl}
+          {vrCanvasEl}
           <div aria-hidden="true" style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(16,20,30,0.30) 0%, rgba(16,20,30,0.12) 45%, rgba(16,20,30,0.55) 100%)" }} />
         </div>
 
@@ -393,6 +431,20 @@ export default function HeroCinematic() {
   );
 }
 
+/* Small mono section label for the reduced-motion stacked layout — an index
+   number, a title, and an optional note, sitting on a hairline rule. */
+function SectionLabel({ index, title, note }: { index: string; title: string; note?: string }) {
+  return (
+    <div style={{ display: "flex", alignItems: "baseline", gap: "0.9rem", padding: "0 0 0.9rem", marginBottom: "1.25rem", borderBottom: "1px solid var(--pk-border)" }}>
+      <span style={{ fontFamily: "var(--pk-mono)", fontSize: "12px", color: "var(--pk-accent)", letterSpacing: "0.1em" }}>{index}</span>
+      <span style={{ fontFamily: "var(--pk-mono)", fontSize: "13px", color: "var(--pk-heading)", letterSpacing: "0.04em", textTransform: "uppercase" }}>{title}</span>
+      {note && (
+        <span style={{ fontFamily: "var(--pk-mono)", fontSize: "11px", color: "var(--pk-muted)", letterSpacing: "0.06em", marginLeft: "auto", textAlign: "right" }}>{note}</span>
+      )}
+    </div>
+  );
+}
+
 /* Static proof band — the three hardest numbers, relocated from the hero so they
    land right after the cinematic with no blank scroll. */
 function ProofBand() {
@@ -455,7 +507,6 @@ function SharedStyles() {
         /* Phone: fill the stage height (video top meets the nav) and crop the
            landscape frame in on the right-hand subject, rather than centering
            the whole frame. Tune the X% to move the focal point left/right. */
-        .vr-clip { object-fit: cover !important; object-position: 67% center !important; }
         .vr-poster { background-size: cover !important; background-position: 67% center !important; }
       }
       @media (prefers-reduced-motion: reduce) {
